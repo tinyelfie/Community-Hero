@@ -1,0 +1,165 @@
+<main class="relative h-screen w-full pt-20 overflow-hidden">
+<!-- Interactive Map Simulation -->
+<div class="absolute inset-0 z-0">
+<div class="w-full h-full grayscale-[20%] brightness-[105%]" data-alt="A detailed map of a clean, modern urban neighborhood in a high-end illustration style. The map features soft pastel colors, distinct park areas in matcha green, and elegant street grids. The lighting is bright and airy, suggesting a sunny afternoon in a premium civic-focused city. Subtle glowing paths highlight key community routes." data-location="San Francisco" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC72EY5N9vohABtFaZFwGL3q0jR1v4dgV9dWW8TC-uFNvoiRPsR1fMiMwXxACDqRomxyIzWsu9cbIkBbD6NtiCpieqSQ9KNIoGpKkDPeBvbgCbFJ_GlHQPGqa5xlMf3pYxHRgtXfDQNp4I1Juvm7dT03LaPufsCBdIV_xC0rwT5Qi3-4BuI2Z_HvFn7QpRod6XKhlDnHDvqby4M6J1GGLtTI8CfuKj4Dkjc6plzvsvW8Fana7hd9p6wQO1Y_MFy2UgFO_qHd4scnAn5')">
+</div>
+<!-- Custom Markers -->
+<!-- Marker 1: High Priority Issue -->
+<button class="absolute top-[30%] left-[40%] group flex flex-col items-center" onclick="openIssueDetail('Broken Streetlight')">
+<div class="w-12 h-12 rounded-full bg-white glass-panel flex items-center justify-center shadow-lg border-2 border-primary marker-pulse hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">light_off</span>
+</div>
+<div class="mt-2 px-3 py-1 bg-primary text-white rounded-full text-label-sm shadow-md opacity-0 group-hover:opacity-100 transition-opacity">Broken Streetlight</div>
+</button>
+<!-- Marker 2: Resolved Issue -->
+<button class="absolute top-[55%] left-[65%] group flex flex-col items-center" onclick="openIssueDetail('Park Cleaned')">
+<div class="w-10 h-10 rounded-full bg-white glass-panel flex items-center justify-center shadow-lg border-2 border-secondary hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">park</span>
+</div>
+<div class="mt-2 px-3 py-1 bg-secondary text-white rounded-full text-label-sm shadow-md opacity-0 group-hover:opacity-100 transition-opacity">Resolved: Park Cleanup</div>
+</button>
+<!-- Marker 3: Pothole -->
+<button class="absolute top-[45%] left-[25%] group flex flex-col items-center" onclick="openIssueDetail('Pothole on Main')">
+<div class="w-12 h-12 rounded-full bg-white glass-panel flex items-center justify-center shadow-lg border-2 border-tertiary hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div class="mt-2 px-3 py-1 bg-tertiary text-white rounded-full text-label-sm shadow-md opacity-0 group-hover:opacity-100 transition-opacity">Large Pothole</div>
+</button>
+</div>
+<!-- Floating UI Over Map -->
+<div class="absolute top-24 left-gutter right-gutter md:left-gutter md:w-[400px] z-10 space-y-4">
+<!-- Search & Filters -->
+<div class="glass-panel rounded-xl p-4 shadow-xl">
+<div class="relative mb-4">
+<input class="w-full bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-3 text-body-md focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="Search issues or areas..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+</div>
+<div class="flex gap-2 overflow-x-auto hide-scrollbar">
+<button class="px-4 py-1.5 rounded-full bg-primary text-white text-label-sm whitespace-nowrap shadow-sm">All Issues</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-highest text-on-surface-variant text-label-sm whitespace-nowrap hover:bg-primary-container transition-colors">Infrastructure</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-highest text-on-surface-variant text-label-sm whitespace-nowrap hover:bg-primary-container transition-colors">Public Safety</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-highest text-on-surface-variant text-label-sm whitespace-nowrap hover:bg-primary-container transition-colors">Resolved</button>
+</div>
+</div>
+</div>
+<!-- Issue List Bottom Sheet (Minimized/Draggable State) -->
+<div class="fixed bottom-16 md:bottom-0 left-0 right-0 z-40 h-[530px] bottom-sheet-transition translate-y-[calc(60vh-140px)]" id="bottom-sheet">
+<div class="h-full bg-white/80 dark:bg-black/80 backdrop-blur-2xl rounded-t-[32px] border-t border-white/40 shadow-2xl overflow-hidden flex flex-col">
+<!-- Drag Handle Area -->
+<div class="w-full h-10 flex items-center justify-center cursor-pointer group" onclick="toggleBottomSheet()">
+<div class="w-12 h-1.5 bg-outline-variant rounded-full group-hover:bg-primary transition-colors"></div>
+</div>
+<div class="px-6 pb-4">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-2">Local Infrastructure</h2>
+<p class="text-on-surface-variant text-body-md">Showing 12 active issues nearby</p>
+</div>
+<div class="flex-1 overflow-y-auto px-6 pb-20 space-y-4">
+<!-- Issue Card 1 -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-white/20 shadow-sm hover:shadow-md transition-all cursor-pointer hover:scale-[1.01]" onclick="openIssueDetail('Broken Streetlight')">
+<div class="flex justify-between items-start mb-2">
+<span class="px-3 py-1 rounded-full bg-error-container text-on-error-container text-label-sm font-bold">Urgent</span>
+<span class="text-on-surface-variant text-label-sm">2h ago</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-1">Broken Streetlight</h3>
+<p class="text-on-surface-variant text-body-md line-clamp-1">Corner of Oak &amp; 5th. Complete blackout in the alley...</p>
+<div class="mt-3 flex items-center gap-4">
+<div class="flex items-center gap-1 text-on-surface-variant text-label-sm">
+<span class="material-symbols-outlined text-[18px]">thumb_up</span>
+                                24
+                            </div>
+<div class="flex items-center gap-1 text-on-surface-variant text-label-sm">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+                                5
+                            </div>
+</div>
+</div>
+<!-- Issue Card 2 (Resolved) -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-white/20 shadow-sm opacity-80">
+<div class="flex justify-between items-start mb-2">
+<span class="px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-label-sm font-bold uppercase">Resolved</span>
+<span class="text-on-surface-variant text-label-sm">Yesterday</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-1">Park Bench Vandalism</h3>
+<p class="text-on-surface-variant text-body-md">Soma Park. Graffiti removed and bench repainted.</p>
+<div class="mt-3 flex items-center gap-2 text-secondary font-bold text-label-sm">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+                            Verified by 18 Heroes
+                        </div>
+</div>
+<!-- Issue Card 3 -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-white/20 shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<span class="px-3 py-1 rounded-full bg-primary-container text-on-primary-container text-label-sm font-bold">In Progress</span>
+<span class="text-on-surface-variant text-label-sm">5h ago</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-1">Clogged Storm Drain</h3>
+<p class="text-on-surface-variant text-body-md">Water pooling at the intersection after morning rain.</p>
+<div class="mt-3 flex items-center gap-4">
+<div class="flex items-center gap-1 text-on-surface-variant text-label-sm">
+<span class="material-symbols-outlined text-[18px]">thumb_up</span>
+                                12
+                            </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Detailed Issue Drawer (Slide-out from Right on Desktop, Full Screen on Mobile) -->
+<div class="fixed inset-y-0 right-0 z-[100] w-full md:w-[480px] glass-panel shadow-2xl translate-x-full transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] flex flex-col" id="issue-detail-drawer">
+<!-- Header -->
+<div class="flex items-center justify-between p-6 border-b border-white/20">
+<button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface-container-highest transition-colors" onclick="closeIssueDetail()">
+<span class="material-symbols-outlined">close</span>
+</button>
+<div class="flex gap-2">
+<button class="px-4 py-2 bg-primary text-white rounded-full text-label-sm sakura-gradient shadow-lg hover:scale-105 transition-transform">Verify Issue</button>
+</div>
+</div>
+<!-- Content -->
+<div class="flex-1 overflow-y-auto px-6 py-8">
+<div class="w-full h-48 rounded-2xl overflow-hidden mb-6 shadow-inner" data-alt="A high-resolution, close-up photograph of a broken classic street lamp in a modern city. The lighting is dramatic, capturing the textures of the cracked glass and rusted metal. The background is a soft-focus urban sunset with pastel pink and deep violet hues, maintaining the premium community-engagement aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDRliZ22zBSve4E5eNHV3ErVp44LQgc-IuivUJB52CLLzb2Jfw3MUio40GuvbUTdeaQXg4bOtrXGHYGp9QMC5aXTSocGHaAZe6Xgs0GIGAQXeCHdh4o4SfvYhjHCipZT5FBgO5n8fX6DZ-9f6ihHgxEhrazz9QZzldhU5HeIb23rDAVwqvBw_1BMYrZ_x-91xwKAGMwd-B-SlToqknqhRK2efjPDgCl_rdHjZvA4w15Uz8GCbL7HgonBwrFAOzAgZvqiJjQNSNH_2Lq')">
+</div>
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<span class="text-on-surface-variant font-medium text-label-sm">45th St &amp; Lexington Ave</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-4" id="detail-title">Broken Streetlight</h2>
+<div class="flex gap-2 mb-6">
+<span class="px-3 py-1 rounded-full bg-error-container text-on-error-container text-label-sm font-bold">Needs Attention</span>
+<span class="px-3 py-1 rounded-full bg-secondary-container/20 text-secondary text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">bolt</span> AI Summarized
+                    </span>
+</div>
+<div class="bg-primary-container/10 border border-primary/20 p-4 rounded-xl mb-6">
+<h3 class="text-on-primary-container font-bold text-label-sm uppercase mb-2">AI Summary</h3>
+<p class="text-body-md text-on-surface-variant italic">"This issue affects pedestrian safety in a high-traffic residential zone. Report suggests recurring power surges. Community impact score: High."</p>
+</div>
+<div class="space-y-6">
+<div>
+<h4 class="font-title-md text-title-md mb-2">Description</h4>
+<p class="text-body-md text-on-surface-variant leading-relaxed">
+                            The main light pole has been flickering for three days and finally went dark last night. It's creating a safety concern for evening commuters and dog walkers. Several neighbors have confirmed the issue.
+                        </p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<button class="flex flex-col items-center justify-center p-4 rounded-xl bg-surface-container-low border border-white/20 hover:bg-primary-container/20 transition-all group">
+<span class="material-symbols-outlined text-primary mb-1 group-hover:scale-125 transition-transform">thumb_up</span>
+<span class="text-label-sm font-bold">Upvote</span>
+<span class="text-[10px] text-on-surface-variant">24 People</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 rounded-xl bg-surface-container-low border border-white/20 hover:bg-secondary-container/20 transition-all group">
+<span class="material-symbols-outlined text-secondary mb-1 group-hover:scale-125 transition-transform">add_comment</span>
+<span class="text-label-sm font-bold">Update</span>
+<span class="text-[10px] text-on-surface-variant">Share Info</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Footer Action -->
+<div class="p-6 border-t border-white/20 bg-surface/50">
+<button class="w-full py-4 rounded-2xl bg-on-surface text-background font-bold hover:scale-[1.02] active:scale-[0.98] transition-all">
+                    I'll Volunteer to Monitor
+                </button>
+</div>
+</div>
+</main>

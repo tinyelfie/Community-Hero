@@ -1,0 +1,3119 @@
+<!-- Dashboard (Dark Mode) - Community Hero -->
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Community Hero | Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#fbf9f3",
+                    "on-surface": "#1b1c19",
+                    "on-secondary-container": "#426b54",
+                    "on-tertiary-fixed": "#400014",
+                    "secondary-fixed-dim": "#a4d1b4",
+                    "inverse-surface": "#30312d",
+                    "surface-container-low": "#f5f3ee",
+                    "tertiary-fixed": "#ffd9dd",
+                    "error": "#ba1a1a",
+                    "primary-fixed": "#ffd9df",
+                    "on-primary-fixed": "#30121a",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed-variant": "#264f39",
+                    "surface-container": "#f0eee8",
+                    "inverse-on-surface": "#f2f1eb",
+                    "surface": "#fbf9f3",
+                    "surface-tint": "#7c535c",
+                    "on-primary-fixed-variant": "#613c45",
+                    "tertiary-fixed-dim": "#ffb2bd",
+                    "on-secondary-fixed": "#002112",
+                    "surface-container-highest": "#e4e2dd",
+                    "on-tertiary-fixed-variant": "#7d283c",
+                    "primary-container": "#ffcad4",
+                    "on-primary-container": "#7b525b",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#fbf9f3",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-container": "#9a3f52",
+                    "primary": "#7c535c",
+                    "surface-container-high": "#eae8e2",
+                    "primary-fixed-dim": "#edb9c3",
+                    "on-primary": "#ffffff",
+                    "outline": "#827476",
+                    "secondary": "#3e6750",
+                    "on-surface-variant": "#504446",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#ffcad1",
+                    "surface-dim": "#dbdad4",
+                    "secondary-container": "#bdeacd",
+                    "on-background": "#1b1c19",
+                    "surface-variant": "#e4e2dd",
+                    "inverse-primary": "#edb9c3",
+                    "secondary-fixed": "#c0edd0",
+                    "on-secondary": "#ffffff",
+                    "outline-variant": "#d4c2c4",
+                    "tertiary": "#9b4053",
+                    "on-error-container": "#93000a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "base": "8px",
+                    "gutter": "20px",
+                    "container-max": "1200px",
+                    "lg": "48px",
+                    "sm": "12px",
+                    "xl": "80px",
+                    "md": "24px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Outfit"],
+                    "headline-lg": ["Outfit"],
+                    "headline-lg-mobile": ["Outfit"],
+                    "title-md": ["Outfit"],
+                    "body-md": ["Outfit"],
+                    "display-xl": ["Outfit"],
+                    "body-lg": ["Outfit"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "title-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .dark .glass-card {
+            background: rgba(48, 49, 45, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .sakura-gradient {
+            background: linear-gradient(135deg, #7c535c 0%, #9b4053 100%);
+        }
+        .shine-effect:hover {
+            position: relative;
+            overflow: hidden;
+        }
+        .shine-effect:hover::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            animation: shine 0.8s ease-in-out;
+        }
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+        .custom-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #d4c2c4;
+            border-radius: 10px;
+        }
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-background dark:bg-[#121210] text-on-surface dark:text-inverse-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/70 dark:bg-[#121210]/70 backdrop-blur-xl border-b border-white/20 dark:border-white/10 shadow-[0_4px_30px_rgba(124,83,92,0.1)]">
+<div class="flex justify-between items-center h-20 px-gutter max-w-container-max mx-auto">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim text-headline-lg" data-icon="account_balance">account_balance</span>
+<h1 class="font-display-xl text-headline-lg-mobile md:text-display-xl bg-gradient-to-r from-primary to-tertiary dark:from-primary-fixed-dim dark:to-tertiary-fixed-dim bg-clip-text text-transparent">Community Hero</h1>
+</div>
+<div class="flex items-center gap-md">
+<button class="hover:scale-105 hover:opacity-80 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] text-on-surface-variant dark:text-outline-variant">
+<span class="material-symbols-outlined" data-icon="dark_mode">dark_mode</span>
+</button>
+<div class="hidden md:flex gap-md">
+<a class="text-primary dark:text-primary-fixed-dim font-bold border-b-2 border-primary dark:border-primary-fixed-dim py-2 transition-all" href="#">Dashboard</a>
+<a class="text-on-surface-variant dark:text-outline-variant font-medium hover:text-primary dark:hover:text-primary-fixed-dim transition-all py-2" href="#">Reports</a>
+<a class="text-on-surface-variant dark:text-outline-variant font-medium hover:text-primary dark:hover:text-primary-fixed-dim transition-all py-2" href="#">Community</a>
+</div>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-20 md:pb-8 px-gutter max-w-container-max mx-auto min-h-screen">
+<!-- Hero Profile & Stats Section -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-md mb-lg">
+<div class="md:col-span-8 glass-card p-md rounded-xl flex flex-col md:flex-row items-center gap-md hover:scale-[1.01] transition-transform duration-300 shadow-[0_4px_20px_rgba(124,83,92,0.05)]">
+<div class="relative group">
+<div class="w-24 h-24 rounded-full overflow-hidden border-4 border-primary/20 dark:border-primary-fixed-dim/20">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a friendly community leader, Alex Rivers, a Caucasian male in his early 30s with a warm smile. He is set against a soft-focus urban park background with sakura pink cherry blossoms. The lighting is golden hour, warm and inviting, consistent with the premium glassmorphism UI style. High resolution and modern aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTjt2fab4MdGJwJH5K_lBKLJkPyHkxIIRh59IhAuBobcy3dFhsYXeEUMADE33TAJ3JMxepg30ZN5ndJQNlIXQ_e0Iadj3FPIf2T50O7Gvqv0XR51V-n0RFF-14E0nrDdfK8m-uCmLtpdMuDEWv_K3qLj10FGnBu25oMj26hwUKeTckK26sMyD-Z2eBY5qmtOt-z_IvRTw6t9rcjNrJPPfY-czGS6jTQbjsFozOIOPJpE3UxGPfc9wUlA-LzgtNG_wqNgaq99xPVE2X"/>
+</div>
+<div class="absolute -bottom-2 -right-2 sakura-gradient text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-[18px]" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div class="text-center md:text-left flex-1">
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface dark:text-inverse-on-surface">Welcome back, Alex Rivers</h2>
+<p class="text-on-surface-variant dark:text-outline-variant font-medium">Civic Hero Level 5 • City Watch Elite</p>
+<div class="mt-base flex flex-wrap justify-center md:justify-start gap-xs">
+<span class="bg-secondary/10 dark:bg-secondary-fixed/10 text-secondary dark:text-secondary-fixed-dim px-sm py-1 rounded-full text-label-sm">Active Protector</span>
+<span class="bg-tertiary/10 dark:bg-tertiary-fixed/10 text-tertiary dark:text-tertiary-fixed-dim px-sm py-1 rounded-full text-label-sm">Top 5% Contributor</span>
+</div>
+</div>
+<div class="flex gap-md border-t md:border-t-0 md:border-l border-outline-variant/30 pt-md md:pt-0 md:pl-md">
+<div class="text-center">
+<span class="block font-display-xl text-primary dark:text-primary-fixed-dim text-headline-lg">1,240</span>
+<span class="text-label-sm text-on-surface-variant dark:text-outline-variant uppercase tracking-wider">Points</span>
+</div>
+<div class="text-center">
+<span class="block font-display-xl text-secondary dark:text-secondary-fixed-dim text-headline-lg">#12</span>
+<span class="text-label-sm text-on-surface-variant dark:text-outline-variant uppercase tracking-wider">Rank</span>
+</div>
+</div>
+</div>
+<!-- Quick Action Card -->
+<div class="md:col-span-4 sakura-gradient p-md rounded-xl text-white shadow-xl flex flex-col justify-between shine-effect cursor-pointer group active:scale-95 transition-transform">
+<div>
+<h3 class="font-title-md text-title-md mb-xs">Spotted something?</h3>
+<p class="text-white/80 text-body-md">Help improve the community by reporting a new issue now.</p>
+</div>
+<div class="flex items-center gap-sm mt-md font-bold text-lg">
+<span>Submit Report</span>
+<span class="material-symbols-outlined group-hover:translate-x-2 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+</section>
+<!-- Main Dashboard Content Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<!-- Left Column: Reports List -->
+<div class="md:col-span-2">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface dark:text-inverse-on-surface flex items-center gap-sm">
+                        My Reports 
+                        <span class="text-on-surface-variant/50 dark:text-outline-variant/50 font-normal text-title-md">(12)</span>
+</h3>
+<button class="text-primary dark:text-primary-fixed-dim font-bold text-label-sm hover:underline">VIEW ALL</button>
+</div>
+<!-- Reports Grid -->
+<div class="grid grid-cols-1 gap-md">
+<!-- Report Card 1 -->
+<div class="bg-surface-container-lowest dark:bg-[#1b1c19] p-md rounded-xl border border-outline-variant/20 dark:border-white/5 hover:shadow-lg transition-all group relative">
+<div class="absolute top-md right-md bg-secondary/10 dark:bg-secondary-fixed/10 text-secondary dark:text-secondary-fixed-dim px-sm py-1 rounded-full text-label-sm font-bold flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-secondary dark:bg-secondary-fixed-dim"></span> Resolved
+                        </div>
+<div class="flex gap-md flex-col sm:flex-row">
+<div class="w-full sm:w-32 h-32 rounded-lg overflow-hidden bg-surface-variant dark:bg-inverse-surface flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A clean, minimalist photograph of a freshly repaired street lamp in a modern urban district. The lighting is cool, evening blue, with the warm yellow glow of the lamp illuminating the clean pavement below. The composition is balanced and elegant, fitting for a civic-minded premium mobile app interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyhw6kVCjsQe3um8JwgWAGq5PtI85S31zAprf4so-Rv60gAY9KcW9RqGk1IETWNXYIb-DRm0FyJYXqrz4t2Ly3m0hiOC64d85HhOfq0_TsYEONWoTs_lCdllJItQKUJkGXztR5PsTtQWM8Se87KUKVOrYI5X6w2gaaaxOjIYeFLIFuymH3KDwXCgVthHuFrZRh_-8xtsRlSwC6m3XIlnt69fKOQmsZ3cah_zBGSLDMMd09PTaWgmE2mLosg-PWwUmtpZ_3eAsT4hKY"/>
+</div>
+<div class="flex-1">
+<p class="text-label-sm text-on-surface-variant dark:text-outline-variant mb-xs uppercase tracking-tight">Street Lighting • 2 days ago</p>
+<h4 class="font-title-md text-title-md text-on-surface dark:text-inverse-on-surface mb-xs group-hover:text-primary dark:group-hover:text-primary-fixed-dim transition-colors">Broken Street Lamp on 5th &amp; Main</h4>
+<p class="text-on-surface-variant dark:text-outline-variant text-body-md line-clamp-2">The lamp has been flickering for three nights, creating a safety hazard for pedestrians and cyclists.</p>
+<div class="mt-md flex items-center gap-md">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-white dark:border-[#1b1c19] bg-primary-container dark:bg-primary-fixed text-[10px] flex items-center justify-center font-bold text-on-primary-container">+5</div>
+</div>
+<span class="text-label-sm text-on-surface-variant dark:text-outline-variant">5 neighbors supported</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Report Card 2 -->
+<div class="bg-surface-container-lowest dark:bg-[#1b1c19] p-md rounded-xl border border-outline-variant/20 dark:border-white/5 hover:shadow-lg transition-all group relative">
+<div class="absolute top-md right-md bg-tertiary/10 dark:bg-tertiary-fixed/10 text-tertiary dark:text-tertiary-fixed-dim px-sm py-1 rounded-full text-label-sm font-bold flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-tertiary dark:bg-tertiary-fixed-dim"></span> In Progress
+                        </div>
+<div class="flex gap-md flex-col sm:flex-row">
+<div class="w-full sm:w-32 h-32 rounded-lg overflow-hidden bg-surface-variant dark:bg-inverse-surface flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A macro shot of vibrant pink flowers growing in a beautifully maintained public community garden. The background is a soft, dreamy bokeh of green leaves and sunlight. The aesthetic is high-end, peaceful, and reflects the 'Sakura Dawn' color theme of the UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCU5O1_bWCxB_ITaz8PSf5pOKHlftTyFHdTwttJdMgjI-EP-zwYv6vCB5BT26lTG8Ko-3vq_wzDQqNrrSwtzHYm8UwchLkfc-5-HGzGUr5YrkU60y7QxOJ-xwz6HT1a3QyTSI6VSdgKNhrQsYUfkIb0wGSh4vUCOcGPLOQn1PAhnvbN9gBKMK2oghVnLzBCDt8YO08hghfQNcVs27paa6WhI4VDgUL48KwWKbP_LQQLbnOmKeiUkSmi3MH-VHYEu6C-I2gsnJpog9di"/>
+</div>
+<div class="flex-1">
+<p class="text-label-sm text-on-surface-variant dark:text-outline-variant mb-xs uppercase tracking-tight">Parks &amp; Rec • 5 hours ago</p>
+<h4 class="font-title-md text-title-md text-on-surface dark:text-inverse-on-surface mb-xs group-hover:text-primary dark:group-hover:text-primary-fixed-dim transition-colors">Oakwood Park Bench Repair</h4>
+<p class="text-on-surface-variant dark:text-outline-variant text-body-md line-clamp-2">The central seating area near the fountain has loose boards. Requested maintenance for family safety.</p>
+<div class="mt-md flex items-center gap-md">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-white dark:border-[#1b1c19] bg-surface-variant dark:bg-inverse-surface text-[10px] flex items-center justify-center font-bold text-on-surface-variant dark:text-outline-variant">2</div>
+</div>
+<span class="text-label-sm text-on-surface-variant dark:text-outline-variant">2 neighbors supported</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Sidebar Panels -->
+<div class="flex flex-col gap-lg">
+<!-- Moderator Panel (Admin Only) -->
+<div class="glass-card rounded-xl overflow-hidden border-2 border-primary/10 dark:border-primary-fixed-dim/20">
+<div class="bg-primary-container/30 dark:bg-primary-fixed/10 px-md py-sm border-b border-primary/10 dark:border-primary-fixed-dim/10 flex items-center justify-between">
+<h4 class="font-title-md text-title-md text-on-primary-container dark:text-primary-fixed-dim flex items-center gap-xs">
+<span class="material-symbols-outlined" data-icon="admin_panel_settings">admin_panel_settings</span>
+                            Moderator Panel
+                        </h4>
+<span class="bg-primary dark:bg-primary-fixed-dim text-white dark:text-on-primary-fixed text-[10px] px-2 py-0.5 rounded-full font-bold">STAFF</span>
+</div>
+<div class="p-md space-y-md">
+<div class="flex items-center justify-between">
+<span class="text-on-surface-variant dark:text-outline-variant font-medium">Pending Review</span>
+<span class="bg-error-container dark:bg-error text-on-error-container dark:text-on-error px-base py-0.5 rounded-full text-label-sm font-bold">24</span>
+</div>
+<button class="w-full py-base bg-surface-container-highest dark:bg-inverse-surface hover:bg-primary/10 dark:hover:bg-primary-fixed-dim/10 text-on-surface dark:text-inverse-on-surface font-bold rounded-lg transition-colors flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="assignment_late">assignment_late</span>
+                            Review New Reports
+                        </button>
+<div class="pt-base border-t border-outline-variant/30 dark:border-white/10">
+<p class="text-label-sm text-on-surface-variant dark:text-outline-variant mb-sm">GLOBAL STATUS CONTROLS</p>
+<div class="grid grid-cols-2 gap-base">
+<button class="p-base bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-lg text-label-sm font-bold hover:brightness-95 transition-all">Open System</button>
+<button class="p-base bg-error-container dark:bg-error/30 text-on-error-container dark:text-error rounded-lg text-label-sm font-bold hover:brightness-95 transition-all">Mute Alerts</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Gamification / Leaderboard Mini -->
+<div class="bg-surface-container-low dark:bg-[#1b1c19] rounded-xl p-md border border-outline-variant/10 dark:border-white/5">
+<h4 class="font-title-md text-title-md text-on-surface dark:text-inverse-on-surface mb-md">Community Leaders</h4>
+<div class="space-y-md">
+<div class="flex items-center gap-md">
+<span class="font-bold text-secondary dark:text-secondary-fixed-dim text-title-md w-4 text-center">1</span>
+<div class="w-10 h-10 rounded-full bg-surface-variant dark:bg-inverse-surface overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Portrait of a smiling young woman with glasses, representing a community leader. Studio lighting, soft shadows, high-end professional photography style, light-mode friendly." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcDrCptIJ2bhmt6Y446ALEjK7mtvaFSqUNB9Oct6MyLIK5QeEMaGJXHSZGlH8Hbk62vomHFzpnNM9w5UE9KBw2-lqdYRtSXT9gly4pFN5Gx8_v5ccYgRwtv4RDspCoT3lwSAb_GLSbHiWXA8EtIsuXtxtmjMLQ_3tLCtVNiyDsN6AJy-CgvKCXSH8AIl1Q0GbLjdAf4Qo7w8iTzDc7IpgpiKXI5gtH-Wysyr1rGv-wrvE7v2UgphCku9iCEjBXHRHKxLBnS2D704eS"/>
+</div>
+<div class="flex-1">
+<p class="text-body-md font-bold text-on-surface dark:text-inverse-on-surface">Sarah Jenkins</p>
+<p class="text-label-sm text-on-surface-variant dark:text-outline-variant">3,450 pts</p>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<span class="font-bold text-on-surface-variant dark:text-outline-variant text-title-md w-4 text-center">2</span>
+<div class="w-10 h-10 rounded-full bg-surface-variant dark:bg-inverse-surface overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Portrait of an older man with a friendly face, representing a dedicated civic reporter. Natural outdoor lighting, sharp focus, clean modern photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkTpJepqBuhfoj3fjmb3aOtbYgJD1y1okMQteHylzrN6hIhaO83YrIk2R-SBUD3UysQ48dWBdV1vBBROPhMSPw7XfBBAWBdCPu1t7zMfp5xkFY-rFtJNFlCaUaWUHO_CnQTza5VnNndIBiid1J7wH6u6twcS4zzuoRBEY2X8ziTRcz9WcMHMCWsAQtZdmZtxnLegbJaF0hlynSpHQFgOp9svjQ4XENY9W4naBvFn65LH1tAUZDxhrp_PV-mfWay5qXSTrhWZstZQ4r"/>
+</div>
+<div class="flex-1">
+<p class="text-body-md font-bold text-on-surface dark:text-inverse-on-surface">Marcus Thorne</p>
+<p class="text-label-sm text-on-surface-variant dark:text-outline-variant">2,910 pts</p>
+</div>
+</div>
+<div class="flex items-center gap-md bg-white dark:bg-inverse-surface p-base rounded-lg shadow-sm border border-primary/10 dark:border-primary-fixed-dim/10 scale-105">
+<span class="font-bold text-primary dark:text-primary-fixed-dim text-title-md w-4 text-center">12</span>
+<div class="w-10 h-10 rounded-full bg-surface-variant dark:bg-background overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close up of Alex Rivers, the user, used for leaderboard position. High resolution, professional, warm lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVcwhQtg4ZHDzuTqv-7x12FO6bxNTxAaPTi11B3N-gm6DU1PrvCrRVLwPTFc7nPdijqnQJ9mvK7f9wAhO3fdtApYMzkeovfu8qrPCM6BdI0HfOq-T5UHtY4By8YkxPjGeR0GlK-OS7ifMbIEZ0AxJtMPeXNPXG_Y1DqNX200K4wRtW7gvLVqb3NJfLRBgLGh_vcvLp7cT65Nj9r2QKV2PVkgscitBHJ-OPcMOqzLClWlwS5eMINDG6T6VOrGl798Q6z0zoBMN2LNl0"/>
+</div>
+<div class="flex-1">
+<p class="text-body-md font-bold text-on-surface dark:text-inverse-on-surface">You (Alex)</p>
+<p class="text-label-sm text-primary dark:text-primary-fixed-dim">1,240 pts</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Navigation Shell Logic for Mobile -->
+<nav class="md:hidden fixed bottom-0 w-full bg-surface/80 dark:bg-[#121210]/80 backdrop-blur-lg border-t border-white/20 dark:border-white/10 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] z-50">
+<div class="flex justify-around items-center h-16 px-4 pb-safe">
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim font-bold scale-110 active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+<span class="font-label-sm text-label-sm">New Issue</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span class="font-label-sm text-label-sm">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</div>
+</nav>
+<!-- Floating Action Button for Desktop -->
+<button class="hidden md:flex fixed bottom-md right-md sakura-gradient text-white w-16 h-16 rounded-full items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all group z-40">
+<span class="material-symbols-outlined text-3xl group-hover:rotate-90 transition-transform duration-300" data-icon="add">add</span>
+</button>
+<script>
+        // Simple micro-interaction for cards
+        document.querySelectorAll('.bg-surface-container-lowest').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Toggle Dark Mode Simulation
+        const toggleBtn = document.querySelector('header button');
+        toggleBtn.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            const icon = toggleBtn.querySelector('span');
+            icon.textContent = isDark ? 'dark_mode' : 'light_mode';
+        });
+    </script>
+</body></html>
+
+<!-- Home (Dark Mode) - Community Hero -->
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Community Hero | Better Cities, Together</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#121212",
+                    "on-surface": "#f2f1eb",
+                    "on-secondary-container": "#c0edd0",
+                    "on-tertiary-fixed": "#400014",
+                    "secondary-fixed-dim": "#a4d1b4",
+                    "inverse-surface": "#f2f1eb",
+                    "surface-container-low": "#1b1c19",
+                    "tertiary-fixed": "#ffd9dd",
+                    "error": "#ffb4ab",
+                    "primary-fixed": "#ffd9df",
+                    "on-primary-fixed": "#30121a",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed-variant": "#264f39",
+                    "surface-container": "#232420",
+                    "inverse-on-surface": "#1b1c19",
+                    "surface": "#121212",
+                    "surface-tint": "#edb9c3",
+                    "on-primary-fixed-variant": "#613c45",
+                    "tertiary-fixed-dim": "#ffb2bd",
+                    "on-secondary-fixed": "#002112",
+                    "surface-container-highest": "#343530",
+                    "on-tertiary-fixed-variant": "#7d283c",
+                    "primary-container": "#613c45",
+                    "on-primary-container": "#ffd9df",
+                    "surface-container-lowest": "#0d0e0c",
+                    "surface-bright": "#383934",
+                    "error-container": "#93000a",
+                    "on-tertiary-container": "#ffcad1",
+                    "primary": "#edb9c3",
+                    "surface-container-high": "#2d2e29",
+                    "primary-fixed-dim": "#edb9c3",
+                    "on-primary": "#49252f",
+                    "outline": "#9c8d90",
+                    "secondary": "#a4d1b4",
+                    "on-surface-variant": "#d4c2c4",
+                    "on-error": "#690005",
+                    "tertiary-container": "#7d283c",
+                    "surface-dim": "#121212",
+                    "secondary-container": "#264f39",
+                    "on-background": "#f2f1eb",
+                    "surface-variant": "#504446",
+                    "inverse-primary": "#7c535c",
+                    "secondary-fixed": "#c0edd0",
+                    "on-secondary": "#0d3824",
+                    "outline-variant": "#504446",
+                    "tertiary": "#ffb2bd",
+                    "on-error-container": "#ffdad6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "base": "8px",
+                    "gutter": "20px",
+                    "container-max": "1200px",
+                    "lg": "48px",
+                    "sm": "12px",
+                    "xl": "80px",
+                    "md": "24px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Outfit"],
+                    "headline-lg": ["Outfit"],
+                    "headline-lg-mobile": ["Outfit"],
+                    "title-md": ["Outfit"],
+                    "body-md": ["Outfit"],
+                    "display-xl": ["Outfit"],
+                    "body-lg": ["Outfit"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "title-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased; }
+        .sakura-dawn { background: linear-gradient(135deg, #7c535c 0%, #9b4053 100%); }
+        .glass-card { 
+            backdrop-filter: blur(12px); 
+            background: rgba(30, 30, 30, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .shine-effect:hover {
+            position: relative;
+            overflow: hidden;
+        }
+        .shine-effect:hover::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 0.8s ease-out;
+        }
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-black/40 backdrop-blur-xl border-b border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.3)]">
+<div class="flex justify-between items-center h-20 px-gutter max-w-container-max mx-auto">
+<div class="flex items-center gap-base hover:scale-105 hover:opacity-80 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] cursor-pointer">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="account_balance">account_balance</span>
+<span class="font-display-xl text-display-xl bg-gradient-to-r from-primary to-tertiary bg-clip-text text-transparent hidden md:block">Community Hero</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile md:hidden">Community Hero</span>
+</div>
+<nav class="hidden md:flex gap-md items-center">
+<a class="text-primary font-bold border-b-2 border-primary font-title-md text-title-md py-1" href="#">Home</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-all font-title-md text-title-md py-1" href="#">Explore</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-all font-title-md text-title-md py-1" href="#">Community</a>
+</nav>
+<div class="flex items-center gap-sm">
+<button class="p-base rounded-full hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="dark_mode">dark_mode</span>
+</button>
+<button class="hidden md:flex items-center gap-xs sakura-dawn text-on-primary px-6 py-3 rounded-full font-label-sm text-label-sm shine-effect shadow-lg">
+<span class="material-symbols-outlined" data-icon="login">login</span> Sign In
+                </button>
+</div>
+</div>
+</header>
+<main class="pt-20 pb-32">
+<!-- Hero Section -->
+<section class="relative overflow-hidden pt-12 pb-24 px-gutter">
+<div class="max-w-container-max mx-auto flex flex-col md:flex-row items-center gap-lg">
+<div class="w-full md:w-1/2 space-y-md">
+<div class="inline-flex items-center gap-xs bg-primary-container/40 text-primary px-4 py-2 rounded-full border border-primary/20">
+<span class="material-symbols-outlined text-sm" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label-sm text-label-sm">TRANSFORMING CITIES GLOBALLY</span>
+</div>
+<h1 class="font-display-xl text-display-xl md:text-[64px] leading-tight text-on-surface">
+                        Empower Your Neighborhood with <span class="text-primary italic">Civic Precision.</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">
+                        A concierge reporting experience for the modern citizen. Report issues, track resolutions in real-time, and shape the future of your local community through elegant feedback loops.
+                    </p>
+<div class="flex flex-wrap gap-md pt-4">
+<button class="sakura-dawn text-on-primary px-8 py-4 rounded-full font-title-md text-title-md flex items-center gap-sm shine-effect shadow-xl active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span> Report an Issue
+                        </button>
+<button class="border border-primary text-primary px-8 py-4 rounded-full font-title-md text-title-md flex items-center gap-sm hover:bg-primary/10 transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="map">map</span> Explore Map
+                        </button>
+</div>
+</div>
+<div class="w-full md:w-1/2 relative group">
+<div class="absolute -inset-4 bg-primary/20 rounded-[40px] blur-3xl group-hover:bg-primary/30 transition-all duration-700"></div>
+<div class="relative rounded-[32px] overflow-hidden shadow-2xl glass-card aspect-video border border-white/5">
+<img class="w-full h-full object-cover opacity-90" data-alt="A clean, minimalist high-end photograph of a futuristic urban park with clean architectural lines, lush greenery, and residents engaging with digital kiosks. The lighting is bright and high-key, reflecting a premium light-mode aesthetic with subtle Sakura Pink accents in the flora. The atmosphere is peaceful, professional, and civic-focused." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4KIJTQ868pT9fdWVkim6rSUgslM2DgBuhnpnmy7QAhNW6H34miHpHLtk9RzN5c0DlPA1tny4s5nPH4rJg5w6Cdsw2q2tF8T-A5OqFQwU312z5g1aQbvlu3RvPwgINfSgnE7YRpcny0Fve3Va3l88KyOFWBZdW9x3B1XzsSrllSU7427BKucIivbvD4yBEPij-0TKDskWSGYXYTZ9UCiITrO8tTcgseXSUV4em_2kmzu-O-b4nzZLPombRzayD-F5aHHPp6OxWLGEQ"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Stats Section (Bento Style) -->
+<section class="max-w-container-max mx-auto px-gutter py-12">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+<div class="glass-card p-lg rounded-[32px] shadow-2xl border border-white/10 flex flex-col items-center text-center group hover:scale-[1.02] transition-transform duration-500">
+<div class="w-16 h-16 rounded-2xl bg-primary-container/40 flex items-center justify-center mb-md group-hover:rotate-12 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="assignment">assignment</span>
+</div>
+<h3 class="font-display-xl text-display-xl text-primary">12,482</h3>
+<p class="font-title-md text-title-md text-on-surface-variant">Total Issues Logged</p>
+</div>
+<div class="glass-card p-lg rounded-[32px] shadow-2xl border border-white/10 flex flex-col items-center text-center group hover:scale-[1.02] transition-transform duration-500">
+<div class="w-16 h-16 rounded-2xl bg-secondary-container/40 flex items-center justify-center mb-md group-hover:rotate-12 transition-transform">
+<span class="material-symbols-outlined text-secondary text-3xl" data-icon="task_alt">task_alt</span>
+</div>
+<h3 class="font-display-xl text-display-xl text-secondary">98%</h3>
+<p class="font-title-md text-title-md text-on-surface-variant">Resolution Rate</p>
+</div>
+<div class="glass-card p-lg rounded-[32px] shadow-2xl border border-white/10 flex flex-col items-center text-center group hover:scale-[1.02] transition-transform duration-500">
+<div class="w-16 h-16 rounded-2xl bg-tertiary-container/40 flex items-center justify-center mb-md group-hover:rotate-12 transition-transform">
+<span class="material-symbols-outlined text-tertiary text-3xl" data-icon="group">group</span>
+</div>
+<h3 class="font-display-xl text-display-xl text-tertiary">45k+</h3>
+<p class="font-title-md text-title-md text-on-surface-variant">Active Heroes</p>
+</div>
+</div>
+</section>
+<!-- Recent Issues Grid -->
+<section class="max-w-container-max mx-auto px-gutter py-xl">
+<div class="flex justify-between items-end mb-lg">
+<div>
+<h2 class="font-headline-lg text-headline-lg md:font-display-xl md:text-display-xl text-on-surface">Recent Activity</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Live feed from neighborhoods near you.</p>
+</div>
+<button class="text-primary font-bold flex items-center gap-xs hover:gap-sm transition-all">
+                    View All Issues <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md">
+<!-- Issue Card 1 -->
+<div class="bg-surface-container rounded-[24px] overflow-hidden shadow-2xl border border-white/5 hover:border-primary/30 transition-all duration-300">
+<div class="h-48 relative">
+<img class="w-full h-full object-cover opacity-80" data-alt="A clean, stylized urban street photography shot focusing on a small pothole in an asphalt road with soft daylight. The environment is well-maintained, suggesting an elite neighborhood where even minor issues are attended to. Soft depth of field, pastel tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDErkbobLlazlivxu0-BtRfteEp9RaY5h_991IqbUeGIUNlLglkspyckDm-EmdYSqhGndmnUZ1r1cwI8FOVB-E0ZELYScfzdX5gGXcwDpjM7P3ZjtOiUOF4yjSmx1xtYpESFjYxN6EHSmWDqcgQeKRuEMq_GDCq3f70TZJDyWXdST0WBbsR5_DTkxXyzAxAd-q1gFPkxZ88n_RYs3M9QvCuNP0sMrOGeG1jvjUsLr04kK0g6Fn5vIw66gC8Leturp37WHfne7qvYiND"/>
+<div class="absolute top-4 right-4 bg-secondary-container/90 backdrop-blur-md text-on-secondary-container px-3 py-1 rounded-full font-label-sm text-label-sm border border-secondary/20">
+                            IN PROGRESS
+                        </div>
+</div>
+<div class="p-md space-y-sm">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-primary-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="construction">construction</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary uppercase">Infrastructure</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface">Main St. Road Repair</h4>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Small asphalt degradation reported near the central fountain. Safety hazard for evening joggers.</p>
+<div class="flex justify-between items-center pt-base border-t border-white/5">
+<span class="font-label-sm text-label-sm text-on-surface-variant">2 hours ago</span>
+<div class="flex items-center gap-xs text-primary">
+<span class="material-symbols-outlined text-sm" data-icon="thumb_up">thumb_up</span>
+<span class="font-label-sm text-label-sm">24</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Issue Card 2 -->
+<div class="bg-surface-container rounded-[24px] overflow-hidden shadow-2xl border border-white/5 hover:border-primary/30 transition-all duration-300">
+<div class="h-48 relative">
+<img class="w-full h-full object-cover opacity-80" data-alt="Close up of a modern, minimalist street light in a suburban setting during the blue hour. The lighting is cool-toned and crisp, emphasizing architectural design and civic technology. High-end aesthetic with soft bokeh in the background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmzYEfeR3jqgVDs6tMmrZPIH6wxr6PtBGNLe_PNjSiVTXxrfLGZUKTe74QZu15xV6QWepxi0wXqbv2mMnCq6ckNKzk7JFi4nQod4lmCi89k4Vd40fPFKwuTPKn3gZd6Xedc4c3ECMIlzWLgCwP-LO-8CE6IM9JrwxPvYFQy3deZx-9Nj0xxlJCc01II9FEsj8HJKjTOQToBsZXLvfK0sdTUyZlNlHw8_cqmYiOaF8luibyfsIgUE-tyBAOTLexFkHAH3JUiZQVznLQ"/>
+<div class="absolute top-4 right-4 bg-primary-container/90 backdrop-blur-md text-on-primary-container px-3 py-1 rounded-full font-label-sm text-label-sm border border-primary/20">
+                            REPORTED
+                        </div>
+</div>
+<div class="p-md space-y-sm">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-primary-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="lightbulb">lightbulb</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary uppercase">Street Lighting</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface">Dim Light: Oak Avenue</h4>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">The LED panel at the corner of 4th and Oak is flickering. Requires technician inspection.</p>
+<div class="flex justify-between items-center pt-base border-t border-white/5">
+<span class="font-label-sm text-label-sm text-on-surface-variant">4 hours ago</span>
+<div class="flex items-center gap-xs text-primary">
+<span class="material-symbols-outlined text-sm" data-icon="thumb_up">thumb_up</span>
+<span class="font-label-sm text-label-sm">12</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Issue Card 3 -->
+<div class="bg-surface-container rounded-[24px] overflow-hidden shadow-2xl border border-white/5 hover:border-primary/30 transition-all duration-300">
+<div class="h-48 relative">
+<img class="w-full h-full object-cover opacity-80" data-alt="A beautifully designed modern park bench in a vibrant urban garden. The sun is setting, casting a warm golden glow over the scene. The image is clean, inviting, and showcases high-quality public amenities. Premium architectural photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5B3AzvdcWOv37_b30nbOI6DkyaVoh6t21amA2prjmZrRErbP1ZSkAYNnDAff13o8g3VAtbjSKKZvVA6sq1Qz26tAgwpVOcMopc_bU5F9dYChRqk6xuMveE_JuRq34Gv8RkPCm7pEp541g4BX-gn1A16bmiRRdquSiRSI63dhUqwngGDgL_34by_jPaBTsikZgROA3AcovEzpCGPh4-r6YToFg1SJgvrznQ9nJGoDDV36e_9745n4MPHHWczOM3S4jKGPlpWEjN5M8"/>
+<div class="absolute top-4 right-4 bg-tertiary-container/90 backdrop-blur-md text-on-tertiary-container px-3 py-1 rounded-full font-label-sm text-label-sm border border-tertiary/20">
+                            RESOLVED
+                        </div>
+</div>
+<div class="p-md space-y-sm">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-primary-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="park">park</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary uppercase">Public Space</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface">Park Bench Restoration</h4>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">The historic bench in Willow Park has been beautifully restored. Thank you for reporting!</p>
+<div class="flex justify-between items-center pt-base border-t border-white/5">
+<span class="font-label-sm text-label-sm text-on-surface-variant">1 day ago</span>
+<div class="flex items-center gap-xs text-secondary">
+<span class="material-symbols-outlined text-sm" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label-sm text-label-sm">Community Choice</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- NavigationDrawer (Mobile Only Overlay) -->
+<div class="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] opacity-0 pointer-events-none transition-opacity duration-300" id="mobileDrawer">
+<div class="fixed left-0 top-0 h-screen w-80 z-[110] flex flex-col bg-surface-container-low backdrop-blur-[20px] h-full rounded-r-2xl border-r border-white/10 shadow-2xl -translate-x-full transition-transform duration-300">
+<div class="p-lg flex flex-col items-start">
+<img class="w-20 h-20 rounded-full border-4 border-primary/30 mb-md object-cover brightness-90" data-alt="A professional headshot of a friendly young urban planner in business casual attire. Soft studio lighting, neutral background, high-end corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuANE_45q8JJ_ikT7xQJl4d15hPnshKKjinlvQ6czqfl8PodaywgInVM1oGUTmTFWsn0A_xtlDMgiGOxQc1kGiIxOWt3afuw6maxB4QlCv5GnuV1_OfIu5nnnlO_33MfAjWdWbkdrXhWey2tUX0dVjloUcNj2ZJ3v8qoEY7bV3eaJekp8o8i1n0gr-uMRCyLlCkt9Tsk8p8I3xzUdDUQUFLUgF_XqDVudxHh8Fx3ju3KrUEZLzar0baHqGt5Slg9VTn2Fi7PZd2OEaMt"/>
+<h3 class="font-headline-lg text-headline-lg text-primary">Alex Rivers</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Civic Hero Level 5</p>
+<p class="font-label-sm text-label-sm text-primary mt-xs">12 Reports Submitted</p>
+</div>
+<nav class="flex-1 mt-md">
+<a class="flex items-center gap-md bg-primary/20 text-primary rounded-full mx-2 px-4 py-3" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-title-md text-title-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant mx-2 px-4 py-3 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="flag">flag</span>
+<span class="font-title-md text-title-md">Reports</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant mx-2 px-4 py-3 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-title-md text-title-md">Community</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant mx-2 px-4 py-3 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-title-md text-title-md">Settings</span>
+</a>
+</nav>
+<button class="m-md p-md text-on-surface-variant flex items-center justify-center border border-outline/30 rounded-xl" onclick="toggleDrawer()">
+                Close Drawer
+            </button>
+</div>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 bg-black/60 backdrop-blur-2xl border-t border-white/10 shadow-[0_-4px_20px_rgba(0,0,0,0.5)]">
+<div class="flex justify-around items-center h-16 px-4 pb-safe">
+<a class="flex flex-col items-center justify-center text-primary font-bold scale-110" href="#">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+<span class="font-label-sm text-label-sm">New Issue</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span class="font-label-sm text-label-sm">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all" href="javascript:void(0)" onclick="toggleDrawer()">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</div>
+</nav>
+<!-- Floating Action Button (FAB) -->
+<button class="fixed bottom-24 right-gutter md:bottom-md md:right-md w-16 h-16 rounded-2xl sakura-dawn text-on-primary shadow-2xl flex items-center justify-center group active:scale-90 duration-200 transition-all z-40">
+<span class="material-symbols-outlined text-3xl group-hover:rotate-90 transition-transform duration-300" data-icon="add">add</span>
+</button>
+<script>
+        function toggleDrawer() {
+            const drawer = document.getElementById('mobileDrawer');
+            const drawerContent = drawer.querySelector('div');
+            if (drawer.classList.contains('opacity-0')) {
+                drawer.classList.remove('opacity-0', 'pointer-events-none');
+                drawerContent.classList.remove('-translate-x-full');
+            } else {
+                drawer.classList.add('opacity-0', 'pointer-events-none');
+                drawerContent.classList.add('-translate-x-full');
+            }
+        }
+
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 20) {
+                header.classList.add('bg-black/60');
+            } else {
+                header.classList.remove('bg-black/60');
+            }
+        });
+    </script>
+</body></html>
+
+<!-- Map Explorer - Community Hero -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Community Hero - Map Explorer</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Outfit -->
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "background": "#fbf9f3",
+                        "on-surface": "#1b1c19",
+                        "on-secondary-container": "#426b54",
+                        "on-tertiary-fixed": "#400014",
+                        "secondary-fixed-dim": "#a4d1b4",
+                        "inverse-surface": "#30312d",
+                        "surface-container-low": "#f5f3ee",
+                        "tertiary-fixed": "#ffd9dd",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#ffd9df",
+                        "on-primary-fixed": "#30121a",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed-variant": "#264f39",
+                        "surface-container": "#f0eee8",
+                        "inverse-on-surface": "#f2f1eb",
+                        "surface": "#fbf9f3",
+                        "surface-tint": "#7c535c",
+                        "on-primary-fixed-variant": "#613c45",
+                        "tertiary-fixed-dim": "#ffb2bd",
+                        "on-secondary-fixed": "#002112",
+                        "surface-container-highest": "#e4e2dd",
+                        "on-tertiary-fixed-variant": "#7d283c",
+                        "primary-container": "#ffcad4",
+                        "on-primary-container": "#7b525b",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#fbf9f3",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#9a3f52",
+                        "primary": "#7c535c",
+                        "surface-container-high": "#eae8e2",
+                        "primary-fixed-dim": "#edb9c3",
+                        "on-primary": "#ffffff",
+                        "outline": "#827476",
+                        "secondary": "#3e6750",
+                        "on-surface-variant": "#504446",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#ffcad1",
+                        "surface-dim": "#dbdad4",
+                        "secondary-container": "#bdeacd",
+                        "on-background": "#1b1c19",
+                        "surface-variant": "#e4e2dd",
+                        "inverse-primary": "#edb9c3",
+                        "secondary-fixed": "#c0edd0",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#d4c2c4",
+                        "tertiary": "#9b4053",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "base": "8px",
+                        "gutter": "20px",
+                        "container-max": "1200px",
+                        "lg": "48px",
+                        "sm": "12px",
+                        "xl": "80px",
+                        "md": "24px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Outfit"],
+                        "headline-lg": ["Outfit"],
+                        "headline-lg-mobile": ["Outfit"],
+                        "title-md": ["Outfit"],
+                        "body-md": ["Outfit"],
+                        "display-xl": ["Outfit"],
+                        "body-lg": ["Outfit"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "title-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "display-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #fbf9f3;
+            overflow: hidden;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .glass-panel {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .dark .glass-panel {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sakura-gradient {
+            background: linear-gradient(135deg, #7c535c 0%, #9b4053 100%);
+        }
+
+        .marker-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .bottom-sheet-transition {
+            transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface">
+<!-- Top Navigation Anchor -->
+<header class="fixed top-0 w-full z-50 bg-surface/70 dark:bg-inverse-surface/70 backdrop-blur-xl border-b border-white/20 dark:border-white/10 shadow-[0_4px_30px_rgba(124,83,92,0.1)]">
+<div class="flex justify-between items-center h-20 px-gutter max-w-container-max mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl">account_balance</span>
+<h1 class="font-display-xl text-[24px] md:text-display-xl bg-gradient-to-r from-primary to-tertiary bg-clip-text text-transparent">Community Hero</h1>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant font-medium hover:scale-105 hover:opacity-80 transition-all" href="#">Dashboard</a>
+<a class="text-on-surface-variant font-medium hover:scale-105 hover:opacity-80 transition-all" href="#">Reports</a>
+<a class="text-primary font-bold border-b-2 border-primary hover:scale-105 hover:opacity-80 transition-all" href="#">Map</a>
+<a class="text-on-surface-variant font-medium hover:scale-105 hover:opacity-80 transition-all" href="#">Settings</a>
+</div>
+<button class="material-symbols-outlined text-primary hover:scale-105 transition-all">light_mode</button>
+</div>
+</header>
+<!-- Map Canvas Area -->
+<main class="relative h-screen w-full pt-20 overflow-hidden">
+<!-- Interactive Map Simulation -->
+<div class="absolute inset-0 z-0">
+<div class="w-full h-full grayscale-[20%] brightness-[105%]" data-alt="A detailed map of a clean, modern urban neighborhood in a high-end illustration style. The map features soft pastel colors, distinct park areas in matcha green, and elegant street grids. The lighting is bright and airy, suggesting a sunny afternoon in a premium civic-focused city. Subtle glowing paths highlight key community routes." data-location="San Francisco" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC72EY5N9vohABtFaZFwGL3q0jR1v4dgV9dWW8TC-uFNvoiRPsR1fMiMwXxACDqRomxyIzWsu9cbIkBbD6NtiCpieqSQ9KNIoGpKkDPeBvbgCbFJ_GlHQPGqa5xlMf3pYxHRgtXfDQNp4I1Juvm7dT03LaPufsCBdIV_xC0rwT5Qi3-4BuI2Z_HvFn7QpRod6XKhlDnHDvqby4M6J1GGLtTI8CfuKj4Dkjc6plzvsvW8Fana7hd9p6wQO1Y_MFy2UgFO_qHd4scnAn5')">
+</div>
+<!-- Custom Markers -->
+<!-- Marker 1: High Priority Issue -->
+<button class="absolute top-[30%] left-[40%] group flex flex-col items-center" onclick="openIssueDetail('Broken Streetlight')">
+<div class="w-12 h-12 rounded-full bg-white glass-panel flex items-center justify-center shadow-lg border-2 border-primary marker-pulse hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">light_off</span>
+</div>
+<div class="mt-2 px-3 py-1 bg-primary text-white rounded-full text-label-sm shadow-md opacity-0 group-hover:opacity-100 transition-opacity">Broken Streetlight</div>
+</button>
+<!-- Marker 2: Resolved Issue -->
+<button class="absolute top-[55%] left-[65%] group flex flex-col items-center" onclick="openIssueDetail('Park Cleaned')">
+<div class="w-10 h-10 rounded-full bg-white glass-panel flex items-center justify-center shadow-lg border-2 border-secondary hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">park</span>
+</div>
+<div class="mt-2 px-3 py-1 bg-secondary text-white rounded-full text-label-sm shadow-md opacity-0 group-hover:opacity-100 transition-opacity">Resolved: Park Cleanup</div>
+</button>
+<!-- Marker 3: Pothole -->
+<button class="absolute top-[45%] left-[25%] group flex flex-col items-center" onclick="openIssueDetail('Pothole on Main')">
+<div class="w-12 h-12 rounded-full bg-white glass-panel flex items-center justify-center shadow-lg border-2 border-tertiary hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div class="mt-2 px-3 py-1 bg-tertiary text-white rounded-full text-label-sm shadow-md opacity-0 group-hover:opacity-100 transition-opacity">Large Pothole</div>
+</button>
+</div>
+<!-- Floating UI Over Map -->
+<div class="absolute top-24 left-gutter right-gutter md:left-gutter md:w-[400px] z-10 space-y-4">
+<!-- Search & Filters -->
+<div class="glass-panel rounded-xl p-4 shadow-xl">
+<div class="relative mb-4">
+<input class="w-full bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-3 text-body-md focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="Search issues or areas..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+</div>
+<div class="flex gap-2 overflow-x-auto hide-scrollbar">
+<button class="px-4 py-1.5 rounded-full bg-primary text-white text-label-sm whitespace-nowrap shadow-sm">All Issues</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-highest text-on-surface-variant text-label-sm whitespace-nowrap hover:bg-primary-container transition-colors">Infrastructure</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-highest text-on-surface-variant text-label-sm whitespace-nowrap hover:bg-primary-container transition-colors">Public Safety</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-highest text-on-surface-variant text-label-sm whitespace-nowrap hover:bg-primary-container transition-colors">Resolved</button>
+</div>
+</div>
+</div>
+<!-- Issue List Bottom Sheet (Minimized/Draggable State) -->
+<div class="fixed bottom-16 md:bottom-0 left-0 right-0 z-40 h-[530px] bottom-sheet-transition translate-y-[calc(60vh-140px)]" id="bottom-sheet">
+<div class="h-full bg-white/80 dark:bg-black/80 backdrop-blur-2xl rounded-t-[32px] border-t border-white/40 shadow-2xl overflow-hidden flex flex-col">
+<!-- Drag Handle Area -->
+<div class="w-full h-10 flex items-center justify-center cursor-pointer group" onclick="toggleBottomSheet()">
+<div class="w-12 h-1.5 bg-outline-variant rounded-full group-hover:bg-primary transition-colors"></div>
+</div>
+<div class="px-6 pb-4">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-2">Local Infrastructure</h2>
+<p class="text-on-surface-variant text-body-md">Showing 12 active issues nearby</p>
+</div>
+<div class="flex-1 overflow-y-auto px-6 pb-20 space-y-4">
+<!-- Issue Card 1 -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-white/20 shadow-sm hover:shadow-md transition-all cursor-pointer hover:scale-[1.01]" onclick="openIssueDetail('Broken Streetlight')">
+<div class="flex justify-between items-start mb-2">
+<span class="px-3 py-1 rounded-full bg-error-container text-on-error-container text-label-sm font-bold">Urgent</span>
+<span class="text-on-surface-variant text-label-sm">2h ago</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-1">Broken Streetlight</h3>
+<p class="text-on-surface-variant text-body-md line-clamp-1">Corner of Oak &amp; 5th. Complete blackout in the alley...</p>
+<div class="mt-3 flex items-center gap-4">
+<div class="flex items-center gap-1 text-on-surface-variant text-label-sm">
+<span class="material-symbols-outlined text-[18px]">thumb_up</span>
+                                24
+                            </div>
+<div class="flex items-center gap-1 text-on-surface-variant text-label-sm">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+                                5
+                            </div>
+</div>
+</div>
+<!-- Issue Card 2 (Resolved) -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-white/20 shadow-sm opacity-80">
+<div class="flex justify-between items-start mb-2">
+<span class="px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-label-sm font-bold uppercase">Resolved</span>
+<span class="text-on-surface-variant text-label-sm">Yesterday</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-1">Park Bench Vandalism</h3>
+<p class="text-on-surface-variant text-body-md">Soma Park. Graffiti removed and bench repainted.</p>
+<div class="mt-3 flex items-center gap-2 text-secondary font-bold text-label-sm">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+                            Verified by 18 Heroes
+                        </div>
+</div>
+<!-- Issue Card 3 -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-white/20 shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<span class="px-3 py-1 rounded-full bg-primary-container text-on-primary-container text-label-sm font-bold">In Progress</span>
+<span class="text-on-surface-variant text-label-sm">5h ago</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-1">Clogged Storm Drain</h3>
+<p class="text-on-surface-variant text-body-md">Water pooling at the intersection after morning rain.</p>
+<div class="mt-3 flex items-center gap-4">
+<div class="flex items-center gap-1 text-on-surface-variant text-label-sm">
+<span class="material-symbols-outlined text-[18px]">thumb_up</span>
+                                12
+                            </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Detailed Issue Drawer (Slide-out from Right on Desktop, Full Screen on Mobile) -->
+<div class="fixed inset-y-0 right-0 z-[100] w-full md:w-[480px] glass-panel shadow-2xl translate-x-full transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] flex flex-col" id="issue-detail-drawer">
+<!-- Header -->
+<div class="flex items-center justify-between p-6 border-b border-white/20">
+<button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface-container-highest transition-colors" onclick="closeIssueDetail()">
+<span class="material-symbols-outlined">close</span>
+</button>
+<div class="flex gap-2">
+<button class="px-4 py-2 bg-primary text-white rounded-full text-label-sm sakura-gradient shadow-lg hover:scale-105 transition-transform">Verify Issue</button>
+</div>
+</div>
+<!-- Content -->
+<div class="flex-1 overflow-y-auto px-6 py-8">
+<div class="w-full h-48 rounded-2xl overflow-hidden mb-6 shadow-inner" data-alt="A high-resolution, close-up photograph of a broken classic street lamp in a modern city. The lighting is dramatic, capturing the textures of the cracked glass and rusted metal. The background is a soft-focus urban sunset with pastel pink and deep violet hues, maintaining the premium community-engagement aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDRliZ22zBSve4E5eNHV3ErVp44LQgc-IuivUJB52CLLzb2Jfw3MUio40GuvbUTdeaQXg4bOtrXGHYGp9QMC5aXTSocGHaAZe6Xgs0GIGAQXeCHdh4o4SfvYhjHCipZT5FBgO5n8fX6DZ-9f6ihHgxEhrazz9QZzldhU5HeIb23rDAVwqvBw_1BMYrZ_x-91xwKAGMwd-B-SlToqknqhRK2efjPDgCl_rdHjZvA4w15Uz8GCbL7HgonBwrFAOzAgZvqiJjQNSNH_2Lq')">
+</div>
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<span class="text-on-surface-variant font-medium text-label-sm">45th St &amp; Lexington Ave</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-4" id="detail-title">Broken Streetlight</h2>
+<div class="flex gap-2 mb-6">
+<span class="px-3 py-1 rounded-full bg-error-container text-on-error-container text-label-sm font-bold">Needs Attention</span>
+<span class="px-3 py-1 rounded-full bg-secondary-container/20 text-secondary text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">bolt</span> AI Summarized
+                    </span>
+</div>
+<div class="bg-primary-container/10 border border-primary/20 p-4 rounded-xl mb-6">
+<h3 class="text-on-primary-container font-bold text-label-sm uppercase mb-2">AI Summary</h3>
+<p class="text-body-md text-on-surface-variant italic">"This issue affects pedestrian safety in a high-traffic residential zone. Report suggests recurring power surges. Community impact score: High."</p>
+</div>
+<div class="space-y-6">
+<div>
+<h4 class="font-title-md text-title-md mb-2">Description</h4>
+<p class="text-body-md text-on-surface-variant leading-relaxed">
+                            The main light pole has been flickering for three days and finally went dark last night. It's creating a safety concern for evening commuters and dog walkers. Several neighbors have confirmed the issue.
+                        </p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<button class="flex flex-col items-center justify-center p-4 rounded-xl bg-surface-container-low border border-white/20 hover:bg-primary-container/20 transition-all group">
+<span class="material-symbols-outlined text-primary mb-1 group-hover:scale-125 transition-transform">thumb_up</span>
+<span class="text-label-sm font-bold">Upvote</span>
+<span class="text-[10px] text-on-surface-variant">24 People</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 rounded-xl bg-surface-container-low border border-white/20 hover:bg-secondary-container/20 transition-all group">
+<span class="material-symbols-outlined text-secondary mb-1 group-hover:scale-125 transition-transform">add_comment</span>
+<span class="text-label-sm font-bold">Update</span>
+<span class="text-[10px] text-on-surface-variant">Share Info</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Footer Action -->
+<div class="p-6 border-t border-white/20 bg-surface/50">
+<button class="w-full py-4 rounded-2xl bg-on-surface text-background font-bold hover:scale-[1.02] active:scale-[0.98] transition-all">
+                    I'll Volunteer to Monitor
+                </button>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Shell (Mobile) -->
+<nav class="md:hidden fixed bottom-0 w-full bg-surface/80 dark:bg-inverse-surface/80 backdrop-blur-lg border-t border-white/20 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] rounded-t-xl z-50">
+<div class="flex justify-around items-center h-16 px-4 pb-safe">
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined">home</span>
+<span class="text-label-sm">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined">add_circle</span>
+<span class="text-label-sm">New Issue</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary font-bold scale-110">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">map</span>
+<span class="text-label-sm">Map</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined">person</span>
+<span class="text-label-sm">Profile</span>
+</div>
+</div>
+</nav>
+<!-- Map FAB (For adding new issue directly on map) -->
+<button class="fixed bottom-20 right-6 md:bottom-8 md:right-8 z-[50] w-14 h-14 rounded-full bg-primary sakura-gradient text-white shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+<script>
+        let isSheetOpen = false;
+
+        function toggleBottomSheet() {
+            const sheet = document.getElementById('bottom-sheet');
+            if (isSheetOpen) {
+                sheet.style.transform = 'translateY(calc(60vh - 140px))';
+            } else {
+                sheet.style.transform = 'translateY(0)';
+            }
+            isSheetOpen = !isSheetOpen;
+        }
+
+        function openIssueDetail(title) {
+            const drawer = document.getElementById('issue-detail-drawer');
+            const titleEl = document.getElementById('detail-title');
+            titleEl.innerText = title;
+            drawer.style.transform = 'translateX(0)';
+        }
+
+        function closeIssueDetail() {
+            const drawer = document.getElementById('issue-detail-drawer');
+            drawer.style.transform = 'translateX(100%)';
+        }
+
+        // Lightweight atmospheric interaction: parallax map move
+        document.addEventListener('mousemove', (e) => {
+            const x = (window.innerWidth / 2 - e.pageX) / 100;
+            const y = (window.innerHeight / 2 - e.pageY) / 100;
+            const map = document.querySelector('[data-location]');
+            if(map) {
+                map.style.transform = `scale(1.1) translate(${x}px, ${y}px)`;
+                map.style.transition = 'transform 0.2s ease-out';
+            }
+        });
+
+        // Initialize sheet state on resize for better UX
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                // Keep it partially up or hidden as per design
+            }
+        });
+    </script>
+</body></html>
+
+<!-- Report Issue - Community Hero -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Report Issue | Community Hero</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#fbf9f3",
+                    "on-surface": "#1b1c19",
+                    "on-secondary-container": "#426b54",
+                    "on-tertiary-fixed": "#400014",
+                    "secondary-fixed-dim": "#a4d1b4",
+                    "inverse-surface": "#30312d",
+                    "surface-container-low": "#f5f3ee",
+                    "tertiary-fixed": "#ffd9dd",
+                    "error": "#ba1a1a",
+                    "primary-fixed": "#ffd9df",
+                    "on-primary-fixed": "#30121a",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed-variant": "#264f39",
+                    "surface-container": "#f0eee8",
+                    "inverse-on-surface": "#f2f1eb",
+                    "surface": "#fbf9f3",
+                    "surface-tint": "#7c535c",
+                    "on-primary-fixed-variant": "#613c45",
+                    "tertiary-fixed-dim": "#ffb2bd",
+                    "on-secondary-fixed": "#002112",
+                    "surface-container-highest": "#e4e2dd",
+                    "on-tertiary-fixed-variant": "#7d283c",
+                    "primary-container": "#ffcad4",
+                    "on-primary-container": "#7b525b",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#fbf9f3",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-container": "#9a3f52",
+                    "primary": "#7c535c",
+                    "surface-container-high": "#eae8e2",
+                    "primary-fixed-dim": "#edb9c3",
+                    "on-primary": "#ffffff",
+                    "outline": "#827476",
+                    "secondary": "#3e6750",
+                    "on-surface-variant": "#504446",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#ffcad1",
+                    "surface-dim": "#dbdad4",
+                    "secondary-container": "#bdeacd",
+                    "on-background": "#1b1c19",
+                    "surface-variant": "#e4e2dd",
+                    "inverse-primary": "#edb9c3",
+                    "secondary-fixed": "#c0edd0",
+                    "on-secondary": "#ffffff",
+                    "outline-variant": "#d4c2c4",
+                    "tertiary": "#9b4053",
+                    "on-error-container": "#93000a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "base": "8px",
+                    "gutter": "20px",
+                    "container-max": "1200px",
+                    "lg": "48px",
+                    "sm": "12px",
+                    "xl": "80px",
+                    "md": "24px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Outfit"],
+                    "headline-lg": ["Outfit"],
+                    "headline-lg-mobile": ["Outfit"],
+                    "title-md": ["Outfit"],
+                    "body-md": ["Outfit"],
+                    "display-xl": ["Outfit"],
+                    "body-lg": ["Outfit"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "title-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fbf9f3;
+            color: #1b1c19;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .sakura-gradient {
+            background: linear-gradient(135deg, #7c535c 0%, #9b4053 100%);
+        }
+        .shimmer {
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d4c2c4;
+            border-radius: 10px;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .draw-in {
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            animation: draw 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        @keyframes draw {
+            to { stroke-dashoffset: 0; }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-body-md overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 bg-surface/70 dark:bg-inverse-surface/70 backdrop-blur-xl border-b border-white/20 dark:border-white/10 shadow-[0_4px_30px_rgba(124,83,92,0.1)]">
+<div class="flex justify-between items-center h-20 px-gutter max-w-container-max mx-auto">
+<div class="flex items-center gap-3">
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary">New Issue</h1>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-2xl">account_balance</span>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-32 px-gutter max-w-2xl mx-auto space-y-lg">
+<!-- Intro Section -->
+<section class="space-y-base">
+<h2 class="font-title-md text-title-md text-on-surface">Report a Concern</h2>
+<p class="text-on-surface-variant font-body-md">Your contribution helps keep our community beautiful and safe. Detailed reports are processed 40% faster.</p>
+</section>
+<form class="space-y-lg" id="reportForm">
+<!-- 1. Details Section -->
+<div class="glass-panel p-md rounded-xl space-y-md shadow-[0_4px_20px_rgba(124,83,92,0.05)]">
+<div class="flex items-center gap-2 text-primary font-bold">
+<span class="material-symbols-outlined">edit_note</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Step 1: Details</span>
+</div>
+<div class="space-y-sm">
+<label class="block font-label-sm text-on-surface-variant px-1">Issue Title</label>
+<input class="w-full bg-surface-container-low border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 transition-all duration-300 outline-none" placeholder="e.g., Pothole on Maple Avenue" type="text"/>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="space-y-sm">
+<label class="block font-label-sm text-on-surface-variant px-1">Category</label>
+<select class="w-full bg-surface-container-low border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 transition-all outline-none appearance-none cursor-pointer">
+<option>Infrastructure</option>
+<option>Sanitation</option>
+<option>Public Safety</option>
+<option>Greenery/Parks</option>
+<option>Other</option>
+</select>
+</div>
+<div class="space-y-sm">
+<label class="block font-label-sm text-on-surface-variant px-1">Severity</label>
+<select class="w-full bg-surface-container-low border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 transition-all outline-none appearance-none cursor-pointer">
+<option>Low (Cosmetic)</option>
+<option>Medium (Nuisance)</option>
+<option>High (Safety Hazard)</option>
+<option>Critical (Emergency)</option>
+</select>
+</div>
+</div>
+<div class="space-y-sm">
+<label class="block font-label-sm text-on-surface-variant px-1">Description</label>
+<textarea class="w-full bg-surface-container-low border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 transition-all duration-300 outline-none resize-none" placeholder="Describe the issue in detail. Include landmarks or specific context..." rows="4"></textarea>
+</div>
+</div>
+<!-- 2. Media Section -->
+<div class="glass-panel p-md rounded-xl space-y-md shadow-[0_4px_20px_rgba(124,83,92,0.05)]">
+<div class="flex items-center gap-2 text-primary font-bold">
+<span class="material-symbols-outlined">photo_camera</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Step 2: Evidence</span>
+</div>
+<div class="relative group cursor-pointer" id="dropzone">
+<div class="w-full aspect-video border-2 border-dashed border-primary/30 rounded-xl flex flex-col items-center justify-center space-y-2 bg-primary/5 group-hover:bg-primary/10 transition-all duration-500 overflow-hidden">
+<span class="material-symbols-outlined text-4xl text-primary/60 group-hover:scale-110 transition-transform duration-500">upload_file</span>
+<p class="font-label-sm text-primary">Drop photos here or <span class="underline">browse</span></p>
+<p class="text-[10px] text-on-surface-variant/60">Maximum 3 files • JPEG, PNG</p>
+</div>
+</div>
+<!-- Preview Area (Empty State) -->
+<div class="grid grid-cols-3 gap-sm">
+<div class="aspect-square bg-surface-container rounded-lg border border-outline-variant/30 flex items-center justify-center text-outline-variant">
+<span class="material-symbols-outlined">image</span>
+</div>
+<div class="aspect-square bg-surface-container rounded-lg border border-outline-variant/30 flex items-center justify-center text-outline-variant">
+<span class="material-symbols-outlined">image</span>
+</div>
+<div class="aspect-square bg-surface-container rounded-lg border border-outline-variant/30 flex items-center justify-center text-outline-variant">
+<span class="material-symbols-outlined">image</span>
+</div>
+</div>
+</div>
+<!-- 3. Location Section -->
+<div class="glass-panel p-md rounded-xl space-y-md shadow-[0_4px_20px_rgba(124,83,92,0.05)] overflow-hidden">
+<div class="flex items-center gap-2 text-primary font-bold">
+<span class="material-symbols-outlined">location_on</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Step 3: Location</span>
+</div>
+<div class="space-y-sm">
+<div class="relative">
+<input class="w-full bg-surface-container-low border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 pr-12 transition-all outline-none" placeholder="Search for address..." type="text"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-primary" type="button">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+<button class="w-full py-3 flex items-center justify-center gap-2 text-primary font-bold text-label-sm bg-primary/10 rounded-lg hover:bg-primary/20 transition-all border border-primary/20" type="button">
+<span class="material-symbols-outlined text-base">my_location</span>
+                        USE MY CURRENT LOCATION
+                    </button>
+</div>
+<!-- Interactive Map UI -->
+<div class="relative w-full h-48 rounded-xl overflow-hidden border border-outline-variant/30 group">
+<div class="absolute inset-0 bg-cover bg-center grayscale-[0.5] contrast-[0.9] brightness-[1.05]" data-alt="A clean, minimalist vector-style map of a suburban neighborhood. The map uses a light-mode aesthetic with rice-white streets, soft green park areas, and light-gray building outlines. The style is modern, professional, and sophisticated, echoing a high-end civic engagement application. Gentle sunlight creates a calm, premium atmosphere." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBn7JbB4xef7HLO7rGte_SQXn5sdjcBpx3IjCVmuspLJzr0OXyQx7qoolZNvvT45NSoOKzcZOk0FoALvINhByZdkHTFwXp6uDX1bR2qWEi8JQI4N8NAh260eUFupLdhMZ2FkoW3UGy_HyjeFfILTTFyuzzaPF-LXFrCM1aZOoJyv0pZWS0gkFHEuY_ZBQ8e7PPBZbsYu8MvC9BiJ2T3_KTdTFpFrzvl5YObxmjUrTaq1sWe08E9Svk25qgqrcdgPodulfL752j_veL4')">
+</div>
+<!-- Center Pin -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<div class="relative -translate-y-4">
+<span class="material-symbols-outlined text-4xl text-primary drop-shadow-md" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<div class="absolute bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-black/20 rounded-full blur-xs"></div>
+</div>
+</div>
+<!-- Map Controls -->
+<div class="absolute bottom-2 right-2 flex flex-col gap-1">
+<button class="w-8 h-8 bg-white/90 backdrop-blur-md rounded shadow-sm flex items-center justify-center text-on-surface hover:bg-white transition-all" type="button"><span class="material-symbols-outlined text-lg">add</span></button>
+<button class="w-8 h-8 bg-white/90 backdrop-blur-md rounded shadow-sm flex items-center justify-center text-on-surface hover:bg-white transition-all" type="button"><span class="material-symbols-outlined text-lg">remove</span></button>
+</div>
+</div>
+</div>
+<!-- Submit Button -->
+<button class="w-full sakura-gradient h-16 rounded-xl text-white font-bold text-title-md shadow-xl hover:scale-[1.02] active:scale-95 transition-all duration-300 relative overflow-hidden group" id="submitBtn" type="button">
+<span class="relative z-10" id="btnText">Submit Report</span>
+<div class="hidden relative z-10 flex items-center justify-center gap-3" id="btnLoading">
+<svg class="animate-spin h-6 w-6 text-white" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+<path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path>
+</svg>
+<span>Sending Data...</span>
+</div>
+<div class="absolute inset-0 shimmer opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+</button>
+</form>
+</main>
+<!-- Bottom Navigation Bar (Contextual Check: Active on Top Level) -->
+<nav class="fixed bottom-0 w-full rounded-t-xl z-50 bg-surface/80 dark:bg-inverse-surface/80 backdrop-blur-lg border-t border-white/20 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+<div class="flex justify-around items-center h-16 px-4 pb-safe">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary font-bold scale-110 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+<span class="font-label-sm text-label-sm">New Issue</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="font-label-sm text-label-sm">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</div>
+</nav>
+<!-- Success Modal (Hidden by Default) -->
+<div class="fixed inset-0 z-[100] flex items-center justify-center p-md pointer-events-none opacity-0 transition-opacity duration-500" id="successModal">
+<div class="absolute inset-0 bg-on-surface/20 backdrop-blur-sm"></div>
+<div class="relative glass-panel w-full max-w-sm rounded-2xl p-lg text-center space-y-md shadow-2xl scale-90 transition-transform duration-500">
+<div class="w-20 h-20 bg-secondary/10 rounded-full flex items-center justify-center mx-auto">
+<svg class="w-10 h-10 text-secondary" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path class="draw-in" d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+</svg>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Report Submitted!</h3>
+<p class="text-on-surface-variant">Thank you, Alex. Your report has been tagged as High Priority and assigned to the Public Works department.</p>
+<button class="w-full py-4 sakura-gradient text-white font-bold rounded-xl shadow-lg" onclick="window.location.reload()">Done</button>
+</div>
+</div>
+<script>
+        document.getElementById('submitBtn').addEventListener('click', function() {
+            const btn = this;
+            const text = document.getElementById('btnText');
+            const loader = document.getElementById('btnLoading');
+            const modal = document.getElementById('successModal');
+            const modalContent = modal.querySelector('.glass-panel');
+
+            // Enter loading state
+            btn.disabled = true;
+            text.classList.add('hidden');
+            loader.classList.remove('hidden');
+
+            // Simulate API Call
+            setTimeout(() => {
+                modal.classList.remove('pointer-events-none', 'opacity-0');
+                modalContent.classList.remove('scale-90');
+                modalContent.classList.add('scale-100');
+            }, 1800);
+        });
+
+        // Dropzone simple visual interaction
+        const dropzone = document.getElementById('dropzone');
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.querySelector('div').classList.add('bg-primary/20');
+        });
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.querySelector('div').classList.remove('bg-primary/20');
+        });
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.querySelector('div').classList.remove('bg-primary/20');
+            // Simplified feedback for demo
+            alert('File added to queue.');
+        });
+    </script>
+</body></html>
+
+<!-- Report Issue (Dark Mode) - Community Hero -->
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Report Issue | Community Hero</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#1b1c19",
+                    "on-surface": "#fbf9f3",
+                    "on-secondary-container": "#c0edd0",
+                    "on-tertiary-fixed": "#400014",
+                    "secondary-fixed-dim": "#a4d1b4",
+                    "inverse-surface": "#fbf9f3",
+                    "surface-container-low": "#2a2b27",
+                    "tertiary-fixed": "#ffd9dd",
+                    "error": "#ffb4ab",
+                    "primary-fixed": "#ffd9df",
+                    "on-primary-fixed": "#30121a",
+                    "on-tertiary": "#5f1227",
+                    "on-secondary-fixed-variant": "#264f39",
+                    "surface-container": "#21211e",
+                    "inverse-on-surface": "#1b1c19",
+                    "surface": "#1b1c19",
+                    "surface-tint": "#edb9c3",
+                    "on-primary-fixed-variant": "#613c45",
+                    "tertiary-fixed-dim": "#ffb2bd",
+                    "on-secondary-fixed": "#002112",
+                    "surface-container-highest": "#363632",
+                    "on-tertiary-fixed-variant": "#7d283c",
+                    "primary-container": "#613c45",
+                    "on-primary-container": "#ffd9df",
+                    "surface-container-lowest": "#0e0f0c",
+                    "surface-bright": "#363632",
+                    "error-container": "#93000a",
+                    "on-tertiary-container": "#ffcad1",
+                    "primary": "#edb9c3",
+                    "surface-container-high": "#2b2b28",
+                    "primary-fixed-dim": "#edb9c3",
+                    "on-primary": "#48262e",
+                    "outline": "#9c8e90",
+                    "secondary": "#a4d1b4",
+                    "on-surface-variant": "#d4c2c4",
+                    "on-error": "#690005",
+                    "tertiary-container": "#7d283c",
+                    "surface-dim": "#1b1c19",
+                    "secondary-container": "#264f39",
+                    "on-background": "#fbf9f3",
+                    "surface-variant": "#504446",
+                    "inverse-primary": "#7c535c",
+                    "secondary-fixed": "#c0edd0",
+                    "on-secondary": "#0d3824",
+                    "outline-variant": "#504446",
+                    "tertiary": "#ffb2bd",
+                    "on-error-container": "#ffdad6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "base": "8px",
+                    "gutter": "20px",
+                    "container-max": "1200px",
+                    "lg": "48px",
+                    "sm": "12px",
+                    "xl": "80px",
+                    "md": "24px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Outfit"],
+                    "headline-lg": ["Outfit"],
+                    "headline-lg-mobile": ["Outfit"],
+                    "title-md": ["Outfit"],
+                    "body-md": ["Outfit"],
+                    "display-xl": ["Outfit"],
+                    "body-lg": ["Outfit"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "title-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #1b1c19;
+            color: #fbf9f3;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .glass-panel {
+            background: rgba(30, 31, 28, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .sakura-gradient {
+            background: linear-gradient(135deg, #7c535c 0%, #9b4053 100%);
+        }
+        .shimmer {
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #504446;
+            border-radius: 10px;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .draw-in {
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            animation: draw 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        @keyframes draw {
+            to { stroke-dashoffset: 0; }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-white/5 shadow-[0_4px_30px_rgba(0,0,0,0.3)]">
+<div class="flex justify-between items-center h-20 px-gutter max-w-container-max mx-auto">
+<div class="flex items-center gap-3">
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary">New Issue</h1>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-2xl">account_balance</span>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-32 px-gutter max-w-2xl mx-auto space-y-lg">
+<!-- Intro Section -->
+<section class="space-y-base">
+<h2 class="font-title-md text-title-md text-on-surface">Report a Concern</h2>
+<p class="text-on-surface-variant font-body-md">Your contribution helps keep our community beautiful and safe. Detailed reports are processed 40% faster.</p>
+</section>
+<form class="space-y-lg" id="reportForm">
+<!-- 1. Details Section -->
+<div class="glass-panel p-md rounded-xl space-y-md shadow-xl">
+<div class="flex items-center gap-2 text-primary font-bold">
+<span class="material-symbols-outlined">edit_note</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Step 1: Details</span>
+</div>
+<div class="space-y-sm">
+<label class="block font-label-sm text-on-surface-variant px-1">Issue Title</label>
+<input class="w-full bg-surface-container-low border-outline-variant text-on-surface placeholder:text-on-surface-variant/50 focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 transition-all duration-300 outline-none" placeholder="e.g., Pothole on Maple Avenue" type="text"/>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="space-y-sm">
+<label class="block font-label-sm text-on-surface-variant px-1">Category</label>
+<select class="w-full bg-surface-container-low border-outline-variant text-on-surface focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 transition-all outline-none appearance-none cursor-pointer">
+<option>Infrastructure</option>
+<option>Sanitation</option>
+<option>Public Safety</option>
+<option>Greenery/Parks</option>
+<option>Other</option>
+</select>
+</div>
+<div class="space-y-sm">
+<label class="block font-label-sm text-on-surface-variant px-1">Severity</label>
+<select class="w-full bg-surface-container-low border-outline-variant text-on-surface focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 transition-all outline-none appearance-none cursor-pointer">
+<option>Low (Cosmetic)</option>
+<option>Medium (Nuisance)</option>
+<option>High (Safety Hazard)</option>
+<option>Critical (Emergency)</option>
+</select>
+</div>
+</div>
+<div class="space-y-sm">
+<label class="block font-label-sm text-on-surface-variant px-1">Description</label>
+<textarea class="w-full bg-surface-container-low border-outline-variant text-on-surface placeholder:text-on-surface-variant/50 focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 transition-all duration-300 outline-none resize-none" placeholder="Describe the issue in detail. Include landmarks or specific context..." rows="4"></textarea>
+</div>
+</div>
+<!-- 2. Media Section -->
+<div class="glass-panel p-md rounded-xl space-y-md shadow-xl">
+<div class="flex items-center gap-2 text-primary font-bold">
+<span class="material-symbols-outlined">photo_camera</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Step 2: Evidence</span>
+</div>
+<div class="relative group cursor-pointer" id="dropzone">
+<div class="w-full aspect-video border-2 border-dashed border-primary/30 rounded-xl flex flex-col items-center justify-center space-y-2 bg-primary/5 group-hover:bg-primary/10 transition-all duration-500 overflow-hidden">
+<span class="material-symbols-outlined text-4xl text-primary/60 group-hover:scale-110 transition-transform duration-500">upload_file</span>
+<p class="font-label-sm text-primary">Drop photos here or <span class="underline">browse</span></p>
+<p class="text-[10px] text-on-surface-variant/60">Maximum 3 files • JPEG, PNG</p>
+</div>
+</div>
+<!-- Preview Area (Empty State) -->
+<div class="grid grid-cols-3 gap-sm">
+<div class="aspect-square bg-surface-container rounded-lg border border-outline-variant/30 flex items-center justify-center text-outline-variant">
+<span class="material-symbols-outlined">image</span>
+</div>
+<div class="aspect-square bg-surface-container rounded-lg border border-outline-variant/30 flex items-center justify-center text-outline-variant">
+<span class="material-symbols-outlined">image</span>
+</div>
+<div class="aspect-square bg-surface-container rounded-lg border border-outline-variant/30 flex items-center justify-center text-outline-variant">
+<span class="material-symbols-outlined">image</span>
+</div>
+</div>
+</div>
+<!-- 3. Location Section -->
+<div class="glass-panel p-md rounded-xl space-y-md shadow-xl overflow-hidden">
+<div class="flex items-center gap-2 text-primary font-bold">
+<span class="material-symbols-outlined">location_on</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Step 3: Location</span>
+</div>
+<div class="space-y-sm">
+<div class="relative">
+<input class="w-full bg-surface-container-low border-outline-variant text-on-surface placeholder:text-on-surface-variant/50 focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 pr-12 transition-all outline-none" placeholder="Search for address..." type="text"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-primary" type="button">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+<button class="w-full py-3 flex items-center justify-center gap-2 text-primary font-bold text-label-sm bg-primary/10 rounded-lg hover:bg-primary/20 transition-all border border-primary/20" type="button">
+<span class="material-symbols-outlined text-base">my_location</span>
+                    USE MY CURRENT LOCATION
+                </button>
+</div>
+<!-- Interactive Map UI -->
+<div class="relative w-full h-48 rounded-xl overflow-hidden border border-outline-variant/30 group">
+<div class="absolute inset-0 bg-cover bg-center grayscale-[0.8] contrast-[1.2] brightness-[0.7]" data-alt="A clean, minimalist dark-mode map of a neighborhood." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBn7JbB4xef7HLO7rGte_SQXn5sdjcBpx3IjCVmuspLJzr0OXyQx7qoolZNvvT45NSoOKzcZOk0FoALvINhByZdkHTFwXp6uDX1bR2qWEi8JQI4N8NAh260eUFupLdhMZ2FkoW3UGy_HyjeFfILTTFyuzzaPF-LXFrCM1aZOoJyv0pZWS0gkFHEuY_ZBQ8e7PPBZbsYu8MvC9BiJ2T3_KTdTFpFrzvl5YObxmjUrTaq1sWe08E9Svk25qgqrcdgPodulfL752j_veL4')">
+</div>
+<!-- Center Pin -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<div class="relative -translate-y-4">
+<span class="material-symbols-outlined text-4xl text-primary drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<div class="absolute bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-black/40 rounded-full blur-xs"></div>
+</div>
+</div>
+<!-- Map Controls -->
+<div class="absolute bottom-2 right-2 flex flex-col gap-1">
+<button class="w-8 h-8 bg-surface-container-high/90 backdrop-blur-md rounded shadow-sm flex items-center justify-center text-on-surface hover:bg-surface-container-highest transition-all" type="button"><span class="material-symbols-outlined text-lg">add</span></button>
+<button class="w-8 h-8 bg-surface-container-high/90 backdrop-blur-md rounded shadow-sm flex items-center justify-center text-on-surface hover:bg-surface-container-highest transition-all" type="button"><span class="material-symbols-outlined text-lg">remove</span></button>
+</div>
+</div>
+</div>
+<!-- Submit Button -->
+<button class="w-full sakura-gradient h-16 rounded-xl text-white font-bold text-title-md shadow-2xl hover:scale-[1.02] active:scale-95 transition-all duration-300 relative overflow-hidden group" id="submitBtn" type="button">
+<span class="relative z-10" id="btnText">Submit Report</span>
+<div class="hidden relative z-10 flex items-center justify-center gap-3" id="btnLoading">
+<svg class="animate-spin h-6 w-6 text-white" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+<path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path>
+</svg>
+<span>Sending Data...</span>
+</div>
+<div class="absolute inset-0 shimmer opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+</button>
+</form>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full rounded-t-xl z-50 bg-background/80 backdrop-blur-lg border-t border-white/5 shadow-[0_-4px_20px_rgba(0,0,0,0.3)]">
+<div class="flex justify-around items-center h-16 px-4 pb-safe">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary font-bold scale-110 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+<span class="font-label-sm text-label-sm">New Issue</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="font-label-sm text-label-sm">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</div>
+</nav>
+<!-- Success Modal -->
+<div class="fixed inset-0 z-[100] flex items-center justify-center p-md pointer-events-none opacity-0 transition-opacity duration-500" id="successModal">
+<div class="absolute inset-0 bg-on-background/40 backdrop-blur-sm"></div>
+<div class="relative glass-panel w-full max-w-sm rounded-2xl p-lg text-center space-y-md shadow-2xl scale-90 transition-transform duration-500">
+<div class="w-20 h-20 bg-secondary/20 rounded-full flex items-center justify-center mx-auto">
+<svg class="w-10 h-10 text-secondary" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path class="draw-in" d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+</svg>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Report Submitted!</h3>
+<p class="text-on-surface-variant">Thank you, Alex. Your report has been tagged as High Priority and assigned to the Public Works department.</p>
+<button class="w-full py-4 sakura-gradient text-white font-bold rounded-xl shadow-lg" onclick="window.location.reload()">Done</button>
+</div>
+</div>
+<script>
+    document.getElementById('submitBtn').addEventListener('click', function() {
+        const btn = this;
+        const text = document.getElementById('btnText');
+        const loader = document.getElementById('btnLoading');
+        const modal = document.getElementById('successModal');
+        const modalContent = modal.querySelector('.glass-panel');
+
+        // Enter loading state
+        btn.disabled = true;
+        text.classList.add('hidden');
+        loader.classList.remove('hidden');
+
+        // Simulate API Call
+        setTimeout(() => {
+            modal.classList.remove('pointer-events-none', 'opacity-0');
+            modalContent.classList.remove('scale-90');
+            modalContent.classList.add('scale-100');
+        }, 1800);
+    });
+
+    // Dropzone simple visual interaction
+    const dropzone = document.getElementById('dropzone');
+    dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropzone.querySelector('div').classList.add('bg-primary/20');
+    });
+    dropzone.addEventListener('dragleave', () => {
+        dropzone.querySelector('div').classList.remove('bg-primary/20');
+    });
+    dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzone.querySelector('div').classList.remove('bg-primary/20');
+        alert('File added to queue.');
+    });
+</script>
+</body></html>
+
+<!-- Map Explorer (Dark Mode) - Community Hero -->
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Community Hero - Map Explorer (Dark Mode)</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Outfit -->
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "background": "#1b1c19",
+                        "on-surface": "#f2f1eb",
+                        "on-secondary-container": "#bdeacd",
+                        "on-tertiary-fixed": "#400014",
+                        "secondary-fixed-dim": "#a4d1b4",
+                        "inverse-surface": "#f2f1eb",
+                        "surface-container-low": "#1b1c19",
+                        "tertiary-fixed": "#ffd9dd",
+                        "error": "#ffb4ab",
+                        "primary-fixed": "#ffd9df",
+                        "on-primary-fixed": "#30121a",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed-variant": "#264f39",
+                        "surface-container": "#242521",
+                        "inverse-on-surface": "#1b1c19",
+                        "surface": "#1b1c19",
+                        "surface-tint": "#edb9c3",
+                        "on-primary-fixed-variant": "#613c45",
+                        "tertiary-fixed-dim": "#ffb2bd",
+                        "on-secondary-fixed": "#002112",
+                        "surface-container-highest": "#353631",
+                        "on-tertiary-fixed-variant": "#7d283c",
+                        "primary-container": "#613c45",
+                        "on-primary-container": "#ffcad4",
+                        "surface-container-lowest": "#11110e",
+                        "surface-bright": "#3c3d38",
+                        "error-container": "#93000a",
+                        "on-tertiary-container": "#ffcad1",
+                        "primary": "#edb9c3",
+                        "surface-container-high": "#2e2f2a",
+                        "primary-fixed-dim": "#edb9c3",
+                        "on-primary": "#49262f",
+                        "outline": "#9c8d8f",
+                        "secondary": "#a4d1b4",
+                        "on-surface-variant": "#d4c2c4",
+                        "on-error": "#690005",
+                        "tertiary-container": "#7d283c",
+                        "surface-dim": "#1b1c19",
+                        "secondary-container": "#264f39",
+                        "on-background": "#f2f1eb",
+                        "surface-variant": "#504446",
+                        "inverse-primary": "#7c535c",
+                        "secondary-fixed": "#c0edd0",
+                        "on-secondary": "#093824",
+                        "outline-variant": "#504446",
+                        "tertiary": "#ffb2bd",
+                        "on-error-container": "#ffdad6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "base": "8px",
+                        "gutter": "20px",
+                        "container-max": "1200px",
+                        "lg": "48px",
+                        "sm": "12px",
+                        "xl": "80px",
+                        "md": "24px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Outfit"],
+                        "headline-lg": ["Outfit"],
+                        "headline-lg-mobile": ["Outfit"],
+                        "title-md": ["Outfit"],
+                        "body-md": ["Outfit"],
+                        "display-xl": ["Outfit"],
+                        "body-lg": ["Outfit"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "title-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "display-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #1b1c19;
+            overflow: hidden;
+            color: #f2f1eb;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .glass-panel {
+            backdrop-filter: blur(24px);
+            background: rgba(27, 28, 25, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .sakura-gradient {
+            background: linear-gradient(135deg, #7c535c 0%, #9b4053 100%);
+        }
+
+        .marker-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.15); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .bottom-sheet-transition {
+            transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .map-dark-overlay {
+            filter: grayscale(1) invert(0.9) brightness(0.8) contrast(1.1) hue-rotate(180deg);
+        }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface dark">
+<!-- Top Navigation Anchor -->
+<header class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-white/5 shadow-xl">
+<div class="flex justify-between items-center h-20 px-gutter max-w-container-max mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl">account_balance</span>
+<h1 class="font-display-xl text-[24px] md:text-display-xl bg-gradient-to-r from-primary to-tertiary bg-clip-text text-transparent">Community Hero</h1>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-all" href="#">Dashboard</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-all" href="#">Reports</a>
+<a class="text-primary font-bold border-b-2 border-primary transition-all" href="#">Map</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-all" href="#">Settings</a>
+</div>
+<button class="material-symbols-outlined text-primary hover:scale-105 transition-all">dark_mode</button>
+</div>
+</header>
+<!-- Map Canvas Area -->
+<main class="relative h-screen w-full pt-20 overflow-hidden">
+<!-- Interactive Map Simulation -->
+<div class="absolute inset-0 z-0 bg-[#121212]">
+<div class="w-full h-full map-dark-overlay opacity-60" data-alt="A dark mode stylized city map with midnight blue and deep gray tones. Grid lines are subtle and glowing." data-location="San Francisco" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC72EY5N9vohABtFaZFwGL3q0jR1v4dgV9dWW8TC-uFNvoiRPsR1fMiMwXxACDqRomxyIzWsu9cbIkBbD6NtiCpieqSQ9KNIoGpKkDPeBvbgCbFJ_GlHQPGqa5xlMf3pYxHRgtXfDQNp4I1Juvm7dT03LaPufsCBdIV_xC0rwT5Qi3-4BuI2Z_HvFn7QpRod6XKhlDnHDvqby4M6J1GGLtTI8CfuKj4Dkjc6plzvsvW8Fana7hd9p6wQO1Y_MFy2UgFO_qHd4scnAn5'); background-size: cover;">
+</div>
+<!-- Custom Markers -->
+<!-- Marker 1: High Priority Issue -->
+<button class="absolute top-[30%] left-[40%] group flex flex-col items-center" onclick="openIssueDetail('Broken Streetlight')">
+<div class="w-12 h-12 rounded-full glass-panel flex items-center justify-center shadow-2xl border border-primary/50 marker-pulse hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">light_off</span>
+</div>
+<div class="mt-2 px-3 py-1 bg-primary text-on-primary rounded-full text-label-sm shadow-md opacity-0 group-hover:opacity-100 transition-opacity">Broken Streetlight</div>
+</button>
+<!-- Marker 2: Resolved Issue -->
+<button class="absolute top-[55%] left-[65%] group flex flex-col items-center" onclick="openIssueDetail('Park Cleaned')">
+<div class="w-10 h-10 rounded-full glass-panel flex items-center justify-center shadow-2xl border border-secondary/50 hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">park</span>
+</div>
+<div class="mt-2 px-3 py-1 bg-secondary text-on-secondary rounded-full text-label-sm shadow-md opacity-0 group-hover:opacity-100 transition-opacity">Resolved: Park Cleanup</div>
+</button>
+<!-- Marker 3: Pothole -->
+<button class="absolute top-[45%] left-[25%] group flex flex-col items-center" onclick="openIssueDetail('Pothole on Main')">
+<div class="w-12 h-12 rounded-full glass-panel flex items-center justify-center shadow-2xl border border-tertiary/50 hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div class="mt-2 px-3 py-1 bg-tertiary text-on-tertiary-container rounded-full text-label-sm shadow-md opacity-0 group-hover:opacity-100 transition-opacity">Large Pothole</div>
+</button>
+</div>
+<!-- Floating UI Over Map -->
+<div class="absolute top-24 left-gutter right-gutter md:left-gutter md:w-[400px] z-10 space-y-4">
+<!-- Search & Filters -->
+<div class="glass-panel rounded-2xl p-4 shadow-2xl">
+<div class="relative mb-4">
+<input class="w-full bg-surface-container-high border-none rounded-xl pl-10 pr-4 py-3 text-on-surface placeholder:text-on-surface-variant/50 focus:ring-2 focus:ring-primary/40 transition-all outline-none" placeholder="Search issues or areas..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+</div>
+<div class="flex gap-2 overflow-x-auto hide-scrollbar">
+<button class="px-4 py-1.5 rounded-full bg-primary text-on-primary text-label-sm whitespace-nowrap shadow-sm">All Issues</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-highest text-on-surface-variant text-label-sm whitespace-nowrap hover:bg-primary/20 transition-colors">Infrastructure</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-highest text-on-surface-variant text-label-sm whitespace-nowrap hover:bg-primary/20 transition-colors">Public Safety</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-highest text-on-surface-variant text-label-sm whitespace-nowrap hover:bg-primary/20 transition-colors">Resolved</button>
+</div>
+</div>
+</div>
+<!-- Issue List Bottom Sheet (Minimized/Draggable State) -->
+<div class="fixed bottom-16 md:bottom-0 left-0 right-0 z-40 h-[530px] bottom-sheet-transition translate-y-[calc(530px-140px)] md:translate-y-[calc(530px-160px)]" id="bottom-sheet">
+<div class="h-full bg-background/90 backdrop-blur-3xl rounded-t-[32px] border-t border-white/10 shadow-2xl overflow-hidden flex flex-col">
+<!-- Drag Handle Area -->
+<div class="w-full h-10 flex items-center justify-center cursor-pointer group" onclick="toggleBottomSheet()">
+<div class="w-12 h-1.5 bg-outline-variant/30 rounded-full group-hover:bg-primary transition-colors"></div>
+</div>
+<div class="px-6 pb-4">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-2">Local Infrastructure</h2>
+<p class="text-on-surface-variant text-body-md">Showing 12 active issues nearby</p>
+</div>
+<div class="flex-1 overflow-y-auto px-6 pb-20 space-y-4 hide-scrollbar">
+<!-- Issue Card 1 -->
+<div class="bg-surface-container p-4 rounded-2xl border border-white/5 shadow-lg hover:bg-surface-container-high transition-all cursor-pointer" onclick="openIssueDetail('Broken Streetlight')">
+<div class="flex justify-between items-start mb-2">
+<span class="px-3 py-1 rounded-full bg-error-container text-on-error-container text-label-sm font-bold">Urgent</span>
+<span class="text-on-surface-variant/60 text-label-sm">2h ago</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-1">Broken Streetlight</h3>
+<p class="text-on-surface-variant text-body-md line-clamp-1">Corner of Oak &amp; 5th. Complete blackout in the alley...</p>
+<div class="mt-3 flex items-center gap-4">
+<div class="flex items-center gap-1 text-on-surface-variant text-label-sm">
+<span class="material-symbols-outlined text-[18px]">thumb_up</span>
+                            24
+                        </div>
+<div class="flex items-center gap-1 text-on-surface-variant text-label-sm">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+                            5
+                        </div>
+</div>
+</div>
+<!-- Issue Card 2 (Resolved) -->
+<div class="bg-surface-container/50 p-4 rounded-2xl border border-white/5 shadow-md opacity-70">
+<div class="flex justify-between items-start mb-2">
+<span class="px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-label-sm font-bold uppercase">Resolved</span>
+<span class="text-on-surface-variant/60 text-label-sm">Yesterday</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-1">Park Bench Vandalism</h3>
+<p class="text-on-surface-variant text-body-md">Soma Park. Graffiti removed and bench repainted.</p>
+<div class="mt-3 flex items-center gap-2 text-secondary font-bold text-label-sm">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+                        Verified by 18 Heroes
+                    </div>
+</div>
+<!-- Issue Card 3 -->
+<div class="bg-surface-container p-4 rounded-2xl border border-white/5 shadow-lg">
+<div class="flex justify-between items-start mb-2">
+<span class="px-3 py-1 rounded-full bg-primary-container text-on-primary-container text-label-sm font-bold">In Progress</span>
+<span class="text-on-surface-variant/60 text-label-sm">5h ago</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-1">Clogged Storm Drain</h3>
+<p class="text-on-surface-variant text-body-md">Water pooling at the intersection after morning rain.</p>
+<div class="mt-3 flex items-center gap-4">
+<div class="flex items-center gap-1 text-on-surface-variant text-label-sm">
+<span class="material-symbols-outlined text-[18px]">thumb_up</span>
+                            12
+                        </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Detailed Issue Drawer -->
+<div class="fixed inset-y-0 right-0 z-[100] w-full md:w-[480px] bg-background/95 backdrop-blur-3xl shadow-2xl translate-x-full transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] flex flex-col border-l border-white/10" id="issue-detail-drawer">
+<!-- Header -->
+<div class="flex items-center justify-between p-6 border-b border-white/5">
+<button class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container-high hover:bg-surface-container-highest transition-colors" onclick="closeIssueDetail()">
+<span class="material-symbols-outlined">close</span>
+</button>
+<div class="flex gap-2">
+<button class="px-6 py-2 bg-primary text-on-primary rounded-full text-label-sm sakura-gradient shadow-lg font-bold hover:scale-105 transition-transform">Verify Issue</button>
+</div>
+</div>
+<!-- Content -->
+<div class="flex-1 overflow-y-auto px-6 py-8 hide-scrollbar">
+<div class="w-full h-48 rounded-2xl overflow-hidden mb-6 shadow-inner relative">
+<div class="absolute inset-0 bg-black/40"></div>
+<div class="w-full h-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDRliZ22zBSve4E5eNHV3ErVp44LQgc-IuivUJB52CLLzb2Jfw3MUio40GuvbUTdeaQXg4bOtrXGHYGp9QMC5aXTSocGHaAZe6Xgs0GIGAQXeCHdh4o4SfvYhjHCipZT5FBgO5n8fX6DZ-9f6ihHgxEhrazz9QZzldhU5HeIb23rDAVwqvBw_1BMYrZ_x-91xwKAGMwd-B-SlToqknqhRK2efjPDgCl_rdHjZvA4w15Uz8GCbL7HgonBwrFAOzAgZvqiJjQNSNH_2Lq')"></div>
+</div>
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<span class="text-on-surface-variant font-medium text-label-sm">45th St &amp; Lexington Ave</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-4" id="detail-title">Broken Streetlight</h2>
+<div class="flex gap-2 mb-6">
+<span class="px-3 py-1 rounded-full bg-error-container text-on-error-container text-label-sm font-bold">Needs Attention</span>
+<span class="px-3 py-1 rounded-full bg-secondary-container/30 text-secondary text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">bolt</span> AI Summarized
+                </span>
+</div>
+<div class="bg-surface-container-high border border-white/5 p-4 rounded-2xl mb-6">
+<h3 class="text-primary font-bold text-label-sm uppercase mb-2">AI Summary</h3>
+<p class="text-body-md text-on-surface-variant italic leading-relaxed">"This issue affects pedestrian safety in a high-traffic residential zone. Report suggests recurring power surges. Community impact score: High."</p>
+</div>
+<div class="space-y-6">
+<div>
+<h4 class="font-title-md text-title-md mb-2 text-on-surface">Description</h4>
+<p class="text-body-md text-on-surface-variant leading-relaxed">
+                        The main light pole has been flickering for three days and finally went dark last night. It's creating a safety concern for evening commuters and dog walkers. Several neighbors have confirmed the issue.
+                    </p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<button class="flex flex-col items-center justify-center p-4 rounded-2xl bg-surface-container border border-white/5 hover:bg-primary/10 transition-all group">
+<span class="material-symbols-outlined text-primary mb-1 group-hover:scale-125 transition-transform">thumb_up</span>
+<span class="text-label-sm font-bold">Upvote</span>
+<span class="text-[10px] text-on-surface-variant">24 People</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 rounded-2xl bg-surface-container border border-white/5 hover:bg-secondary/10 transition-all group">
+<span class="material-symbols-outlined text-secondary mb-1 group-hover:scale-125 transition-transform">add_comment</span>
+<span class="text-label-sm font-bold">Update</span>
+<span class="text-[10px] text-on-surface-variant">Share Info</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Footer Action -->
+<div class="p-6 border-t border-white/5 bg-background">
+<button class="w-full py-4 rounded-2xl bg-on-surface text-background font-bold hover:scale-[1.02] active:scale-[0.98] transition-all">
+                I'll Volunteer to Monitor
+            </button>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Shell (Mobile) -->
+<nav class="md:hidden fixed bottom-0 w-full bg-background/90 backdrop-blur-2xl border-t border-white/5 shadow-2xl rounded-t-2xl z-50">
+<div class="flex justify-around items-center h-16 px-4 pb-safe">
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined">home</span>
+<span class="text-label-sm">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined">add_circle</span>
+<span class="text-label-sm">New Issue</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary font-bold scale-110">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">map</span>
+<span class="text-label-sm">Map</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined">person</span>
+<span class="text-label-sm">Profile</span>
+</div>
+</div>
+</nav>
+<!-- Map FAB -->
+<button class="fixed bottom-24 right-6 md:bottom-8 md:right-8 z-[50] w-14 h-14 rounded-full bg-primary sakura-gradient text-on-primary shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+<script>
+    let isSheetOpen = false;
+
+    function toggleBottomSheet() {
+        const sheet = document.getElementById('bottom-sheet');
+        if (isSheetOpen) {
+            sheet.style.transform = 'translateY(calc(530px - 140px))';
+            if (window.innerWidth >= 768) sheet.style.transform = 'translateY(calc(530px - 160px))';
+        } else {
+            sheet.style.transform = 'translateY(0)';
+        }
+        isSheetOpen = !isSheetOpen;
+    }
+
+    function openIssueDetail(title) {
+        const drawer = document.getElementById('issue-detail-drawer');
+        const titleEl = document.getElementById('detail-title');
+        titleEl.innerText = title;
+        drawer.style.transform = 'translateX(0)';
+    }
+
+    function closeIssueDetail() {
+        const drawer = document.getElementById('issue-detail-drawer');
+        drawer.style.transform = 'translateX(100%)';
+    }
+
+    // Parallax map interaction
+    document.addEventListener('mousemove', (e) => {
+        const x = (window.innerWidth / 2 - e.pageX) / 120;
+        const y = (window.innerHeight / 2 - e.pageY) / 120;
+        const map = document.querySelector('[data-location]');
+        if(map) {
+            map.style.transform = `scale(1.1) translate(${x}px, ${y}px)`;
+            map.style.transition = 'transform 0.3s ease-out';
+        }
+    });
+
+    window.addEventListener('resize', () => {
+        if (isSheetOpen) {
+            document.getElementById('bottom-sheet').style.transform = 'translateY(0)';
+        } else {
+             const sheet = document.getElementById('bottom-sheet');
+             sheet.style.transform = window.innerWidth >= 768 ? 'translateY(calc(530px - 160px))' : 'translateY(calc(530px - 140px))';
+        }
+    });
+</script>
+</body></html>
+
+<!-- Dashboard - Community Hero -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Community Hero | Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#fbf9f3",
+                    "on-surface": "#1b1c19",
+                    "on-secondary-container": "#426b54",
+                    "on-tertiary-fixed": "#400014",
+                    "secondary-fixed-dim": "#a4d1b4",
+                    "inverse-surface": "#30312d",
+                    "surface-container-low": "#f5f3ee",
+                    "tertiary-fixed": "#ffd9dd",
+                    "error": "#ba1a1a",
+                    "primary-fixed": "#ffd9df",
+                    "on-primary-fixed": "#30121a",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed-variant": "#264f39",
+                    "surface-container": "#f0eee8",
+                    "inverse-on-surface": "#f2f1eb",
+                    "surface": "#fbf9f3",
+                    "surface-tint": "#7c535c",
+                    "on-primary-fixed-variant": "#613c45",
+                    "tertiary-fixed-dim": "#ffb2bd",
+                    "on-secondary-fixed": "#002112",
+                    "surface-container-highest": "#e4e2dd",
+                    "on-tertiary-fixed-variant": "#7d283c",
+                    "primary-container": "#ffcad4",
+                    "on-primary-container": "#7b525b",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#fbf9f3",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-container": "#9a3f52",
+                    "primary": "#7c535c",
+                    "surface-container-high": "#eae8e2",
+                    "primary-fixed-dim": "#edb9c3",
+                    "on-primary": "#ffffff",
+                    "outline": "#827476",
+                    "secondary": "#3e6750",
+                    "on-surface-variant": "#504446",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#ffcad1",
+                    "surface-dim": "#dbdad4",
+                    "secondary-container": "#bdeacd",
+                    "on-background": "#1b1c19",
+                    "surface-variant": "#e4e2dd",
+                    "inverse-primary": "#edb9c3",
+                    "secondary-fixed": "#c0edd0",
+                    "on-secondary": "#ffffff",
+                    "outline-variant": "#d4c2c4",
+                    "tertiary": "#9b4053",
+                    "on-error-container": "#93000a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "base": "8px",
+                    "gutter": "20px",
+                    "container-max": "1200px",
+                    "lg": "48px",
+                    "sm": "12px",
+                    "xl": "80px",
+                    "md": "24px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Outfit"],
+                    "headline-lg": ["Outfit"],
+                    "headline-lg-mobile": ["Outfit"],
+                    "title-md": ["Outfit"],
+                    "body-md": ["Outfit"],
+                    "display-xl": ["Outfit"],
+                    "body-lg": ["Outfit"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "title-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .sakura-gradient {
+            background: linear-gradient(135deg, #7c535c 0%, #9b4053 100%);
+        }
+        .shine-effect:hover {
+            position: relative;
+            overflow: hidden;
+        }
+        .shine-effect:hover::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            animation: shine 0.8s ease-in-out;
+        }
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+        .custom-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #d4c2c4;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/70 dark:bg-inverse-surface/70 backdrop-blur-xl border-b border-white/20 dark:border-white/10 shadow-[0_4px_30px_rgba(124,83,92,0.1)]">
+<div class="flex justify-between items-center h-20 px-gutter max-w-container-max mx-auto">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary text-headline-lg" data-icon="account_balance">account_balance</span>
+<h1 class="font-display-xl text-headline-lg-mobile md:text-display-xl bg-gradient-to-r from-primary to-tertiary bg-clip-text text-transparent">Community Hero</h1>
+</div>
+<div class="flex items-center gap-md">
+<button class="hover:scale-105 hover:opacity-80 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="light_mode">light_mode</span>
+</button>
+<div class="hidden md:flex gap-md">
+<a class="text-primary font-bold border-b-2 border-primary py-2 transition-all" href="#">Dashboard</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-all py-2" href="#">Reports</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-all py-2" href="#">Community</a>
+</div>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-20 md:pb-8 px-gutter max-w-container-max mx-auto min-h-screen">
+<!-- Hero Profile & Stats Section -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-md mb-lg">
+<div class="md:col-span-8 glass-card p-md rounded-xl flex flex-col md:flex-row items-center gap-md hover:scale-[1.01] transition-transform duration-300 shadow-[0_4px_20px_rgba(124,83,92,0.05)]">
+<div class="relative group">
+<div class="w-24 h-24 rounded-full overflow-hidden border-4 border-primary/20">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a friendly community leader, Alex Rivers, a Caucasian male in his early 30s with a warm smile. He is set against a soft-focus urban park background with sakura pink cherry blossoms. The lighting is golden hour, warm and inviting, consistent with the premium glassmorphism UI style. High resolution and modern aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTjt2fab4MdGJwJH5K_lBKLJkPyHkxIIRh59IhAuBobcy3dFhsYXeEUMADE33TAJ3JMxepg30ZN5ndJQNlIXQ_e0Iadj3FPIf2T50O7Gvqv0XR51V-n0RFF-14E0nrDdfK8m-uCmLtpdMuDEWv_K3qLj10FGnBu25oMj26hwUKeTckK26sMyD-Z2eBY5qmtOt-z_IvRTw6t9rcjNrJPPfY-czGS6jTQbjsFozOIOPJpE3UxGPfc9wUlA-LzgtNG_wqNgaq99xPVE2X"/>
+</div>
+<div class="absolute -bottom-2 -right-2 sakura-gradient text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-[18px]" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div class="text-center md:text-left flex-1">
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Welcome back, Alex Rivers</h2>
+<p class="text-on-surface-variant font-medium">Civic Hero Level 5 • City Watch Elite</p>
+<div class="mt-base flex flex-wrap justify-center md:justify-start gap-xs">
+<span class="bg-secondary/10 text-secondary px-sm py-1 rounded-full text-label-sm">Active Protector</span>
+<span class="bg-tertiary/10 text-tertiary px-sm py-1 rounded-full text-label-sm">Top 5% Contributor</span>
+</div>
+</div>
+<div class="flex gap-md border-t md:border-t-0 md:border-l border-outline-variant/30 pt-md md:pt-0 md:pl-md">
+<div class="text-center">
+<span class="block font-display-xl text-primary text-headline-lg">1,240</span>
+<span class="text-label-sm text-on-surface-variant uppercase tracking-wider">Points</span>
+</div>
+<div class="text-center">
+<span class="block font-display-xl text-secondary text-headline-lg">#12</span>
+<span class="text-label-sm text-on-surface-variant uppercase tracking-wider">Rank</span>
+</div>
+</div>
+</div>
+<!-- Quick Action Card -->
+<div class="md:col-span-4 sakura-gradient p-md rounded-xl text-white shadow-xl flex flex-col justify-between shine-effect cursor-pointer group active:scale-95 transition-transform">
+<div>
+<h3 class="font-title-md text-title-md mb-xs">Spotted something?</h3>
+<p class="text-white/80 text-body-md">Help improve the community by reporting a new issue now.</p>
+</div>
+<div class="flex items-center gap-sm mt-md font-bold text-lg">
+<span>Submit Report</span>
+<span class="material-symbols-outlined group-hover:translate-x-2 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+</section>
+<!-- Main Dashboard Content Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<!-- Left Column: Reports List -->
+<div class="md:col-span-2">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface flex items-center gap-sm">
+                        My Reports 
+                        <span class="text-on-surface-variant/50 font-normal text-title-md">(12)</span>
+</h3>
+<button class="text-primary font-bold text-label-sm hover:underline">VIEW ALL</button>
+</div>
+<!-- Reports Grid -->
+<div class="grid grid-cols-1 gap-md">
+<!-- Report Card 1 -->
+<div class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant/20 hover:shadow-lg transition-all group relative">
+<div class="absolute top-md right-md bg-secondary/10 text-secondary px-sm py-1 rounded-full text-label-sm font-bold flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-secondary"></span> Resolved
+                        </div>
+<div class="flex gap-md flex-col sm:flex-row">
+<div class="w-full sm:w-32 h-32 rounded-lg overflow-hidden bg-surface-variant flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A clean, minimalist photograph of a freshly repaired street lamp in a modern urban district. The lighting is cool, evening blue, with the warm yellow glow of the lamp illuminating the clean pavement below. The composition is balanced and elegant, fitting for a civic-minded premium mobile app interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyhw6kVCjsQe3um8JwgWAGq5PtI85S31zAprf4so-Rv60gAY9KcW9RqGk1IETWNXYIb-DRm0FyJYXqrz4t2Ly3m0hiOC64d85HhOfq0_TsYEONWoTs_lCdllJItQKUJkGXztR5PsTtQWM8Se87KUKVOrYI5X6w2gaaaxOjIYeFLIFuymH3KDwXCgVthHuFrZRh_-8xtsRlSwC6m3XIlnt69fKOQmsZ3cah_zBGSLDMMd09PTaWgmE2mLosg-PWwUmtpZ_3eAsT4hKY"/>
+</div>
+<div class="flex-1">
+<p class="text-label-sm text-on-surface-variant mb-xs">STREET LIGHTING • 2 DAYS AGO</p>
+<h4 class="font-title-md text-title-md text-on-surface mb-xs group-hover:text-primary transition-colors">Broken Street Lamp on 5th &amp; Main</h4>
+<p class="text-on-surface-variant text-body-md line-clamp-2">The lamp has been flickering for three nights, creating a safety hazard for pedestrians and cyclists.</p>
+<div class="mt-md flex items-center gap-md">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-white bg-primary-container text-[10px] flex items-center justify-center font-bold text-on-primary-container">+5</div>
+</div>
+<span class="text-label-sm text-on-surface-variant">5 neighbors supported</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Report Card 2 -->
+<div class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant/20 hover:shadow-lg transition-all group relative">
+<div class="absolute top-md right-md bg-tertiary/10 text-tertiary px-sm py-1 rounded-full text-label-sm font-bold flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span> In Progress
+                        </div>
+<div class="flex gap-md flex-col sm:flex-row">
+<div class="w-full sm:w-32 h-32 rounded-lg overflow-hidden bg-surface-variant flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A macro shot of vibrant pink flowers growing in a beautifully maintained public community garden. The background is a soft, dreamy bokeh of green leaves and sunlight. The aesthetic is high-end, peaceful, and reflects the 'Sakura Dawn' color theme of the UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCU5O1_bWCxB_ITaz8PSf5pOKHlftTyFHdTwttJdMgjI-EP-zwYv6vCB5BT26lTG8Ko-3vq_wzDQqNrrSwtzHYm8UwchLkfc-5-HGzGUr5YrkU60y7QxOJ-xwz6HT1a3QyTSI6VSdgKNhrQsYUfkIb0wGSh4vUCOcGPLOQn1PAhnvbN9gBKMK2oghVnLzBCDt8YO08hghfQNcVs27paa6WhI4VDgUL48KwWKbP_LQQLbnOmKeiUkSmi3MH-VHYEu6C-I2gsnJpog9di"/>
+</div>
+<div class="flex-1">
+<p class="text-label-sm text-on-surface-variant mb-xs">PARKS &amp; REC • 5 HOURS AGO</p>
+<h4 class="font-title-md text-title-md text-on-surface mb-xs group-hover:text-primary transition-colors">Oakwood Park Bench Repair</h4>
+<p class="text-on-surface-variant text-body-md line-clamp-2">The central seating area near the fountain has loose boards. Requested maintenance for family safety.</p>
+<div class="mt-md flex items-center gap-md">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-white bg-surface-variant text-[10px] flex items-center justify-center font-bold text-on-surface-variant">2</div>
+</div>
+<span class="text-label-sm text-on-surface-variant">2 neighbors supported</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Sidebar Panels -->
+<div class="flex flex-col gap-lg">
+<!-- Moderator Panel (Admin Only) -->
+<div class="glass-card rounded-xl overflow-hidden border-2 border-primary/10">
+<div class="bg-primary-container/30 px-md py-sm border-b border-primary/10 flex items-center justify-between">
+<h4 class="font-title-md text-title-md text-on-primary-container flex items-center gap-xs">
+<span class="material-symbols-outlined" data-icon="admin_panel_settings">admin_panel_settings</span>
+                            Moderator Panel
+                        </h4>
+<span class="bg-primary text-white text-[10px] px-2 py-0.5 rounded-full font-bold">STAFF</span>
+</div>
+<div class="p-md space-y-md">
+<div class="flex items-center justify-between">
+<span class="text-on-surface-variant font-medium">Pending Review</span>
+<span class="bg-error-container text-on-error-container px-base py-0.5 rounded-full text-label-sm font-bold">24</span>
+</div>
+<button class="w-full py-base bg-surface-container-highest hover:bg-primary/10 text-on-surface font-bold rounded-lg transition-colors flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="assignment_late">assignment_late</span>
+                            Review New Reports
+                        </button>
+<div class="pt-base border-t border-outline-variant/30">
+<p class="text-label-sm text-on-surface-variant mb-sm">GLOBAL STATUS CONTROLS</p>
+<div class="grid grid-cols-2 gap-base">
+<button class="p-base bg-secondary-container text-on-secondary-container rounded-lg text-label-sm font-bold hover:brightness-95">Open System</button>
+<button class="p-base bg-error-container text-on-error-container rounded-lg text-label-sm font-bold hover:brightness-95">Mute Alerts</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Gamification / Leaderboard Mini -->
+<div class="bg-surface-container-low rounded-xl p-md">
+<h4 class="font-title-md text-title-md text-on-surface mb-md">Community Leaders</h4>
+<div class="space-y-md">
+<div class="flex items-center gap-md">
+<span class="font-bold text-secondary text-title-md w-4 text-center">1</span>
+<div class="w-10 h-10 rounded-full bg-surface-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Portrait of a smiling young woman with glasses, representing a community leader. Studio lighting, soft shadows, high-end professional photography style, light-mode friendly." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcDrCptIJ2bhmt6Y446ALEjK7mtvaFSqUNB9Oct6MyLIK5QeEMaGJXHSZGlH8Hbk62vomHFzpnNM9w5UE9KBw2-lqdYRtSXT9gly4pFN5Gx8_v5ccYgRwtv4RDspCoT3lwSAb_GLSbHiWXA8EtIsuXtxtmjMLQ_3tLCtVNiyDsN6AJy-CgvKCXSH8AIl1Q0GbLjdAf4Qo7w8iTzDc7IpgpiKXI5gtH-Wysyr1rGv-wrvE7v2UgphCku9iCEjBXHRHKxLBnS2D704eS"/>
+</div>
+<div class="flex-1">
+<p class="text-body-md font-bold">Sarah Jenkins</p>
+<p class="text-label-sm text-on-surface-variant">3,450 pts</p>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<span class="font-bold text-on-surface-variant text-title-md w-4 text-center">2</span>
+<div class="w-10 h-10 rounded-full bg-surface-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Portrait of an older man with a friendly face, representing a dedicated civic reporter. Natural outdoor lighting, sharp focus, clean modern photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkTpJepqBuhfoj3fjmb3aOtbYgJD1y1okMQteHylzrN6hIhaO83YrIk2R-SBUD3UysQ48dWBdV1vBBROPhMSPw7XfBBAWBdCPu1t7zMfp5xkFY-rFtJNFlCaUaWUHO_CnQTza5VnNndIBiid1J7wH6u6twcS4zzuoRBEY2X8ziTRcz9WcMHMCWsAQtZdmZtxnLegbJaF0hlynSpHQFgOp9svjQ4XENY9W4naBvFn65LH1tAUZDxhrp_PV-mfWay5qXSTrhWZstZQ4r"/>
+</div>
+<div class="flex-1">
+<p class="text-body-md font-bold">Marcus Thorne</p>
+<p class="text-label-sm text-on-surface-variant">2,910 pts</p>
+</div>
+</div>
+<div class="flex items-center gap-md bg-white p-base rounded-lg shadow-sm border border-primary/10 scale-105">
+<span class="font-bold text-primary text-title-md w-4 text-center">12</span>
+<div class="w-10 h-10 rounded-full bg-surface-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close up of Alex Rivers, the user, used for leaderboard position. High resolution, professional, warm lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVcwhQtg4ZHDzuTqv-7x12FO6bxNTxAaPTi11B3N-gm6DU1PrvCrRVLwPTFc7nPdijqnQJ9mvK7f9wAhO3fdtApYMzkeovfu8qrPCM6BdI0HfOq-T5UHtY4By8YkxPjGeR0GlK-OS7ifMbIEZ0AxJtMPeXNPXG_Y1DqNX200K4wRtW7gvLVqb3NJfLRBgLGh_vcvLp7cT65Nj9r2QKV2PVkgscitBHJ-OPcMOqzLClWlwS5eMINDG6T6VOrGl798Q6z0zoBMN2LNl0"/>
+</div>
+<div class="flex-1">
+<p class="text-body-md font-bold">You (Alex)</p>
+<p class="text-label-sm text-primary">1,240 pts</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Navigation Shell Logic for Mobile -->
+<nav class="md:hidden fixed bottom-0 w-full bg-surface/80 backdrop-blur-lg border-t border-white/20 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] z-50">
+<div class="flex justify-around items-center h-16 px-4 pb-safe">
+<a class="flex flex-col items-center justify-center text-primary font-bold scale-110 active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+<span class="font-label-sm text-label-sm">New Issue</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span class="font-label-sm text-label-sm">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</div>
+</nav>
+<!-- Floating Action Button for Desktop -->
+<button class="hidden md:flex fixed bottom-md right-md sakura-gradient text-white w-16 h-16 rounded-full items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all group z-40">
+<span class="material-symbols-outlined text-3xl group-hover:rotate-90 transition-transform duration-300" data-icon="add">add</span>
+</button>
+<script>
+        // Simple micro-interaction for cards
+        document.querySelectorAll('.bg-surface-container-lowest').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Toggle Dark Mode Simulation (for demo purposes)
+        let isDark = false;
+        const toggleBtn = document.querySelector('header button');
+        toggleBtn.addEventListener('click', () => {
+            isDark = !isDark;
+            document.documentElement.classList.toggle('dark');
+            const icon = toggleBtn.querySelector('span');
+            icon.textContent = isDark ? 'dark_mode' : 'light_mode';
+        });
+    </script>
+</body></html>
+
+<!-- Design System -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Community Hero | Better Cities, Together</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#fbf9f3",
+                    "on-surface": "#1b1c19",
+                    "on-secondary-container": "#426b54",
+                    "on-tertiary-fixed": "#400014",
+                    "secondary-fixed-dim": "#a4d1b4",
+                    "inverse-surface": "#30312d",
+                    "surface-container-low": "#f5f3ee",
+                    "tertiary-fixed": "#ffd9dd",
+                    "error": "#ba1a1a",
+                    "primary-fixed": "#ffd9df",
+                    "on-primary-fixed": "#30121a",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed-variant": "#264f39",
+                    "surface-container": "#f0eee8",
+                    "inverse-on-surface": "#f2f1eb",
+                    "surface": "#fbf9f3",
+                    "surface-tint": "#7c535c",
+                    "on-primary-fixed-variant": "#613c45",
+                    "tertiary-fixed-dim": "#ffb2bd",
+                    "on-secondary-fixed": "#002112",
+                    "surface-container-highest": "#e4e2dd",
+                    "on-tertiary-fixed-variant": "#7d283c",
+                    "primary-container": "#ffcad4",
+                    "on-primary-container": "#7b525b",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#fbf9f3",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-container": "#9a3f52",
+                    "primary": "#7c535c",
+                    "surface-container-high": "#eae8e2",
+                    "primary-fixed-dim": "#edb9c3",
+                    "on-primary": "#ffffff",
+                    "outline": "#827476",
+                    "secondary": "#3e6750",
+                    "on-surface-variant": "#504446",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#ffcad1",
+                    "surface-dim": "#dbdad4",
+                    "secondary-container": "#bdeacd",
+                    "on-background": "#1b1c19",
+                    "surface-variant": "#e4e2dd",
+                    "inverse-primary": "#edb9c3",
+                    "secondary-fixed": "#c0edd0",
+                    "on-secondary": "#ffffff",
+                    "outline-variant": "#d4c2c4",
+                    "tertiary": "#9b4053",
+                    "on-error-container": "#93000a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "base": "8px",
+                    "gutter": "20px",
+                    "container-max": "1200px",
+                    "lg": "48px",
+                    "sm": "12px",
+                    "xl": "80px",
+                    "md": "24px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Outfit"],
+                    "headline-lg": ["Outfit"],
+                    "headline-lg-mobile": ["Outfit"],
+                    "title-md": ["Outfit"],
+                    "body-md": ["Outfit"],
+                    "display-xl": ["Outfit"],
+                    "body-lg": ["Outfit"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "title-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased; }
+        .sakura-dawn { background: linear-gradient(135deg, #7c535c 0%, #9b4053 100%); }
+        .glass-card { 
+            backdrop-filter: blur(12px); 
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .shine-effect:hover {
+            position: relative;
+            overflow: hidden;
+        }
+        .shine-effect:hover::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: rotate(45deg);
+            animation: shine 0.8s ease-out;
+        }
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+        .draw-in {
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            animation: draw 1s forwards;
+        }
+        @keyframes draw { to { stroke-dashoffset: 0; } }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/70 dark:bg-inverse-surface/70 backdrop-blur-xl border-b border-white/20 dark:border-white/10 shadow-[0_4px_30px_rgba(124,83,92,0.1)]">
+<div class="flex justify-between items-center h-20 px-gutter max-w-container-max mx-auto">
+<div class="flex items-center gap-base hover:scale-105 hover:opacity-80 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] cursor-pointer">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="account_balance">account_balance</span>
+<span class="font-display-xl text-display-xl bg-gradient-to-r from-primary to-tertiary bg-clip-text text-transparent hidden md:block">Community Hero</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile md:hidden">Community Hero</span>
+</div>
+<nav class="hidden md:flex gap-md items-center">
+<a class="text-primary font-bold border-b-2 border-primary font-title-md text-title-md py-1" href="#">Home</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-all font-title-md text-title-md py-1" href="#">Explore</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-all font-title-md text-title-md py-1" href="#">Community</a>
+</nav>
+<div class="flex items-center gap-sm">
+<button class="p-base rounded-full hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="light_mode">light_mode</span>
+</button>
+<button class="hidden md:flex items-center gap-xs sakura-dawn text-on-primary px-6 py-3 rounded-full font-label-sm text-label-sm shine-effect shadow-lg">
+<span class="material-symbols-outlined" data-icon="login">login</span> Sign In
+                </button>
+</div>
+</div>
+</header>
+<main class="pt-20 pb-32">
+<!-- Hero Section -->
+<section class="relative overflow-hidden pt-12 pb-24 px-gutter">
+<!-- Animated Background Shader Component -->
+
+<div class="max-w-container-max mx-auto flex flex-col md:flex-row items-center gap-lg">
+<div class="w-full md:w-1/2 space-y-md">
+<div class="inline-flex items-center gap-xs bg-primary-container/40 text-primary px-4 py-2 rounded-full border border-primary/20">
+<span class="material-symbols-outlined text-sm" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label-sm text-label-sm">TRANSFORMING CITIES GLOBALLY</span>
+</div>
+<h1 class="font-display-xl text-display-xl md:text-[64px] leading-tight text-on-surface">
+                        Empower Your Neighborhood with <span class="text-primary italic">Civic Precision.</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">
+                        A concierge reporting experience for the modern citizen. Report issues, track resolutions in real-time, and shape the future of your local community through elegant feedback loops.
+                    </p>
+<div class="flex flex-wrap gap-md pt-4">
+<button class="sakura-dawn text-on-primary px-8 py-4 rounded-full font-title-md text-title-md flex items-center gap-sm shine-effect shadow-xl active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span> Report an Issue
+                        </button>
+<button class="border border-primary text-primary px-8 py-4 rounded-full font-title-md text-title-md flex items-center gap-sm hover:bg-primary/5 transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="map">map</span> Explore Map
+                        </button>
+</div>
+</div>
+<div class="w-full md:w-1/2 relative group">
+<div class="absolute -inset-4 bg-primary/10 rounded-[40px] blur-3xl group-hover:bg-primary/20 transition-all duration-700"></div>
+<div class="relative rounded-[32px] overflow-hidden shadow-2xl glass-card aspect-video">
+<img class="w-full h-full object-cover" data-alt="A clean, minimalist high-end photograph of a futuristic urban park with clean architectural lines, lush greenery, and residents engaging with digital kiosks. The lighting is bright and high-key, reflecting a premium light-mode aesthetic with subtle Sakura Pink accents in the flora. The atmosphere is peaceful, professional, and civic-focused." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4KIJTQ868pT9fdWVkim6rSUgslM2DgBuhnpnmy7QAhNW6H34miHpHLtk9RzN5c0DlPA1tny4s5nPH4rJg5w6Cdsw2q2tF8T-A5OqFQwU312z5g1aQbvlu3RvPwgINfSgnE7YRpcny0Fve3Va3l88KyOFWBZdW9x3B1XzsSrllSU7427BKucIivbvD4yBEPij-0TKDskWSGYXYTZ9UCiITrO8tTcgseXSUV4em_2kmzu-O-b4nzZLPombRzayD-F5aHHPp6OxWLGEQ"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Stats Section (Bento Style) -->
+<section class="max-w-container-max mx-auto px-gutter py-12">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+<div class="glass-card p-lg rounded-[32px] shadow-[0_4px_30px_rgba(124,83,92,0.05)] border border-white/40 flex flex-col items-center text-center group hover:scale-[1.02] transition-transform duration-500">
+<div class="w-16 h-16 rounded-2xl bg-primary-container flex items-center justify-center mb-md group-hover:rotate-12 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="assignment">assignment</span>
+</div>
+<h3 class="font-display-xl text-display-xl text-primary">12,482</h3>
+<p class="font-title-md text-title-md text-on-surface-variant">Total Issues Logged</p>
+</div>
+<div class="glass-card p-lg rounded-[32px] shadow-[0_4px_30px_rgba(124,83,92,0.05)] border border-white/40 flex flex-col items-center text-center group hover:scale-[1.02] transition-transform duration-500">
+<div class="w-16 h-16 rounded-2xl bg-secondary-container flex items-center justify-center mb-md group-hover:rotate-12 transition-transform">
+<span class="material-symbols-outlined text-secondary text-3xl" data-icon="task_alt">task_alt</span>
+</div>
+<h3 class="font-display-xl text-display-xl text-secondary">98%</h3>
+<p class="font-title-md text-title-md text-on-surface-variant">Resolution Rate</p>
+</div>
+<div class="glass-card p-lg rounded-[32px] shadow-[0_4px_30px_rgba(124,83,92,0.05)] border border-white/40 flex flex-col items-center text-center group hover:scale-[1.02] transition-transform duration-500">
+<div class="w-16 h-16 rounded-2xl bg-tertiary-container flex items-center justify-center mb-md group-hover:rotate-12 transition-transform">
+<span class="material-symbols-outlined text-tertiary text-3xl" data-icon="group">group</span>
+</div>
+<h3 class="font-display-xl text-display-xl text-tertiary">45k+</h3>
+<p class="font-title-md text-title-md text-on-surface-variant">Active Heroes</p>
+</div>
+</div>
+</section>
+<!-- Recent Issues Grid -->
+<section class="max-w-container-max mx-auto px-gutter py-xl">
+<div class="flex justify-between items-end mb-lg">
+<div>
+<h2 class="font-headline-lg text-headline-lg md:font-display-xl md:text-display-xl text-on-surface">Recent Activity</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Live feed from neighborhoods near you.</p>
+</div>
+<button class="text-primary font-bold flex items-center gap-xs hover:gap-sm transition-all">
+                    View All Issues <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md">
+<!-- Issue Card 1 -->
+<div class="bg-surface-container-lowest rounded-[24px] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-surface-variant hover:shadow-xl transition-all duration-300">
+<div class="h-48 relative">
+<img class="w-full h-full object-cover" data-alt="A clean, stylized urban street photography shot focusing on a small pothole in an asphalt road with soft daylight. The environment is well-maintained, suggesting an elite neighborhood where even minor issues are attended to. Soft depth of field, pastel tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDErkbobLlazlivxu0-BtRfteEp9RaY5h_991IqbUeGIUNlLglkspyckDm-EmdYSqhGndmnUZ1r1cwI8FOVB-E0ZELYScfzdX5gGXcwDpjM7P3ZjtOiUOF4yjSmx1xtYpESFjYxN6EHSmWDqcgQeKRuEMq_GDCq3f70TZJDyWXdST0WBbsR5_DTkxXyzAxAd-q1gFPkxZ88n_RYs3M9QvCuNP0sMrOGeG1jvjUsLr04kK0g6Fn5vIw66gC8Leturp37WHfne7qvYiND"/>
+<div class="absolute top-4 right-4 bg-secondary-container/90 backdrop-blur-md text-on-secondary-container px-3 py-1 rounded-full font-label-sm text-label-sm border border-secondary/10">
+                            IN PROGRESS
+                        </div>
+</div>
+<div class="p-md space-y-sm">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-primary-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="construction">construction</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary uppercase">Infrastructure</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface">Main St. Road Repair</h4>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Small asphalt degradation reported near the central fountain. Safety hazard for evening joggers.</p>
+<div class="flex justify-between items-center pt-base border-t border-surface-variant">
+<span class="font-label-sm text-label-sm text-on-surface-variant">2 hours ago</span>
+<div class="flex items-center gap-xs text-primary">
+<span class="material-symbols-outlined text-sm" data-icon="thumb_up">thumb_up</span>
+<span class="font-label-sm text-label-sm">24</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Issue Card 2 -->
+<div class="bg-surface-container-lowest rounded-[24px] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-surface-variant hover:shadow-xl transition-all duration-300">
+<div class="h-48 relative">
+<img class="w-full h-full object-cover" data-alt="Close up of a modern, minimalist street light in a suburban setting during the blue hour. The lighting is cool-toned and crisp, emphasizing architectural design and civic technology. High-end aesthetic with soft bokeh in the background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmzYEfeR3jqgVDs6tMmrZPIH6wxr6PtBGNLe_PNjSiVTXxrfLGZUKTe74QZu15xV6QWepxi0wXqbv2mMnCq6ckNKzk7JFi4nQod4lmCi89k4Vd40fPFKwuTPKn3gZd6Xedc4c3ECMIlzWLgCwP-LO-8CE6IM9JrwxPvYFQy3deZx-9Nj0xxlJCc01II9FEsj8HJKjTOQToBsZXLvfK0sdTUyZlNlHw8_cqmYiOaF8luibyfsIgUE-tyBAOTLexFkHAH3JUiZQVznLQ"/>
+<div class="absolute top-4 right-4 bg-primary-container/90 backdrop-blur-md text-on-primary-container px-3 py-1 rounded-full font-label-sm text-label-sm border border-primary/10">
+                            REPORTED
+                        </div>
+</div>
+<div class="p-md space-y-sm">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-primary-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="lightbulb">lightbulb</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary uppercase">Street Lighting</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface">Dim Light: Oak Avenue</h4>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">The LED panel at the corner of 4th and Oak is flickering. Requires technician inspection.</p>
+<div class="flex justify-between items-center pt-base border-t border-surface-variant">
+<span class="font-label-sm text-label-sm text-on-surface-variant">4 hours ago</span>
+<div class="flex items-center gap-xs text-primary">
+<span class="material-symbols-outlined text-sm" data-icon="thumb_up">thumb_up</span>
+<span class="font-label-sm text-label-sm">12</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Issue Card 3 -->
+<div class="bg-surface-container-lowest rounded-[24px] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-surface-variant hover:shadow-xl transition-all duration-300">
+<div class="h-48 relative">
+<img class="w-full h-full object-cover" data-alt="A beautifully designed modern park bench in a vibrant urban garden. The sun is setting, casting a warm golden glow over the scene. The image is clean, inviting, and showcases high-quality public amenities. Premium architectural photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5B3AzvdcWOv37_b30nbOI6DkyaVoh6t21amA2prjmZrRErbP1ZSkAYNnDAff13o8g3VAtbjSKKZvVA6sq1Qz26tAgwpVOcMopc_bU5F9dYChRqk6xuMveE_JuRq34Gv8RkPCm7pEp541g4BX-gn1A16bmiRRdquSiRSI63dhUqwngGDgL_34by_jPaBTsikZgROA3AcovEzpCGPh4-r6YToFg1SJgvrznQ9nJGoDDV36e_9745n4MPHHWczOM3S4jKGPlpWEjN5M8"/>
+<div class="absolute top-4 right-4 bg-tertiary-container/90 backdrop-blur-md text-on-tertiary-container px-3 py-1 rounded-full font-label-sm text-label-sm border border-tertiary/10">
+                            RESOLVED
+                        </div>
+</div>
+<div class="p-md space-y-sm">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-primary-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="park">park</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary uppercase">Public Space</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface">Park Bench Restoration</h4>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">The historic bench in Willow Park has been beautifully restored. Thank you for reporting!</p>
+<div class="flex justify-between items-center pt-base border-t border-surface-variant">
+<span class="font-label-sm text-label-sm text-on-surface-variant">1 day ago</span>
+<div class="flex items-center gap-xs text-secondary">
+<span class="material-symbols-outlined text-sm" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label-sm text-label-sm">Community Choice</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- NavigationDrawer (Mobile Only Overlay) -->
+<div class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100] opacity-0 pointer-events-none transition-opacity duration-300" id="mobileDrawer">
+<div class="fixed left-0 top-0 h-screen w-80 z-[110] flex flex-col bg-white/70 dark:bg-black/70 backdrop-blur-[20px] h-full rounded-r-xl border-r border-white/30 shadow-xl -translate-x-full transition-transform duration-300">
+<div class="p-lg flex flex-col items-start">
+<img class="w-20 h-20 rounded-full border-4 border-primary/20 mb-md object-cover" data-alt="A professional headshot of a friendly young urban planner in business casual attire. Soft studio lighting, neutral background, high-end corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuANE_45q8JJ_ikT7xQJl4d15hPnshKKjinlvQ6czqfl8PodaywgInVM1oGUTmTFWsn0A_xtlDMgiGOxQc1kGiIxOWt3afuw6maxB4QlCv5GnuV1_OfIu5nnnlO_33MfAjWdWbkdrXhWey2tUX0dVjloUcNj2ZJ3v8qoEY7bV3eaJekp8o8i1n0gr-uMRCyLlCkt9Tsk8p8I3xzUdDUQUFLUgF_XqDVudxHh8Fx3ju3KrUEZLzar0baHqGt5Slg9VTn2Fi7PZd2OEaMt"/>
+<h3 class="font-headline-lg text-headline-lg text-primary">Alex Rivers</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Civic Hero Level 5</p>
+<p class="font-label-sm text-label-sm text-primary mt-xs">12 Reports Submitted</p>
+</div>
+<nav class="flex-1 mt-md">
+<a class="flex items-center gap-md bg-primary-container text-on-primary-container rounded-full mx-2 px-4 py-3" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-title-md text-title-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant mx-2 px-4 py-3 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="flag">flag</span>
+<span class="font-title-md text-title-md">Reports</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant mx-2 px-4 py-3 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-title-md text-title-md">Community</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant mx-2 px-4 py-3 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-title-md text-title-md">Settings</span>
+</a>
+</nav>
+<button class="m-md p-md text-on-surface-variant flex items-center justify-center border border-outline-variant rounded-xl" onclick="toggleDrawer()">
+                Close Drawer
+            </button>
+</div>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full rounded-t-xl z-50 bg-surface/80 dark:bg-inverse-surface/80 backdrop-blur-lg border-t border-white/20 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+<div class="flex justify-around items-center h-16 px-4 pb-safe">
+<a class="flex flex-col items-center justify-center text-primary font-bold scale-110" href="#">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+<span class="font-label-sm text-label-sm">New Issue</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span class="font-label-sm text-label-sm">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</div>
+</nav>
+<!-- Floating Action Button (FAB) -->
+<button class="fixed bottom-24 right-gutter md:bottom-md md:right-md w-16 h-16 rounded-2xl sakura-dawn text-on-primary shadow-2xl flex items-center justify-center group active:scale-90 duration-200 transition-all z-40">
+<span class="material-symbols-outlined text-3xl group-hover:rotate-90 transition-transform duration-300" data-icon="add">add</span>
+</button>
+<script>
+        function toggleDrawer() {
+            const drawer = document.getElementById('mobileDrawer');
+            const drawerContent = drawer.querySelector('div');
+            if (drawer.classList.contains('opacity-0')) {
+                drawer.classList.remove('opacity-0', 'pointer-events-none');
+                drawerContent.classList.remove('-translate-x-full');
+            } else {
+                drawer.classList.add('opacity-0', 'pointer-events-none');
+                drawerContent.classList.add('-translate-x-full');
+            }
+        }
+
+        // Add scroll effect to header
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 20) {
+                header.classList.add('py-0');
+                header.classList.remove('py-2');
+            } else {
+                header.classList.remove('py-0');
+                header.classList.add('py-2');
+            }
+        });
+    </script>
+</body></html>

@@ -1,0 +1,137 @@
+<!-- Home (Dark Mode) - Community Hero -->
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Community Hero | Better Cities, Together</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#121212",
+                    "on-surface": "#f2f1eb",
+                    "on-secondary-container": "#c0edd0",
+                    "on-tertiary-fixed": "#400014",
+                    "secondary-fixed-dim": "#a4d1b4",
+                    "inverse-surface": "#f2f1eb",
+                    "surface-container-low": "#1b1c19",
+                    "tertiary-fixed": "#ffd9dd",
+                    "error": "#ffb4ab",
+                    "primary-fixed": "#ffd9df",
+                    "on-primary-fixed": "#30121a",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed-variant": "#264f39",
+                    "surface-container": "#232420",
+                    "inverse-on-surface": "#1b1c19",
+                    "surface": "#121212",
+                    "surface-tint": "#edb9c3",
+                    "on-primary-fixed-variant": "#613c45",
+                    "tertiary-fixed-dim": "#ffb2bd",
+                    "on-secondary-fixed": "#002112",
+                    "surface-container-highest": "#343530",
+                    "on-tertiary-fixed-variant": "#7d283c",
+                    "primary-container": "#613c45",
+                    "on-primary-container": "#ffd9df",
+                    "surface-container-lowest": "#0d0e0c",
+                    "surface-bright": "#383934",
+                    "error-container": "#93000a",
+                    "on-tertiary-container": "#ffcad1",
+                    "primary": "#edb9c3",
+                    "surface-container-high": "#2d2e29",
+                    "primary-fixed-dim": "#edb9c3",
+                    "on-primary": "#49252f",
+                    "outline": "#9c8d90",
+                    "secondary": "#a4d1b4",
+                    "on-surface-variant": "#d4c2c4",
+                    "on-error": "#690005",
+                    "tertiary-container": "#7d283c",
+                    "surface-dim": "#121212",
+                    "secondary-container": "#264f39",
+                    "on-background": "#f2f1eb",
+                    "surface-variant": "#504446",
+                    "inverse-primary": "#7c535c",
+                    "secondary-fixed": "#c0edd0",
+                    "on-secondary": "#0d3824",
+                    "outline-variant": "#504446",
+                    "tertiary": "#ffb2bd",
+                    "on-error-container": "#ffdad6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "base": "8px",
+                    "gutter": "20px",
+                    "container-max": "1200px",
+                    "lg": "48px",
+                    "sm": "12px",
+                    "xl": "80px",
+                    "md": "24px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Outfit"],
+                    "headline-lg": ["Outfit"],
+                    "headline-lg-mobile": ["Outfit"],
+                    "title-md": ["Outfit"],
+                    "body-md": ["Outfit"],
+                    "display-xl": ["Outfit"],
+                    "body-lg": ["Outfit"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "title-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased; }
+        .sakura-dawn { background: linear-gradient(135deg, #7c535c 0%, #9b4053 100%); }
+        .glass-card { 
+            backdrop-filter: blur(12px); 
+            background: rgba(30, 30, 30, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .shine-effect:hover {
+            position: relative;
+            overflow: hidden;
+        }
+        .shine-effect:hover::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 0.8s ease-out;
+        }
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface">

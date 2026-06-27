@@ -1,0 +1,21 @@
+
+# ---------- Notification Schemas ----------
+
+class SubscriptionOut(BaseModel):
+    id: UUID
+    user_id: UUID
+    issue_id: UUID
+    created_at: datetime
+
+    model_config = {"from_attributes": True}
+
+
+class NotificationOut(BaseModel):
+    id: UUID
+    user_id: UUID
+    issue_id: Optional[UUID]
+    message: str
+    is_read: bool
+    created_at: datetime
+
+    model_config = {"from_attributes": True}

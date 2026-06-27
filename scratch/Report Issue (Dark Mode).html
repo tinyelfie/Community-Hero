@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Report Issue | Community Hero</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#1b1c19",
+                    "on-surface": "#fbf9f3",
+                    "on-secondary-container": "#c0edd0",
+                    "on-tertiary-fixed": "#400014",
+                    "secondary-fixed-dim": "#a4d1b4",
+                    "inverse-surface": "#fbf9f3",
+                    "surface-container-low": "#2a2b27",
+                    "tertiary-fixed": "#ffd9dd",
+                    "error": "#ffb4ab",
+                    "primary-fixed": "#ffd9df",
+                    "on-primary-fixed": "#30121a",
+                    "on-tertiary": "#5f1227",
+                    "on-secondary-fixed-variant": "#264f39",
+                    "surface-container": "#21211e",
+                    "inverse-on-surface": "#1b1c19",
+                    "surface": "#1b1c19",
+                    "surface-tint": "#edb9c3",
+                    "on-primary-fixed-variant": "#613c45",
+                    "tertiary-fixed-dim": "#ffb2bd",
+                    "on-secondary-fixed": "#002112",
+                    "surface-container-highest": "#363632",
+                    "on-tertiary-fixed-variant": "#7d283c",
+                    "primary-container": "#613c45",
+                    "on-primary-container": "#ffd9df",
+                    "surface-container-lowest": "#0e0f0c",
+                    "surface-bright": "#363632",
+                    "error-container": "#93000a",
+                    "on-tertiary-container": "#ffcad1",
+                    "primary": "#edb9c3",
+                    "surface-container-high": "#2b2b28",
+                    "primary-fixed-dim": "#edb9c3",
+                    "on-primary": "#48262e",
+                    "outline": "#9c8e90",
+                    "secondary": "#a4d1b4",
+                    "on-surface-variant": "#d4c2c4",
+                    "on-error": "#690005",
+                    "tertiary-container": "#7d283c",
+                    "surface-dim": "#1b1c19",
+                    "secondary-container": "#264f39",
+                    "on-background": "#fbf9f3",
+                    "surface-variant": "#504446",
+                    "inverse-primary": "#7c535c",
+                    "secondary-fixed": "#c0edd0",
+                    "on-secondary": "#0d3824",
+                    "outline-variant": "#504446",
+                    "tertiary": "#ffb2bd",
+                    "on-error-container": "#ffdad6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "base": "8px",
+                    "gutter": "20px",
+                    "container-max": "1200px",
+                    "lg": "48px",
+                    "sm": "12px",
+                    "xl": "80px",
+                    "md": "24px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Outfit"],
+                    "headline-lg": ["Outfit"],
+                    "headline-lg-mobile": ["Outfit"],
+                    "title-md": ["Outfit"],
+                    "body-md": ["Outfit"],
+                    "display-xl": ["Outfit"],
+                    "body-lg": ["Outfit"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "title-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #1b1c19;
+            color: #fbf9f3;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .glass-panel {
+            background: rgba(30, 31, 28, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .sakura-gradient {
+            background: linear-gradient(135deg, #7c535c 0%, #9b4053 100%);
+        }
+        .shimmer {
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #504446;
+            border-radius: 10px;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .draw-in {
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            animation: draw 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        @keyframes draw {
+            to { stroke-dashoffset: 0; }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-white/5 shadow-[0_4px_30px_rgba(0,0,0,0.3)]">
+<div class="flex justify-between items-center h-20 px-gutter max-w-container-max mx-auto">
+<div class="flex items-center gap-3">
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary">New Issue</h1>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-2xl">account_balance</span>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-32 px-gutter max-w-2xl mx-auto space-y-lg">
+<!-- Intro Section -->
+<section class="space-y-base">
+<h2 class="font-title-md text-title-md text-on-surface">Report a Concern</h2>
+<p class="text-on-surface-variant font-body-md">Your contribution helps keep our community beautiful and safe. Detailed reports are processed 40% faster.</p>
+</section>
+<form class="space-y-lg" id="reportForm">
+<!-- 1. Details Section -->
+<div class="glass-panel p-md rounded-xl space-y-md shadow-xl">
+<div class="flex items-center gap-2 text-primary font-bold">
+<span class="material-symbols-outlined">edit_note</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Step 1: Details</span>
+</div>
+<div class="space-y-sm">
+<label class="block font-label-sm text-on-surface-variant px-1">Issue Title</label>
+<input class="w-full bg-surface-container-low border-outline-variant text-on-surface placeholder:text-on-surface-variant/50 focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 transition-all duration-300 outline-none" placeholder="e.g., Pothole on Maple Avenue" type="text"/>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="space-y-sm">
+<label class="block font-label-sm text-on-surface-variant px-1">Category</label>
+<select class="w-full bg-surface-container-low border-outline-variant text-on-surface focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 transition-all outline-none appearance-none cursor-pointer">
+<option>Infrastructure</option>
+<option>Sanitation</option>
+<option>Public Safety</option>
+<option>Greenery/Parks</option>
+<option>Other</option>
+</select>
+</div>
+<div class="space-y-sm">
+<label class="block font-label-sm text-on-surface-variant px-1">Severity</label>
+<select class="w-full bg-surface-container-low border-outline-variant text-on-surface focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 transition-all outline-none appearance-none cursor-pointer">
+<option>Low (Cosmetic)</option>
+<option>Medium (Nuisance)</option>
+<option>High (Safety Hazard)</option>
+<option>Critical (Emergency)</option>
+</select>
+</div>
+</div>
+<div class="space-y-sm">
+<label class="block font-label-sm text-on-surface-variant px-1">Description</label>
+<textarea class="w-full bg-surface-container-low border-outline-variant text-on-surface placeholder:text-on-surface-variant/50 focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 transition-all duration-300 outline-none resize-none" placeholder="Describe the issue in detail. Include landmarks or specific context..." rows="4"></textarea>
+</div>
+</div>
+<!-- 2. Media Section -->
+<div class="glass-panel p-md rounded-xl space-y-md shadow-xl">
+<div class="flex items-center gap-2 text-primary font-bold">
+<span class="material-symbols-outlined">photo_camera</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Step 2: Evidence</span>
+</div>
+<div class="relative group cursor-pointer" id="dropzone">
+<div class="w-full aspect-video border-2 border-dashed border-primary/30 rounded-xl flex flex-col items-center justify-center space-y-2 bg-primary/5 group-hover:bg-primary/10 transition-all duration-500 overflow-hidden">
+<span class="material-symbols-outlined text-4xl text-primary/60 group-hover:scale-110 transition-transform duration-500">upload_file</span>
+<p class="font-label-sm text-primary">Drop photos here or <span class="underline">browse</span></p>
+<p class="text-[10px] text-on-surface-variant/60">Maximum 3 files • JPEG, PNG</p>
+</div>
+</div>
+<!-- Preview Area (Empty State) -->
+<div class="grid grid-cols-3 gap-sm">
+<div class="aspect-square bg-surface-container rounded-lg border border-outline-variant/30 flex items-center justify-center text-outline-variant">
+<span class="material-symbols-outlined">image</span>
+</div>
+<div class="aspect-square bg-surface-container rounded-lg border border-outline-variant/30 flex items-center justify-center text-outline-variant">
+<span class="material-symbols-outlined">image</span>
+</div>
+<div class="aspect-square bg-surface-container rounded-lg border border-outline-variant/30 flex items-center justify-center text-outline-variant">
+<span class="material-symbols-outlined">image</span>
+</div>
+</div>
+</div>
+<!-- 3. Location Section -->
+<div class="glass-panel p-md rounded-xl space-y-md shadow-xl overflow-hidden">
+<div class="flex items-center gap-2 text-primary font-bold">
+<span class="material-symbols-outlined">location_on</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Step 3: Location</span>
+</div>
+<div class="space-y-sm">
+<div class="relative">
+<input class="w-full bg-surface-container-low border-outline-variant text-on-surface placeholder:text-on-surface-variant/50 focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 pr-12 transition-all outline-none" placeholder="Search for address..." type="text"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-primary" type="button">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+<button class="w-full py-3 flex items-center justify-center gap-2 text-primary font-bold text-label-sm bg-primary/10 rounded-lg hover:bg-primary/20 transition-all border border-primary/20" type="button">
+<span class="material-symbols-outlined text-base">my_location</span>
+                    USE MY CURRENT LOCATION
+                </button>
+</div>
+<!-- Interactive Map UI -->
+<div class="relative w-full h-48 rounded-xl overflow-hidden border border-outline-variant/30 group">
+<div class="absolute inset-0 bg-cover bg-center grayscale-[0.8] contrast-[1.2] brightness-[0.7]" data-alt="A clean, minimalist dark-mode map of a neighborhood." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBn7JbB4xef7HLO7rGte_SQXn5sdjcBpx3IjCVmuspLJzr0OXyQx7qoolZNvvT45NSoOKzcZOk0FoALvINhByZdkHTFwXp6uDX1bR2qWEi8JQI4N8NAh260eUFupLdhMZ2FkoW3UGy_HyjeFfILTTFyuzzaPF-LXFrCM1aZOoJyv0pZWS0gkFHEuY_ZBQ8e7PPBZbsYu8MvC9BiJ2T3_KTdTFpFrzvl5YObxmjUrTaq1sWe08E9Svk25qgqrcdgPodulfL752j_veL4')">
+</div>
+<!-- Center Pin -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<div class="relative -translate-y-4">
+<span class="material-symbols-outlined text-4xl text-primary drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<div class="absolute bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-black/40 rounded-full blur-xs"></div>
+</div>
+</div>
+<!-- Map Controls -->
+<div class="absolute bottom-2 right-2 flex flex-col gap-1">
+<button class="w-8 h-8 bg-surface-container-high/90 backdrop-blur-md rounded shadow-sm flex items-center justify-center text-on-surface hover:bg-surface-container-highest transition-all" type="button"><span class="material-symbols-outlined text-lg">add</span></button>
+<button class="w-8 h-8 bg-surface-container-high/90 backdrop-blur-md rounded shadow-sm flex items-center justify-center text-on-surface hover:bg-surface-container-highest transition-all" type="button"><span class="material-symbols-outlined text-lg">remove</span></button>
+</div>
+</div>
+</div>
+<!-- Submit Button -->
+<button class="w-full sakura-gradient h-16 rounded-xl text-white font-bold text-title-md shadow-2xl hover:scale-[1.02] active:scale-95 transition-all duration-300 relative overflow-hidden group" id="submitBtn" type="button">
+<span class="relative z-10" id="btnText">Submit Report</span>
+<div class="hidden relative z-10 flex items-center justify-center gap-3" id="btnLoading">
+<svg class="animate-spin h-6 w-6 text-white" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+<path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path>
+</svg>
+<span>Sending Data...</span>
+</div>
+<div class="absolute inset-0 shimmer opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+</button>
+</form>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full rounded-t-xl z-50 bg-background/80 backdrop-blur-lg border-t border-white/5 shadow-[0_-4px_20px_rgba(0,0,0,0.3)]">
+<div class="flex justify-around items-center h-16 px-4 pb-safe">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary font-bold scale-110 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+<span class="font-label-sm text-label-sm">New Issue</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="font-label-sm text-label-sm">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</div>
+</nav>
+<!-- Success Modal -->
+<div class="fixed inset-0 z-[100] flex items-center justify-center p-md pointer-events-none opacity-0 transition-opacity duration-500" id="successModal">
+<div class="absolute inset-0 bg-on-background/40 backdrop-blur-sm"></div>
+<div class="relative glass-panel w-full max-w-sm rounded-2xl p-lg text-center space-y-md shadow-2xl scale-90 transition-transform duration-500">
+<div class="w-20 h-20 bg-secondary/20 rounded-full flex items-center justify-center mx-auto">
+<svg class="w-10 h-10 text-secondary" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path class="draw-in" d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+</svg>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Report Submitted!</h3>
+<p class="text-on-surface-variant">Thank you, Alex. Your report has been tagged as High Priority and assigned to the Public Works department.</p>
+<button class="w-full py-4 sakura-gradient text-white font-bold rounded-xl shadow-lg" onclick="window.location.reload()">Done</button>
+</div>
+</div>
+<script>
+    document.getElementById('submitBtn').addEventListener('click', function() {
+        const btn = this;
+        const text = document.getElementById('btnText');
+        const loader = document.getElementById('btnLoading');
+        const modal = document.getElementById('successModal');
+        const modalContent = modal.querySelector('.glass-panel');
+
+        // Enter loading state
+        btn.disabled = true;
+        text.classList.add('hidden');
+        loader.classList.remove('hidden');
+
+        // Simulate API Call
+        setTimeout(() => {
+            modal.classList.remove('pointer-events-none', 'opacity-0');
+            modalContent.classList.remove('scale-90');
+            modalContent.classList.add('scale-100');
+        }, 1800);
+    });
+
+    // Dropzone simple visual interaction
+    const dropzone = document.getElementById('dropzone');
+    dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropzone.querySelector('div').classList.add('bg-primary/20');
+    });
+    dropzone.addEventListener('dragleave', () => {
+        dropzone.querySelector('div').classList.remove('bg-primary/20');
+    });
+    dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzone.querySelector('div').classList.remove('bg-primary/20');
+        alert('File added to queue.');
+    });
+</script>
+</body></html>
+
+<!-- Map Explorer (Dark Mode) - Community Hero -->

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Community Hero - Map Explorer (Dark Mode)</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Outfit -->
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "background": "#1b1c19",
+                        "on-surface": "#f2f1eb",
+                        "on-secondary-container": "#bdeacd",
+                        "on-tertiary-fixed": "#400014",
+                        "secondary-fixed-dim": "#a4d1b4",
+                        "inverse-surface": "#f2f1eb",
+                        "surface-container-low": "#1b1c19",
+                        "tertiary-fixed": "#ffd9dd",
+                        "error": "#ffb4ab",
+                        "primary-fixed": "#ffd9df",
+                        "on-primary-fixed": "#30121a",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed-variant": "#264f39",
+                        "surface-container": "#242521",
+                        "inverse-on-surface": "#1b1c19",
+                        "surface": "#1b1c19",
+                        "surface-tint": "#edb9c3",
+                        "on-primary-fixed-variant": "#613c45",
+                        "tertiary-fixed-dim": "#ffb2bd",
+                        "on-secondary-fixed": "#002112",
+                        "surface-container-highest": "#353631",
+                        "on-tertiary-fixed-variant": "#7d283c",
+                        "primary-container": "#613c45",
+                        "on-primary-container": "#ffcad4",
+                        "surface-container-lowest": "#11110e",
+                        "surface-bright": "#3c3d38",
+                        "error-container": "#93000a",
+                        "on-tertiary-container": "#ffcad1",
+                        "primary": "#edb9c3",
+                        "surface-container-high": "#2e2f2a",
+                        "primary-fixed-dim": "#edb9c3",
+                        "on-primary": "#49262f",
+                        "outline": "#9c8d8f",
+                        "secondary": "#a4d1b4",
+                        "on-surface-variant": "#d4c2c4",
+                        "on-error": "#690005",
+                        "tertiary-container": "#7d283c",
+                        "surface-dim": "#1b1c19",
+                        "secondary-container": "#264f39",
+                        "on-background": "#f2f1eb",
+                        "surface-variant": "#504446",
+                        "inverse-primary": "#7c535c",
+                        "secondary-fixed": "#c0edd0",
+                        "on-secondary": "#093824",
+                        "outline-variant": "#504446",
+                        "tertiary": "#ffb2bd",
+                        "on-error-container": "#ffdad6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "base": "8px",
+                        "gutter": "20px",
+                        "container-max": "1200px",
+                        "lg": "48px",
+                        "sm": "12px",
+                        "xl": "80px",
+                        "md": "24px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Outfit"],
+                        "headline-lg": ["Outfit"],
+                        "headline-lg-mobile": ["Outfit"],
+                        "title-md": ["Outfit"],
+                        "body-md": ["Outfit"],
+                        "display-xl": ["Outfit"],
+                        "body-lg": ["Outfit"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "title-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "display-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #1b1c19;
+            overflow: hidden;
+            color: #f2f1eb;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .glass-panel {
+            backdrop-filter: blur(24px);
+            background: rgba(27, 28, 25, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .sakura-gradient {
+            background: linear-gradient(135deg, #7c535c 0%, #9b4053 100%);
+        }
+
+        .marker-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.15); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .bottom-sheet-transition {
+            transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .map-dark-overlay {
+            filter: grayscale(1) invert(0.9) brightness(0.8) contrast(1.1) hue-rotate(180deg);
+        }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface dark">
+<!-- Top Navigation Anchor -->
+<header class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-white/5 shadow-xl">
+<div class="flex justify-between items-center h-20 px-gutter max-w-container-max mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl">account_balance</span>
+<h1 class="font-display-xl text-[24px] md:text-display-xl bg-gradient-to-r from-primary to-tertiary bg-clip-text text-transparent">Community Hero</h1>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-all" href="#">Dashboard</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-all" href="#">Reports</a>
+<a class="text-primary font-bold border-b-2 border-primary transition-all" href="#">Map</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-all" href="#">Settings</a>
+</div>
+<button class="material-symbols-outlined text-primary hover:scale-105 transition-all">dark_mode</button>
+</div>
+</header>
+<!-- Map Canvas Area -->
+<main class="relative h-screen w-full pt-20 overflow-hidden">
+<!-- Interactive Map Simulation -->
+<div class="absolute inset-0 z-0 bg-[#121212]">
+<div class="w-full h-full map-dark-overlay opacity-60" data-alt="A dark mode stylized city map with midnight blue and deep gray tones. Grid lines are subtle and glowing." data-location="San Francisco" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC72EY5N9vohABtFaZFwGL3q0jR1v4dgV9dWW8TC-uFNvoiRPsR1fMiMwXxACDqRomxyIzWsu9cbIkBbD6NtiCpieqSQ9KNIoGpKkDPeBvbgCbFJ_GlHQPGqa5xlMf3pYxHRgtXfDQNp4I1Juvm7dT03LaPufsCBdIV_xC0rwT5Qi3-4BuI2Z_HvFn7QpRod6XKhlDnHDvqby4M6J1GGLtTI8CfuKj4Dkjc6plzvsvW8Fana7hd9p6wQO1Y_MFy2UgFO_qHd4scnAn5'); background-size: cover;">
+</div>
+<!-- Custom Markers -->
+<!-- Marker 1: High Priority Issue -->
+<button class="absolute top-[30%] left-[40%] group flex flex-col items-center" onclick="openIssueDetail('Broken Streetlight')">
+<div class="w-12 h-12 rounded-full glass-panel flex items-center justify-center shadow-2xl border border-primary/50 marker-pulse hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">light_off</span>
+</div>
+<div class="mt-2 px-3 py-1 bg-primary text-on-primary rounded-full text-label-sm shadow-md opacity-0 group-hover:opacity-100 transition-opacity">Broken Streetlight</div>
+</button>
+<!-- Marker 2: Resolved Issue -->
+<button class="absolute top-[55%] left-[65%] group flex flex-col items-center" onclick="openIssueDetail('Park Cleaned')">
+<div class="w-10 h-10 rounded-full glass-panel flex items-center justify-center shadow-2xl border border-secondary/50 hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">park</span>
+</div>
+<div class="mt-2 px-3 py-1 bg-secondary text-on-secondary rounded-full text-label-sm shadow-md opacity-0 group-hover:opacity-100 transition-opacity">Resolved: Park Cleanup</div>
+</button>
+<!-- Marker 3: Pothole -->
+<button class="absolute top-[45%] left-[25%] group flex flex-col items-center" onclick="openIssueDetail('Pothole on Main')">
+<div class="w-12 h-12 rounded-full glass-panel flex items-center justify-center shadow-2xl border border-tertiary/50 hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div class="mt-2 px-3 py-1 bg-tertiary text-on-tertiary-container rounded-full text-label-sm shadow-md opacity-0 group-hover:opacity-100 transition-opacity">Large Pothole</div>
+</button>
+</div>
+<!-- Floating UI Over Map -->
+<div class="absolute top-24 left-gutter right-gutter md:left-gutter md:w-[400px] z-10 space-y-4">
+<!-- Search & Filters -->
+<div class="glass-panel rounded-2xl p-4 shadow-2xl">
+<div class="relative mb-4">
+<input class="w-full bg-surface-container-high border-none rounded-xl pl-10 pr-4 py-3 text-on-surface placeholder:text-on-surface-variant/50 focus:ring-2 focus:ring-primary/40 transition-all outline-none" placeholder="Search issues or areas..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+</div>
+<div class="flex gap-2 overflow-x-auto hide-scrollbar">
+<button class="px-4 py-1.5 rounded-full bg-primary text-on-primary text-label-sm whitespace-nowrap shadow-sm">All Issues</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-highest text-on-surface-variant text-label-sm whitespace-nowrap hover:bg-primary/20 transition-colors">Infrastructure</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-highest text-on-surface-variant text-label-sm whitespace-nowrap hover:bg-primary/20 transition-colors">Public Safety</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-highest text-on-surface-variant text-label-sm whitespace-nowrap hover:bg-primary/20 transition-colors">Resolved</button>
+</div>
+</div>
+</div>
+<!-- Issue List Bottom Sheet (Minimized/Draggable State) -->
+<div class="fixed bottom-16 md:bottom-0 left-0 right-0 z-40 h-[530px] bottom-sheet-transition translate-y-[calc(530px-140px)] md:translate-y-[calc(530px-160px)]" id="bottom-sheet">
+<div class="h-full bg-background/90 backdrop-blur-3xl rounded-t-[32px] border-t border-white/10 shadow-2xl overflow-hidden flex flex-col">
+<!-- Drag Handle Area -->
+<div class="w-full h-10 flex items-center justify-center cursor-pointer group" onclick="toggleBottomSheet()">
+<div class="w-12 h-1.5 bg-outline-variant/30 rounded-full group-hover:bg-primary transition-colors"></div>
+</div>
+<div class="px-6 pb-4">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-2">Local Infrastructure</h2>
+<p class="text-on-surface-variant text-body-md">Showing 12 active issues nearby</p>
+</div>
+<div class="flex-1 overflow-y-auto px-6 pb-20 space-y-4 hide-scrollbar">
+<!-- Issue Card 1 -->
+<div class="bg-surface-container p-4 rounded-2xl border border-white/5 shadow-lg hover:bg-surface-container-high transition-all cursor-pointer" onclick="openIssueDetail('Broken Streetlight')">
+<div class="flex justify-between items-start mb-2">
+<span class="px-3 py-1 rounded-full bg-error-container text-on-error-container text-label-sm font-bold">Urgent</span>
+<span class="text-on-surface-variant/60 text-label-sm">2h ago</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-1">Broken Streetlight</h3>
+<p class="text-on-surface-variant text-body-md line-clamp-1">Corner of Oak &amp; 5th. Complete blackout in the alley...</p>
+<div class="mt-3 flex items-center gap-4">
+<div class="flex items-center gap-1 text-on-surface-variant text-label-sm">
+<span class="material-symbols-outlined text-[18px]">thumb_up</span>
+                            24
+                        </div>
+<div class="flex items-center gap-1 text-on-surface-variant text-label-sm">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+                            5
+                        </div>
+</div>
+</div>
+<!-- Issue Card 2 (Resolved) -->
+<div class="bg-surface-container/50 p-4 rounded-2xl border border-white/5 shadow-md opacity-70">
+<div class="flex justify-between items-start mb-2">
+<span class="px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-label-sm font-bold uppercase">Resolved</span>
+<span class="text-on-surface-variant/60 text-label-sm">Yesterday</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-1">Park Bench Vandalism</h3>
+<p class="text-on-surface-variant text-body-md">Soma Park. Graffiti removed and bench repainted.</p>
+<div class="mt-3 flex items-center gap-2 text-secondary font-bold text-label-sm">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+                        Verified by 18 Heroes
+                    </div>
+</div>
+<!-- Issue Card 3 -->
+<div class="bg-surface-container p-4 rounded-2xl border border-white/5 shadow-lg">
+<div class="flex justify-between items-start mb-2">
+<span class="px-3 py-1 rounded-full bg-primary-container text-on-primary-container text-label-sm font-bold">In Progress</span>
+<span class="text-on-surface-variant/60 text-label-sm">5h ago</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-1">Clogged Storm Drain</h3>
+<p class="text-on-surface-variant text-body-md">Water pooling at the intersection after morning rain.</p>
+<div class="mt-3 flex items-center gap-4">
+<div class="flex items-center gap-1 text-on-surface-variant text-label-sm">
+<span class="material-symbols-outlined text-[18px]">thumb_up</span>
+                            12
+                        </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Detailed Issue Drawer -->
+<div class="fixed inset-y-0 right-0 z-[100] w-full md:w-[480px] bg-background/95 backdrop-blur-3xl shadow-2xl translate-x-full transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] flex flex-col border-l border-white/10" id="issue-detail-drawer">
+<!-- Header -->
+<div class="flex items-center justify-between p-6 border-b border-white/5">
+<button class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container-high hover:bg-surface-container-highest transition-colors" onclick="closeIssueDetail()">
+<span class="material-symbols-outlined">close</span>
+</button>
+<div class="flex gap-2">
+<button class="px-6 py-2 bg-primary text-on-primary rounded-full text-label-sm sakura-gradient shadow-lg font-bold hover:scale-105 transition-transform">Verify Issue</button>
+</div>
+</div>
+<!-- Content -->
+<div class="flex-1 overflow-y-auto px-6 py-8 hide-scrollbar">
+<div class="w-full h-48 rounded-2xl overflow-hidden mb-6 shadow-inner relative">
+<div class="absolute inset-0 bg-black/40"></div>
+<div class="w-full h-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDRliZ22zBSve4E5eNHV3ErVp44LQgc-IuivUJB52CLLzb2Jfw3MUio40GuvbUTdeaQXg4bOtrXGHYGp9QMC5aXTSocGHaAZe6Xgs0GIGAQXeCHdh4o4SfvYhjHCipZT5FBgO5n8fX6DZ-9f6ihHgxEhrazz9QZzldhU5HeIb23rDAVwqvBw_1BMYrZ_x-91xwKAGMwd-B-SlToqknqhRK2efjPDgCl_rdHjZvA4w15Uz8GCbL7HgonBwrFAOzAgZvqiJjQNSNH_2Lq')"></div>
+</div>
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<span class="text-on-surface-variant font-medium text-label-sm">45th St &amp; Lexington Ave</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-4" id="detail-title">Broken Streetlight</h2>
+<div class="flex gap-2 mb-6">
+<span class="px-3 py-1 rounded-full bg-error-container text-on-error-container text-label-sm font-bold">Needs Attention</span>
+<span class="px-3 py-1 rounded-full bg-secondary-container/30 text-secondary text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">bolt</span> AI Summarized
+                </span>
+</div>
+<div class="bg-surface-container-high border border-white/5 p-4 rounded-2xl mb-6">
+<h3 class="text-primary font-bold text-label-sm uppercase mb-2">AI Summary</h3>
+<p class="text-body-md text-on-surface-variant italic leading-relaxed">"This issue affects pedestrian safety in a high-traffic residential zone. Report suggests recurring power surges. Community impact score: High."</p>
+</div>
+<div class="space-y-6">
+<div>
+<h4 class="font-title-md text-title-md mb-2 text-on-surface">Description</h4>
+<p class="text-body-md text-on-surface-variant leading-relaxed">
+                        The main light pole has been flickering for three days and finally went dark last night. It's creating a safety concern for evening commuters and dog walkers. Several neighbors have confirmed the issue.
+                    </p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<button class="flex flex-col items-center justify-center p-4 rounded-2xl bg-surface-container border border-white/5 hover:bg-primary/10 transition-all group">
+<span class="material-symbols-outlined text-primary mb-1 group-hover:scale-125 transition-transform">thumb_up</span>
+<span class="text-label-sm font-bold">Upvote</span>
+<span class="text-[10px] text-on-surface-variant">24 People</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 rounded-2xl bg-surface-container border border-white/5 hover:bg-secondary/10 transition-all group">
+<span class="material-symbols-outlined text-secondary mb-1 group-hover:scale-125 transition-transform">add_comment</span>
+<span class="text-label-sm font-bold">Update</span>
+<span class="text-[10px] text-on-surface-variant">Share Info</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Footer Action -->
+<div class="p-6 border-t border-white/5 bg-background">
+<button class="w-full py-4 rounded-2xl bg-on-surface text-background font-bold hover:scale-[1.02] active:scale-[0.98] transition-all">
+                I'll Volunteer to Monitor
+            </button>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Shell (Mobile) -->
+<nav class="md:hidden fixed bottom-0 w-full bg-background/90 backdrop-blur-2xl border-t border-white/5 shadow-2xl rounded-t-2xl z-50">
+<div class="flex justify-around items-center h-16 px-4 pb-safe">
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined">home</span>
+<span class="text-label-sm">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined">add_circle</span>
+<span class="text-label-sm">New Issue</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary font-bold scale-110">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">map</span>
+<span class="text-label-sm">Map</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined">person</span>
+<span class="text-label-sm">Profile</span>
+</div>
+</div>
+</nav>
+<!-- Map FAB -->
+<button class="fixed bottom-24 right-6 md:bottom-8 md:right-8 z-[50] w-14 h-14 rounded-full bg-primary sakura-gradient text-on-primary shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+<script>
+    let isSheetOpen = false;
+
+    function toggleBottomSheet() {
+        const sheet = document.getElementById('bottom-sheet');
+        if (isSheetOpen) {
+            sheet.style.transform = 'translateY(calc(530px - 140px))';
+            if (window.innerWidth >= 768) sheet.style.transform = 'translateY(calc(530px - 160px))';
+        } else {
+            sheet.style.transform = 'translateY(0)';
+        }
+        isSheetOpen = !isSheetOpen;
+    }
+
+    function openIssueDetail(title) {
+        const drawer = document.getElementById('issue-detail-drawer');
+        const titleEl = document.getElementById('detail-title');
+        titleEl.innerText = title;
+        drawer.style.transform = 'translateX(0)';
+    }
+
+    function closeIssueDetail() {
+        const drawer = document.getElementById('issue-detail-drawer');
+        drawer.style.transform = 'translateX(100%)';
+    }
+
+    // Parallax map interaction
+    document.addEventListener('mousemove', (e) => {
+        const x = (window.innerWidth / 2 - e.pageX) / 120;
+        const y = (window.innerHeight / 2 - e.pageY) / 120;
+        const map = document.querySelector('[data-location]');
+        if(map) {
+            map.style.transform = `scale(1.1) translate(${x}px, ${y}px)`;
+            map.style.transition = 'transform 0.3s ease-out';
+        }
+    });
+
+    window.addEventListener('resize', () => {
+        if (isSheetOpen) {
+            document.getElementById('bottom-sheet').style.transform = 'translateY(0)';
+        } else {
+             const sheet = document.getElementById('bottom-sheet');
+             sheet.style.transform = window.innerWidth >= 768 ? 'translateY(calc(530px - 160px))' : 'translateY(calc(530px - 140px))';
+        }
+    });
+</script>
+</body></html>
+
+<!-- Dashboard - Community Hero -->

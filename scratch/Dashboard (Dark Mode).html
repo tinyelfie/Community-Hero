@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Community Hero | Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#fbf9f3",
+                    "on-surface": "#1b1c19",
+                    "on-secondary-container": "#426b54",
+                    "on-tertiary-fixed": "#400014",
+                    "secondary-fixed-dim": "#a4d1b4",
+                    "inverse-surface": "#30312d",
+                    "surface-container-low": "#f5f3ee",
+                    "tertiary-fixed": "#ffd9dd",
+                    "error": "#ba1a1a",
+                    "primary-fixed": "#ffd9df",
+                    "on-primary-fixed": "#30121a",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed-variant": "#264f39",
+                    "surface-container": "#f0eee8",
+                    "inverse-on-surface": "#f2f1eb",
+                    "surface": "#fbf9f3",
+                    "surface-tint": "#7c535c",
+                    "on-primary-fixed-variant": "#613c45",
+                    "tertiary-fixed-dim": "#ffb2bd",
+                    "on-secondary-fixed": "#002112",
+                    "surface-container-highest": "#e4e2dd",
+                    "on-tertiary-fixed-variant": "#7d283c",
+                    "primary-container": "#ffcad4",
+                    "on-primary-container": "#7b525b",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#fbf9f3",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-container": "#9a3f52",
+                    "primary": "#7c535c",
+                    "surface-container-high": "#eae8e2",
+                    "primary-fixed-dim": "#edb9c3",
+                    "on-primary": "#ffffff",
+                    "outline": "#827476",
+                    "secondary": "#3e6750",
+                    "on-surface-variant": "#504446",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#ffcad1",
+                    "surface-dim": "#dbdad4",
+                    "secondary-container": "#bdeacd",
+                    "on-background": "#1b1c19",
+                    "surface-variant": "#e4e2dd",
+                    "inverse-primary": "#edb9c3",
+                    "secondary-fixed": "#c0edd0",
+                    "on-secondary": "#ffffff",
+                    "outline-variant": "#d4c2c4",
+                    "tertiary": "#9b4053",
+                    "on-error-container": "#93000a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "base": "8px",
+                    "gutter": "20px",
+                    "container-max": "1200px",
+                    "lg": "48px",
+                    "sm": "12px",
+                    "xl": "80px",
+                    "md": "24px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Outfit"],
+                    "headline-lg": ["Outfit"],
+                    "headline-lg-mobile": ["Outfit"],
+                    "title-md": ["Outfit"],
+                    "body-md": ["Outfit"],
+                    "display-xl": ["Outfit"],
+                    "body-lg": ["Outfit"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "title-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .dark .glass-card {
+            background: rgba(48, 49, 45, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .sakura-gradient {
+            background: linear-gradient(135deg, #7c535c 0%, #9b4053 100%);
+        }
+        .shine-effect:hover {
+            position: relative;
+            overflow: hidden;
+        }
+        .shine-effect:hover::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            animation: shine 0.8s ease-in-out;
+        }
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+        .custom-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #d4c2c4;
+            border-radius: 10px;
+        }
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-background dark:bg-[#121210] text-on-surface dark:text-inverse-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/70 dark:bg-[#121210]/70 backdrop-blur-xl border-b border-white/20 dark:border-white/10 shadow-[0_4px_30px_rgba(124,83,92,0.1)]">
+<div class="flex justify-between items-center h-20 px-gutter max-w-container-max mx-auto">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim text-headline-lg" data-icon="account_balance">account_balance</span>
+<h1 class="font-display-xl text-headline-lg-mobile md:text-display-xl bg-gradient-to-r from-primary to-tertiary dark:from-primary-fixed-dim dark:to-tertiary-fixed-dim bg-clip-text text-transparent">Community Hero</h1>
+</div>
+<div class="flex items-center gap-md">
+<button class="hover:scale-105 hover:opacity-80 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] text-on-surface-variant dark:text-outline-variant">
+<span class="material-symbols-outlined" data-icon="dark_mode">dark_mode</span>
+</button>
+<div class="hidden md:flex gap-md">
+<a class="text-primary dark:text-primary-fixed-dim font-bold border-b-2 border-primary dark:border-primary-fixed-dim py-2 transition-all" href="#">Dashboard</a>
+<a class="text-on-surface-variant dark:text-outline-variant font-medium hover:text-primary dark:hover:text-primary-fixed-dim transition-all py-2" href="#">Reports</a>
+<a class="text-on-surface-variant dark:text-outline-variant font-medium hover:text-primary dark:hover:text-primary-fixed-dim transition-all py-2" href="#">Community</a>
+</div>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-20 md:pb-8 px-gutter max-w-container-max mx-auto min-h-screen">
+<!-- Hero Profile & Stats Section -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-md mb-lg">
+<div class="md:col-span-8 glass-card p-md rounded-xl flex flex-col md:flex-row items-center gap-md hover:scale-[1.01] transition-transform duration-300 shadow-[0_4px_20px_rgba(124,83,92,0.05)]">
+<div class="relative group">
+<div class="w-24 h-24 rounded-full overflow-hidden border-4 border-primary/20 dark:border-primary-fixed-dim/20">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a friendly community leader, Alex Rivers, a Caucasian male in his early 30s with a warm smile. He is set against a soft-focus urban park background with sakura pink cherry blossoms. The lighting is golden hour, warm and inviting, consistent with the premium glassmorphism UI style. High resolution and modern aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTjt2fab4MdGJwJH5K_lBKLJkPyHkxIIRh59IhAuBobcy3dFhsYXeEUMADE33TAJ3JMxepg30ZN5ndJQNlIXQ_e0Iadj3FPIf2T50O7Gvqv0XR51V-n0RFF-14E0nrDdfK8m-uCmLtpdMuDEWv_K3qLj10FGnBu25oMj26hwUKeTckK26sMyD-Z2eBY5qmtOt-z_IvRTw6t9rcjNrJPPfY-czGS6jTQbjsFozOIOPJpE3UxGPfc9wUlA-LzgtNG_wqNgaq99xPVE2X"/>
+</div>
+<div class="absolute -bottom-2 -right-2 sakura-gradient text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-[18px]" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div class="text-center md:text-left flex-1">
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface dark:text-inverse-on-surface">Welcome back, Alex Rivers</h2>
+<p class="text-on-surface-variant dark:text-outline-variant font-medium">Civic Hero Level 5 • City Watch Elite</p>
+<div class="mt-base flex flex-wrap justify-center md:justify-start gap-xs">
+<span class="bg-secondary/10 dark:bg-secondary-fixed/10 text-secondary dark:text-secondary-fixed-dim px-sm py-1 rounded-full text-label-sm">Active Protector</span>
+<span class="bg-tertiary/10 dark:bg-tertiary-fixed/10 text-tertiary dark:text-tertiary-fixed-dim px-sm py-1 rounded-full text-label-sm">Top 5% Contributor</span>
+</div>
+</div>
+<div class="flex gap-md border-t md:border-t-0 md:border-l border-outline-variant/30 pt-md md:pt-0 md:pl-md">
+<div class="text-center">
+<span class="block font-display-xl text-primary dark:text-primary-fixed-dim text-headline-lg">1,240</span>
+<span class="text-label-sm text-on-surface-variant dark:text-outline-variant uppercase tracking-wider">Points</span>
+</div>
+<div class="text-center">
+<span class="block font-display-xl text-secondary dark:text-secondary-fixed-dim text-headline-lg">#12</span>
+<span class="text-label-sm text-on-surface-variant dark:text-outline-variant uppercase tracking-wider">Rank</span>
+</div>
+</div>
+</div>
+<!-- Quick Action Card -->
+<div class="md:col-span-4 sakura-gradient p-md rounded-xl text-white shadow-xl flex flex-col justify-between shine-effect cursor-pointer group active:scale-95 transition-transform">
+<div>
+<h3 class="font-title-md text-title-md mb-xs">Spotted something?</h3>
+<p class="text-white/80 text-body-md">Help improve the community by reporting a new issue now.</p>
+</div>
+<div class="flex items-center gap-sm mt-md font-bold text-lg">
+<span>Submit Report</span>
+<span class="material-symbols-outlined group-hover:translate-x-2 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+</section>
+<!-- Main Dashboard Content Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<!-- Left Column: Reports List -->
+<div class="md:col-span-2">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface dark:text-inverse-on-surface flex items-center gap-sm">
+                        My Reports 
+                        <span class="text-on-surface-variant/50 dark:text-outline-variant/50 font-normal text-title-md">(12)</span>
+</h3>
+<button class="text-primary dark:text-primary-fixed-dim font-bold text-label-sm hover:underline">VIEW ALL</button>
+</div>
+<!-- Reports Grid -->
+<div class="grid grid-cols-1 gap-md">
+<!-- Report Card 1 -->
+<div class="bg-surface-container-lowest dark:bg-[#1b1c19] p-md rounded-xl border border-outline-variant/20 dark:border-white/5 hover:shadow-lg transition-all group relative">
+<div class="absolute top-md right-md bg-secondary/10 dark:bg-secondary-fixed/10 text-secondary dark:text-secondary-fixed-dim px-sm py-1 rounded-full text-label-sm font-bold flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-secondary dark:bg-secondary-fixed-dim"></span> Resolved
+                        </div>
+<div class="flex gap-md flex-col sm:flex-row">
+<div class="w-full sm:w-32 h-32 rounded-lg overflow-hidden bg-surface-variant dark:bg-inverse-surface flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A clean, minimalist photograph of a freshly repaired street lamp in a modern urban district. The lighting is cool, evening blue, with the warm yellow glow of the lamp illuminating the clean pavement below. The composition is balanced and elegant, fitting for a civic-minded premium mobile app interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyhw6kVCjsQe3um8JwgWAGq5PtI85S31zAprf4so-Rv60gAY9KcW9RqGk1IETWNXYIb-DRm0FyJYXqrz4t2Ly3m0hiOC64d85HhOfq0_TsYEONWoTs_lCdllJItQKUJkGXztR5PsTtQWM8Se87KUKVOrYI5X6w2gaaaxOjIYeFLIFuymH3KDwXCgVthHuFrZRh_-8xtsRlSwC6m3XIlnt69fKOQmsZ3cah_zBGSLDMMd09PTaWgmE2mLosg-PWwUmtpZ_3eAsT4hKY"/>
+</div>
+<div class="flex-1">
+<p class="text-label-sm text-on-surface-variant dark:text-outline-variant mb-xs uppercase tracking-tight">Street Lighting • 2 days ago</p>
+<h4 class="font-title-md text-title-md text-on-surface dark:text-inverse-on-surface mb-xs group-hover:text-primary dark:group-hover:text-primary-fixed-dim transition-colors">Broken Street Lamp on 5th &amp; Main</h4>
+<p class="text-on-surface-variant dark:text-outline-variant text-body-md line-clamp-2">The lamp has been flickering for three nights, creating a safety hazard for pedestrians and cyclists.</p>
+<div class="mt-md flex items-center gap-md">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-white dark:border-[#1b1c19] bg-primary-container dark:bg-primary-fixed text-[10px] flex items-center justify-center font-bold text-on-primary-container">+5</div>
+</div>
+<span class="text-label-sm text-on-surface-variant dark:text-outline-variant">5 neighbors supported</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Report Card 2 -->
+<div class="bg-surface-container-lowest dark:bg-[#1b1c19] p-md rounded-xl border border-outline-variant/20 dark:border-white/5 hover:shadow-lg transition-all group relative">
+<div class="absolute top-md right-md bg-tertiary/10 dark:bg-tertiary-fixed/10 text-tertiary dark:text-tertiary-fixed-dim px-sm py-1 rounded-full text-label-sm font-bold flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-tertiary dark:bg-tertiary-fixed-dim"></span> In Progress
+                        </div>
+<div class="flex gap-md flex-col sm:flex-row">
+<div class="w-full sm:w-32 h-32 rounded-lg overflow-hidden bg-surface-variant dark:bg-inverse-surface flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A macro shot of vibrant pink flowers growing in a beautifully maintained public community garden. The background is a soft, dreamy bokeh of green leaves and sunlight. The aesthetic is high-end, peaceful, and reflects the 'Sakura Dawn' color theme of the UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCU5O1_bWCxB_ITaz8PSf5pOKHlftTyFHdTwttJdMgjI-EP-zwYv6vCB5BT26lTG8Ko-3vq_wzDQqNrrSwtzHYm8UwchLkfc-5-HGzGUr5YrkU60y7QxOJ-xwz6HT1a3QyTSI6VSdgKNhrQsYUfkIb0wGSh4vUCOcGPLOQn1PAhnvbN9gBKMK2oghVnLzBCDt8YO08hghfQNcVs27paa6WhI4VDgUL48KwWKbP_LQQLbnOmKeiUkSmi3MH-VHYEu6C-I2gsnJpog9di"/>
+</div>
+<div class="flex-1">
+<p class="text-label-sm text-on-surface-variant dark:text-outline-variant mb-xs uppercase tracking-tight">Parks &amp; Rec • 5 hours ago</p>
+<h4 class="font-title-md text-title-md text-on-surface dark:text-inverse-on-surface mb-xs group-hover:text-primary dark:group-hover:text-primary-fixed-dim transition-colors">Oakwood Park Bench Repair</h4>
+<p class="text-on-surface-variant dark:text-outline-variant text-body-md line-clamp-2">The central seating area near the fountain has loose boards. Requested maintenance for family safety.</p>
+<div class="mt-md flex items-center gap-md">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-white dark:border-[#1b1c19] bg-surface-variant dark:bg-inverse-surface text-[10px] flex items-center justify-center font-bold text-on-surface-variant dark:text-outline-variant">2</div>
+</div>
+<span class="text-label-sm text-on-surface-variant dark:text-outline-variant">2 neighbors supported</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Sidebar Panels -->
+<div class="flex flex-col gap-lg">
+<!-- Moderator Panel (Admin Only) -->
+<div class="glass-card rounded-xl overflow-hidden border-2 border-primary/10 dark:border-primary-fixed-dim/20">
+<div class="bg-primary-container/30 dark:bg-primary-fixed/10 px-md py-sm border-b border-primary/10 dark:border-primary-fixed-dim/10 flex items-center justify-between">
+<h4 class="font-title-md text-title-md text-on-primary-container dark:text-primary-fixed-dim flex items-center gap-xs">
+<span class="material-symbols-outlined" data-icon="admin_panel_settings">admin_panel_settings</span>
+                            Moderator Panel
+                        </h4>
+<span class="bg-primary dark:bg-primary-fixed-dim text-white dark:text-on-primary-fixed text-[10px] px-2 py-0.5 rounded-full font-bold">STAFF</span>
+</div>
+<div class="p-md space-y-md">
+<div class="flex items-center justify-between">
+<span class="text-on-surface-variant dark:text-outline-variant font-medium">Pending Review</span>
+<span class="bg-error-container dark:bg-error text-on-error-container dark:text-on-error px-base py-0.5 rounded-full text-label-sm font-bold">24</span>
+</div>
+<button class="w-full py-base bg-surface-container-highest dark:bg-inverse-surface hover:bg-primary/10 dark:hover:bg-primary-fixed-dim/10 text-on-surface dark:text-inverse-on-surface font-bold rounded-lg transition-colors flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="assignment_late">assignment_late</span>
+                            Review New Reports
+                        </button>
+<div class="pt-base border-t border-outline-variant/30 dark:border-white/10">
+<p class="text-label-sm text-on-surface-variant dark:text-outline-variant mb-sm">GLOBAL STATUS CONTROLS</p>
+<div class="grid grid-cols-2 gap-base">
+<button class="p-base bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-lg text-label-sm font-bold hover:brightness-95 transition-all">Open System</button>
+<button class="p-base bg-error-container dark:bg-error/30 text-on-error-container dark:text-error rounded-lg text-label-sm font-bold hover:brightness-95 transition-all">Mute Alerts</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Gamification / Leaderboard Mini -->
+<div class="bg-surface-container-low dark:bg-[#1b1c19] rounded-xl p-md border border-outline-variant/10 dark:border-white/5">
+<h4 class="font-title-md text-title-md text-on-surface dark:text-inverse-on-surface mb-md">Community Leaders</h4>
+<div class="space-y-md">
+<div class="flex items-center gap-md">
+<span class="font-bold text-secondary dark:text-secondary-fixed-dim text-title-md w-4 text-center">1</span>
+<div class="w-10 h-10 rounded-full bg-surface-variant dark:bg-inverse-surface overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Portrait of a smiling young woman with glasses, representing a community leader. Studio lighting, soft shadows, high-end professional photography style, light-mode friendly." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcDrCptIJ2bhmt6Y446ALEjK7mtvaFSqUNB9Oct6MyLIK5QeEMaGJXHSZGlH8Hbk62vomHFzpnNM9w5UE9KBw2-lqdYRtSXT9gly4pFN5Gx8_v5ccYgRwtv4RDspCoT3lwSAb_GLSbHiWXA8EtIsuXtxtmjMLQ_3tLCtVNiyDsN6AJy-CgvKCXSH8AIl1Q0GbLjdAf4Qo7w8iTzDc7IpgpiKXI5gtH-Wysyr1rGv-wrvE7v2UgphCku9iCEjBXHRHKxLBnS2D704eS"/>
+</div>
+<div class="flex-1">
+<p class="text-body-md font-bold text-on-surface dark:text-inverse-on-surface">Sarah Jenkins</p>
+<p class="text-label-sm text-on-surface-variant dark:text-outline-variant">3,450 pts</p>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<span class="font-bold text-on-surface-variant dark:text-outline-variant text-title-md w-4 text-center">2</span>
+<div class="w-10 h-10 rounded-full bg-surface-variant dark:bg-inverse-surface overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Portrait of an older man with a friendly face, representing a dedicated civic reporter. Natural outdoor lighting, sharp focus, clean modern photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkTpJepqBuhfoj3fjmb3aOtbYgJD1y1okMQteHylzrN6hIhaO83YrIk2R-SBUD3UysQ48dWBdV1vBBROPhMSPw7XfBBAWBdCPu1t7zMfp5xkFY-rFtJNFlCaUaWUHO_CnQTza5VnNndIBiid1J7wH6u6twcS4zzuoRBEY2X8ziTRcz9WcMHMCWsAQtZdmZtxnLegbJaF0hlynSpHQFgOp9svjQ4XENY9W4naBvFn65LH1tAUZDxhrp_PV-mfWay5qXSTrhWZstZQ4r"/>
+</div>
+<div class="flex-1">
+<p class="text-body-md font-bold text-on-surface dark:text-inverse-on-surface">Marcus Thorne</p>
+<p class="text-label-sm text-on-surface-variant dark:text-outline-variant">2,910 pts</p>
+</div>
+</div>
+<div class="flex items-center gap-md bg-white dark:bg-inverse-surface p-base rounded-lg shadow-sm border border-primary/10 dark:border-primary-fixed-dim/10 scale-105">
+<span class="font-bold text-primary dark:text-primary-fixed-dim text-title-md w-4 text-center">12</span>
+<div class="w-10 h-10 rounded-full bg-surface-variant dark:bg-background overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close up of Alex Rivers, the user, used for leaderboard position. High resolution, professional, warm lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVcwhQtg4ZHDzuTqv-7x12FO6bxNTxAaPTi11B3N-gm6DU1PrvCrRVLwPTFc7nPdijqnQJ9mvK7f9wAhO3fdtApYMzkeovfu8qrPCM6BdI0HfOq-T5UHtY4By8YkxPjGeR0GlK-OS7ifMbIEZ0AxJtMPeXNPXG_Y1DqNX200K4wRtW7gvLVqb3NJfLRBgLGh_vcvLp7cT65Nj9r2QKV2PVkgscitBHJ-OPcMOqzLClWlwS5eMINDG6T6VOrGl798Q6z0zoBMN2LNl0"/>
+</div>
+<div class="flex-1">
+<p class="text-body-md font-bold text-on-surface dark:text-inverse-on-surface">You (Alex)</p>
+<p class="text-label-sm text-primary dark:text-primary-fixed-dim">1,240 pts</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Navigation Shell Logic for Mobile -->
+<nav class="md:hidden fixed bottom-0 w-full bg-surface/80 dark:bg-[#121210]/80 backdrop-blur-lg border-t border-white/20 dark:border-white/10 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] z-50">
+<div class="flex justify-around items-center h-16 px-4 pb-safe">
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim font-bold scale-110 active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+<span class="font-label-sm text-label-sm">New Issue</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span class="font-label-sm text-label-sm">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</div>
+</nav>
+<!-- Floating Action Button for Desktop -->
+<button class="hidden md:flex fixed bottom-md right-md sakura-gradient text-white w-16 h-16 rounded-full items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all group z-40">
+<span class="material-symbols-outlined text-3xl group-hover:rotate-90 transition-transform duration-300" data-icon="add">add</span>
+</button>
+<script>
+        // Simple micro-interaction for cards
+        document.querySelectorAll('.bg-surface-container-lowest').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Toggle Dark Mode Simulation
+        const toggleBtn = document.querySelector('header button');
+        toggleBtn.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            const icon = toggleBtn.querySelector('span');
+            icon.textContent = isDark ? 'dark_mode' : 'light_mode';
+        });
+    </script>
+</body></html>
+
+<!-- Home (Dark Mode) - Community Hero -->

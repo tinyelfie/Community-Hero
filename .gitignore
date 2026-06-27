@@ -1,0 +1,17 @@
+# Ignore all markdown files
+*.md
+# But do not ignore README.md
+!README.md
+
+# Virtual environments
+venv/
+env/
+__pycache__/
+
+# Dependencies
+node_modules/
+
+# Local configuration
+.env
+backend/communityhero.db
+backend/uploads/

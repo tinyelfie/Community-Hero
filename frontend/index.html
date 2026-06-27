@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+  <title>Community Hero | Better Cities, Together</title>
+  
+  <meta name="description" content="Report, verify, and track civic issues in your city.">
+
+  <!-- Chart.js for Dashboard -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  
+  <!-- Leaflet for Maps -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  
+  <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                      "background": "var(--color-background)",
+                      "on-surface": "var(--color-on-surface)",
+                      "on-secondary-container": "var(--color-on-secondary-container)",
+                      "on-tertiary-fixed": "var(--color-on-tertiary-fixed)",
+                      "secondary-fixed-dim": "var(--color-secondary-fixed-dim)",
+                      "inverse-surface": "var(--color-inverse-surface)",
+                      "surface-container-low": "var(--color-surface-container-low)",
+                      "tertiary-fixed": "var(--color-tertiary-fixed)",
+                      "error": "var(--color-error)",
+                      "primary-fixed": "var(--color-primary-fixed)",
+                      "on-primary-fixed": "var(--color-on-primary-fixed)",
+                      "on-tertiary": "var(--color-on-tertiary)",
+                      "on-secondary-fixed-variant": "var(--color-on-secondary-fixed-variant)",
+                      "surface-container": "var(--color-surface-container)",
+                      "inverse-on-surface": "var(--color-inverse-on-surface)",
+                      "surface": "var(--color-surface)",
+                      "surface-tint": "var(--color-surface-tint)",
+                      "on-primary-fixed-variant": "var(--color-on-primary-fixed-variant)",
+                      "tertiary-fixed-dim": "var(--color-tertiary-fixed-dim)",
+                      "on-secondary-fixed": "var(--color-on-secondary-fixed)",
+                      "surface-container-highest": "var(--color-surface-container-highest)",
+                      "on-tertiary-fixed-variant": "var(--color-on-tertiary-fixed-variant)",
+                      "primary-container": "var(--color-primary-container)",
+                      "on-primary-container": "var(--color-on-primary-container)",
+                      "surface-container-lowest": "var(--color-surface-container-lowest)",
+                      "surface-bright": "var(--color-surface-bright)",
+                      "error-container": "var(--color-error-container)",
+                      "on-tertiary-container": "var(--color-on-tertiary-container)",
+                      "primary": "var(--color-primary)",
+                      "surface-container-high": "var(--color-surface-container-high)",
+                      "primary-fixed-dim": "var(--color-primary-fixed-dim)",
+                      "on-primary": "var(--color-on-primary)",
+                      "outline": "var(--color-outline)",
+                      "secondary": "var(--color-secondary)",
+                      "on-surface-variant": "var(--color-on-surface-variant)",
+                      "on-error": "var(--color-on-error)",
+                      "tertiary-container": "var(--color-tertiary-container)",
+                      "surface-dim": "var(--color-surface-dim)",
+                      "secondary-container": "var(--color-secondary-container)",
+                      "on-background": "var(--color-on-background)",
+                      "surface-variant": "var(--color-surface-variant)",
+                      "inverse-primary": "var(--color-inverse-primary)",
+                      "secondary-fixed": "var(--color-secondary-fixed)",
+                      "on-secondary": "var(--color-on-secondary)",
+                      "outline-variant": "var(--color-outline-variant)",
+                      "tertiary": "var(--color-tertiary)",
+                      "on-error-container": "var(--color-on-error-container)"
+},
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "base": "8px",
+                    "gutter": "20px",
+                    "container-max": "1200px",
+                    "lg": "48px",
+                    "sm": "12px",
+                    "xl": "80px",
+                    "md": "24px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Outfit"],
+                    "headline-lg": ["Outfit"],
+                    "headline-lg-mobile": ["Outfit"],
+                    "title-md": ["Outfit"],
+                    "body-md": ["Outfit"],
+                    "display-xl": ["Outfit"],
+                    "body-lg": ["Outfit"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "title-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+  </script>
+  <style>
+      body { font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased; }
+      .glass-card {
+          background: rgba(255, 255, 255, 0.7);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+      .dark .glass-card {
+          background: rgba(48, 49, 45, 0.6);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .sakura-gradient, .sakura-dawn {
+          background: linear-gradient(135deg, #7c535c 0%, #9b4053 100%);
+      }
+      .shine-effect:hover {
+          position: relative;
+          overflow: hidden;
+      }
+      .shine-effect:hover::after {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+          transform: rotate(45deg);
+          animation: shine 0.8s ease-in-out;
+      }
+      @keyframes shine {
+          0% { transform: translateX(-100%) rotate(45deg); }
+          100% { transform: translateX(100%) rotate(45deg); }
+      }
+      .custom-scroll::-webkit-scrollbar {
+          width: 4px;
+      }
+      .custom-scroll::-webkit-scrollbar-thumb {
+          background: #d4c2c4;
+          border-radius: 10px;
+      }
+      body {
+          min-height: 100dvh;
+      }
+  </style>
+<style>
+:root {
+  --color-background: #fbf9f3;
+  --color-on-surface: #1b1c19;
+  --color-on-secondary-container: #426b54;
+  --color-on-tertiary-fixed: #400014;
+  --color-secondary-fixed-dim: #a4d1b4;
+  --color-inverse-surface: #30312d;
+  --color-surface-container-low: #f5f3ee;
+  --color-tertiary-fixed: #ffd9dd;
+  --color-error: #ba1a1a;
+  --color-primary-fixed: #ffd9df;
+  --color-on-primary-fixed: #30121a;
+  --color-on-tertiary: #ffffff;
+  --color-on-secondary-fixed-variant: #264f39;
+  --color-surface-container: #f0eee8;
+  --color-inverse-on-surface: #f2f1eb;
+  --color-surface: #fbf9f3;
+  --color-surface-tint: #7c535c;
+  --color-on-primary-fixed-variant: #613c45;
+  --color-tertiary-fixed-dim: #ffb2bd;
+  --color-on-secondary-fixed: #002112;
+  --color-surface-container-highest: #e4e2dd;
+  --color-on-tertiary-fixed-variant: #7d283c;
+  --color-primary-container: #ffcad4;
+  --color-on-primary-container: #7b525b;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-bright: #fbf9f3;
+  --color-error-container: #ffdad6;
+  --color-on-tertiary-container: #9a3f52;
+  --color-primary: #7c535c;
+  --color-surface-container-high: #eae8e2;
+  --color-primary-fixed-dim: #edb9c3;
+  --color-on-primary: #ffffff;
+  --color-outline: #827476;
+  --color-secondary: #3e6750;
+  --color-on-surface-variant: #504446;
+  --color-on-error: #ffffff;
+  --color-tertiary-container: #ffcad1;
+  --color-surface-dim: #dbdad4;
+  --color-secondary-container: #bdeacd;
+  --color-on-background: #1b1c19;
+  --color-surface-variant: #e4e2dd;
+  --color-inverse-primary: #edb9c3;
+  --color-secondary-fixed: #c0edd0;
+  --color-on-secondary: #ffffff;
+  --color-outline-variant: #d4c2c4;
+  --color-tertiary: #9b4053;
+  --color-on-error-container: #93000a;
+}
+.dark {
+  color-scheme: dark;
+  --color-background: #121212;
+  --color-on-surface: #f2f1eb;
+  --color-on-secondary-container: #c0edd0;
+  --color-on-tertiary-fixed: #400014;
+  --color-secondary-fixed-dim: #a4d1b4;
+  --color-inverse-surface: #f2f1eb;
+  --color-surface-container-low: #1b1c19;
+  --color-tertiary-fixed: #ffd9dd;
+  --color-error: #ffb4ab;
+  --color-primary-fixed: #ffd9df;
+  --color-on-primary-fixed: #30121a;
+  --color-on-tertiary: #ffffff;
+  --color-on-secondary-fixed-variant: #264f39;
+  --color-surface-container: #232420;
+  --color-inverse-on-surface: #1b1c19;
+  --color-surface: #121212;
+  --color-surface-tint: #edb9c3;
+  --color-on-primary-fixed-variant: #613c45;
+  --color-tertiary-fixed-dim: #ffb2bd;
+  --color-on-secondary-fixed: #002112;
+  --color-surface-container-highest: #343530;
+  --color-on-tertiary-fixed-variant: #7d283c;
+  --color-primary-container: #613c45;
+  --color-on-primary-container: #ffd9df;
+  --color-surface-container-lowest: #0d0e0c;
+  --color-surface-bright: #383934;
+  --color-error-container: #93000a;
+  --color-on-tertiary-container: #ffcad1;
+  --color-primary: #edb9c3;
+  --color-surface-container-high: #2d2e29;
+  --color-primary-fixed-dim: #edb9c3;
+  --color-on-primary: #49252f;
+  --color-outline: #9c8d90;
+  --color-secondary: #a4d1b4;
+  --color-on-surface-variant: #d4c2c4;
+  --color-on-error: #690005;
+  --color-tertiary-container: #7d283c;
+  --color-surface-dim: #121212;
+  --color-secondary-container: #264f39;
+  --color-on-background: #f2f1eb;
+  --color-surface-variant: #504446;
+  --color-inverse-primary: #7c535c;
+  --color-secondary-fixed: #c0edd0;
+  --color-on-secondary: #0d3824;
+  --color-outline-variant: #504446;
+  --color-tertiary: #ffb2bd;
+  --color-on-error-container: #ffdad6;
+}
+</style>
+</head>
+<body class="bg-background dark:bg-[#121210] text-on-surface dark:text-inverse-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container">
+  
+  <!-- Navbar injection point (rendered by navbar.js) -->
+  <div id="navbar-container"></div>
+
+  <!-- Main Application Container -->
+  <div id="app">
+    <div style="display:flex;align-items:center;justify-content:center;height:100vh">
+      <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+    </div>
+  </div>
+
+  <!-- Application Entry Point (ES Module) -->
+  <script>window.addEventListener("error", function(e) { console.log("ONERROR: " + e.filename + ":" + e.lineno + " - " + e.message); }, true);</script><script type="module" src="js/app.js"></script>
+</body>
+</html>
