@@ -4,7 +4,7 @@
  * All API calls go through this module.
  */
 
-const API_BASE = 'http://localhost:8000/api';
+const API_BASE = 'https://community-hero-api.onrender.com/api';
 
 /** Get the stored JWT token */
 function getToken() {

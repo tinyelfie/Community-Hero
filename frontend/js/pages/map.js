@@ -317,7 +317,7 @@ async function selectIssue(issueId) {
 
 function renderDrawerContent(issue) {
   const { user } = getAuthState();
-  const imageUrl = issue.image_url ? `http://localhost:8000${issue.image_url}` : null;
+  const imageUrl = issue.image_url ? `https://community-hero-api.onrender.com${issue.image_url}` : null;
   const dateStr = formatDate(issue.created_at);
   const icon = CATEGORY_ICONS[issue.category] || '📌';
 

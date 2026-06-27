@@ -59,7 +59,7 @@ export function buildIssueCard(issue, opts = {}) {
   const dateStr = formatDate(issue.created_at);
   const address = issue.address || 'Location unknown';
   const summary = issue.ai_summary || issue.description || 'No description available.';
-  const imageUrl = issue.image_url ? `http://localhost:8000${issue.image_url}` : null;
+  const imageUrl = issue.image_url ? `https://community-hero-api.onrender.com${issue.image_url}` : null;
 
   if (compact) {
     return `
