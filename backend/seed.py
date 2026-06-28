@@ -3,12 +3,13 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(__file__))
 
-from database import SessionLocal, create_tables
+from database import SessionLocal, create_tables, Base, engine
 from auth import hash_password
 import models
 from datetime import datetime, timedelta
 import uuid
 
+Base.metadata.drop_all(bind=engine)
 create_tables()
 db = SessionLocal()
 
