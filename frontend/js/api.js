@@ -83,17 +83,30 @@ export const api = {
 
     get: (id) => request(`/issues/${id}`),
 
-    updateStatus: (id, status) =>
-      request(`/issues/${id}/status`, {
+    updateStatus: (id, status, resolutionImageFile = null) => {
+      const fd = new FormData();
+      fd.append('status', status);
+      if (resolutionImageFile) fd.append('resolution_image', resolutionImageFile);
+      return request(`/issues/${id}/status`, {
         method: 'PATCH',
-        body: JSON.stringify({ status }),
-      }),
+        body: fd,
+        headers: {},
+      });
+    },
 
     aiPreview: (imageFile) => {
       const fd = new FormData();
       fd.append('image', imageFile);
       return request('/issues/ai-preview', { method: 'POST', body: fd, headers: {} });
     },
+
+    communityAssessment: (id) => request(`/issues/${id}/community-assessment`),
+
+    microVerify: (id, payload) =>
+      request(`/issues/${id}/micro-verify`, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      }),
   },
 
   // ── Votes ────────────────────────────────────────────────────────
@@ -126,6 +139,8 @@ export const api = {
     stats: () => request('/insights/stats'),
     heatmap: () => request('/insights/heatmap'),
     predictions: () => request('/insights/predictions'),
+    generateDigest: () => request('/admin/generate-digest', { method: 'POST' }),
+    area: (name) => request(`/insights/area?name=${encodeURIComponent(name)}`),
   },
 
   // ── Users ────────────────────────────────────────────────────────
@@ -151,6 +166,12 @@ export const api = {
         method: 'POST',
         body: JSON.stringify({ category, start_lat: startLat, start_lng: startLng }),
       }),
+  },
+
+  // ── Admin ────────────────────────────────────────────────────────
+  
+  admin: {
+    seedDemo: () => request('/admin/seed-demo', { method: 'POST' }),
   },
 };
 

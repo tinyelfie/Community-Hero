@@ -106,3 +106,156 @@ def generate_resolution_suggestion(category: str, description: str) -> str:
     except Exception as e:
         print(f"[AI] generate_resolution_suggestion error: {e}")
         return "Please assess the issue on-site and coordinate with the relevant municipal department for timely resolution."
+
+
+def check_duplicate(new_title: str, new_desc: str, existing_issues: list) -> dict:
+    """
+    Checks if a new issue is a duplicate of any existing issues using Gemini.
+    Returns: {"is_duplicate": bool, "matching_issue_id": str, "confidence": float}
+    """
+    if not _GEMINI_AVAILABLE or not existing_issues:
+        return {"is_duplicate": False}
+
+    issues_context = "\n".join([
+        f"ID: {i.id} | Title: {i.title} | Description: {i.description or ''}"
+        for i in existing_issues
+    ])
+
+    prompt = f"""You are a civic issue duplicate detector.
+    
+    NEW ISSUE TO REPORT:
+    Title: {new_title}
+    Description: {new_desc or ''}
+    
+    EXISTING NEARBY ISSUES:
+    {issues_context}
+    
+    Determine if the new issue is describing the exact same physical problem as any of the existing issues.
+    Return ONLY valid JSON with these exact keys:
+    {{
+      "is_duplicate": true/false,
+      "matching_issue_id": "<uuid of the match, or null>",
+      "confidence": <float between 0 and 1>
+    }}
+    
+    Return ONLY the JSON object. No other text.
+    """
+
+    try:
+        model = genai.GenerativeModel("gemini-1.5-flash")
+        response = model.generate_content(prompt)
+        result = _extract_json(response.text)
+        return {
+            "is_duplicate": bool(result.get("is_duplicate", False)),
+            "matching_issue_id": result.get("matching_issue_id"),
+            "confidence": float(result.get("confidence", 0.0))
+        }
+    except Exception as e:
+        print(f"[AI] check_duplicate error: {e}")
+        return {"is_duplicate": False}
+
+
+def generate_resolution_suggestion_with_context(category: str, description: str, severity: str, similar_issues: list) -> str:
+    """
+    Generates numbered resolution steps, an estimated time, and a reference to a similar past resolution based on historical context.
+    """
+    if not _GEMINI_AVAILABLE:
+        return "1. Assess the issue on-site.\n2. Coordinate with the relevant department.\n\nEstimated time: 1-3 days."
+
+    history_context = "\n".join([
+        f"- Past Issue: '{i.title}' -> {i.description or 'No description'}"
+        for i in similar_issues
+    ]) if similar_issues else "No recent similar resolved issues available."
+
+    prompt = f"""You are a municipal authority assistant.
+    
+    CURRENT ISSUE:
+    Category: {category}
+    Severity: {severity}
+    Description: {description}
+    
+    HISTORICAL CONTEXT (Similar Resolved Issues):
+    {history_context}
+    
+    Please provide an actionable resolution suggestion. Include:
+    1. Numbered resolution steps.
+    2. An estimated time to resolve.
+    3. A brief reference to a similar past resolution (if context provided).
+    
+    Format as clear, professional text. Do not use markdown headers, just plain text with numbers.
+    """
+
+    try:
+        model = genai.GenerativeModel("gemini-1.5-flash")
+        response = model.generate_content(prompt)
+        return response.text.strip()
+    except Exception as e:
+        print(f"[AI] generate_resolution_suggestion_with_context error: {e}")
+        return "1. Assess the issue on-site.\n2. Coordinate with the relevant department.\n\nEstimated time: 1-3 days."
+
+
+def generate_weekly_digest(stats_text: str) -> str:
+    """
+    Generates a 3-paragraph natural language summary of the weekly stats.
+    """
+    if not _GEMINI_AVAILABLE:
+        return "Weekly stats are available, but AI summary could not be generated. Please review the raw metrics on the dashboard."
+        
+    prompt = f"""You are the Chief Intelligence Officer for a civic reporting platform.
+    Write a 3-paragraph natural language executive summary based on the following weekly data:
+    
+    {stats_text}
+    
+    Paragraph 1: High-level summary of the volume and resolution rate.
+    Paragraph 2: Breakdown of the most problematic categories and top reporting zones.
+    Paragraph 3: Mention the most active user and concluding thoughts on civic engagement this week.
+    
+    Write in a professional, encouraging, and analytical tone. Do not use markdown headers or bolding, just 3 plain paragraphs.
+    """
+
+    try:
+        model = genai.GenerativeModel("gemini-1.5-flash")
+        response = model.generate_content(prompt)
+        return response.text.strip()
+    except Exception as e:
+        print(f"[AI] generate_weekly_digest error: {e}")
+        return "Weekly stats are available, but AI summary could not be generated. Please review the raw metrics on the dashboard."
+
+def estimate_issue_cost(category: str, severity: str) -> dict:
+    """
+    Estimates the repair cost for a civic issue in INR using Gemini.
+    """
+    if not _GEMINI_AVAILABLE:
+        return {"estimated_cost_min": None, "estimated_cost_max": None}
+    
+    prompt = f"""You are a municipal cost estimator.
+    Provide a realistic cost estimate in INR to fix a civic issue of category '{category}' and severity '{severity}' in an Indian city (e.g. Kolkata, Mumbai).
+    Return ONLY valid JSON with these exact keys:
+    {{
+      "estimated_cost_min": <integer>,
+      "estimated_cost_max": <integer>
+    }}
+    Do not include any other text or markdown fences.
+    """
+    
+    try:
+        model = genai.GenerativeModel("gemini-1.5-flash")
+        response = model.generate_content(prompt)
+        result = _extract_json(response.text)
+        
+        # Ensure we got valid integers, otherwise fallback to None
+        min_cost = int(result.get("estimated_cost_min")) if result.get("estimated_cost_min") is not None else None
+        max_cost = int(result.get("estimated_cost_max")) if result.get("estimated_cost_max") is not None else None
+        
+        # If it returns 0 for some reason, we'll treat it as None to avoid showing ₹0
+        if min_cost == 0 and max_cost == 0:
+            return {"estimated_cost_min": None, "estimated_cost_max": None}
+            
+        return {
+            "estimated_cost_min": min_cost,
+            "estimated_cost_max": max_cost
+        }
+    except Exception as e:
+        print(f"[AI] estimate_issue_cost error: {e}")
+        return {"estimated_cost_min": None, "estimated_cost_max": None}
+

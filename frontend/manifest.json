@@ -1,0 +1,21 @@
+{
+  "name": "Community Hero",
+  "short_name": "Hero",
+  "description": "Civic issue reporting made easy.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#FFFDF7",
+  "theme_color": "#425B46",
+  "icons": [
+    {
+      "src": "/assets/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/assets/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

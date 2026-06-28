@@ -46,6 +46,12 @@ class VoteType(str, enum.Enum):
     verify = "verify"
 
 
+class PerceivedSeverity(str, enum.Enum):
+    mild = "mild"
+    moderate = "moderate"
+    severe = "severe"
+
+
 # ---------- Models ----------
 
 class User(Base):
@@ -57,6 +63,7 @@ class User(Base):
     password_hash = Column(String(255), nullable=False)
     role = Column(SAEnum(UserRole), nullable=False, default=UserRole.citizen)
     points = Column(Integer, nullable=False, default=0)
+    is_verified_reporter = Column(Boolean, nullable=False, default=False)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     # Relationships
@@ -79,12 +86,18 @@ class Issue(Base):
     address = Column(String(500), nullable=True)
     image_url = Column(String(500), nullable=True)
     ai_summary = Column(Text, nullable=True)
-    ai_tags = Column(String(500), nullable=True)  # comma-separated tags
+    ai_tags = Column(String(200), nullable=True)
+    ai_resolution_suggestion = Column(Text, nullable=True)
+    resolution_image_url = Column(String(500), nullable=True)
     vote_count = Column(Integer, nullable=False, default=0)
+    is_escalated = Column(Boolean, nullable=False, default=False)
+    estimated_cost_min = Column(Integer, nullable=True)
+    estimated_cost_max = Column(Integer, nullable=True)
     reported_by = Column(Uuid(as_uuid=True), ForeignKey("users.id"), nullable=False)
     assigned_to = Column(Uuid(as_uuid=True), ForeignKey("users.id"), nullable=True)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
+    status_changed_at = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     # Relationships
     reporter = relationship("User", foreign_keys=[reported_by], back_populates="issues")
@@ -116,7 +129,7 @@ class Comment(Base):
 
     id = Column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
     issue_id = Column(Uuid(as_uuid=True), ForeignKey("issues.id"), nullable=False)
-    user_id = Column(Uuid(as_uuid=True), ForeignKey("users.id"), nullable=False)
+    user_id = Column(Uuid(as_uuid=True), ForeignKey("users.id"), nullable=True)
     body = Column(Text, nullable=False)
     is_authority_update = Column(Boolean, nullable=False, default=False)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
@@ -154,3 +167,31 @@ class Notification(Base):
 
     user = relationship("User", backref="notifications")
     issue = relationship("Issue", backref="notifications")
+
+
+class Digest(Base):
+    __tablename__ = "digests"
+
+    id = Column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    generated_at = Column(DateTime, nullable=False, default=datetime.utcnow)
+    content = Column(Text, nullable=False)
+    week_start = Column(DateTime, nullable=False)
+    week_end = Column(DateTime, nullable=False)
+
+class MicroVerification(Base):
+    __tablename__ = "micro_verifications"
+
+    id = Column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    issue_id = Column(Uuid(as_uuid=True), ForeignKey("issues.id"), nullable=False)
+    user_id = Column(Uuid(as_uuid=True), ForeignKey("users.id"), nullable=False)
+    photo_visible = Column(Boolean, nullable=False)
+    location_accurate = Column(Boolean, nullable=False)
+    perceived_severity = Column(SAEnum(PerceivedSeverity), nullable=False)
+    created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
+
+    __table_args__ = (
+        UniqueConstraint("issue_id", "user_id", name="uq_micro_verify_issue_user"),
+    )
+
+    issue = relationship("Issue", backref="micro_verifications")
+    user = relationship("User", backref="micro_verifications")

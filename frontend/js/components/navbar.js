@@ -103,6 +103,7 @@ export function updateNavAuth() {
         <span id="nav-notification-badge" class="absolute -top-1 -right-1 bg-error text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full hidden">0</span>
       </div>
       <a href="#profile" class="flex items-center gap-2 mr-2 hover:bg-surface-variant p-1 rounded-full pr-3 transition-colors">
+        <div id="user-points" style="font-weight:bold; color:#FF8FA3; font-size:14px;">🌟 ${user.reputation || 0} pts</div>
         <div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-sm">${initials}</div>
         <span class="font-medium text-sm hidden lg:block text-on-surface hover:text-primary transition-colors">${user.name.split(' ')[0]}</span>
       </a>

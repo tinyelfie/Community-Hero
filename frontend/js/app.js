@@ -12,6 +12,8 @@ import { renderReport } from './pages/report.js';
 import { renderDashboard, cleanupDashboard } from './pages/dashboard.js';
 import { renderProfile } from './pages/profile.js';
 import { renderAuthority, cleanupAuthority } from './pages/authority.js';
+import { renderArea, cleanupArea } from './pages/area.js';
+import { renderDemo } from './pages/demo.js';
 
 let authState = { user: null, token: null };
 let currentRoute = null;
@@ -57,6 +59,30 @@ async function checkAuthOnLoad() {
 
 /* ── Routing ──────────────────────────────────────────────────── */
 
+export function showFloatingPoints(e, points) {
+  const el = document.createElement('div');
+  el.textContent = `+${points} pts`;
+  el.style.cssText = `
+    position: fixed;
+    left: ${e.clientX}px;
+    top: ${e.clientY}px;
+    color: #FF8FA3;
+    font-weight: bold;
+    font-size: 16px;
+    pointer-events: none;
+    z-index: 10000;
+    transition: all 1s ease-out;
+  `;
+  document.body.appendChild(el);
+  
+  requestAnimationFrame(() => {
+    el.style.transform = 'translateY(-40px) scale(1.2)';
+    el.style.opacity = '0';
+  });
+  
+  setTimeout(() => el.remove(), 1000);
+}
+
 const routes = {
   home: { render: renderHome, cleanup: cleanupHome },
   map: { render: renderMap, cleanup: cleanupMap },
@@ -64,16 +90,25 @@ const routes = {
   dashboard: { render: renderDashboard, cleanup: cleanupDashboard },
   profile: { render: renderProfile, cleanup: null },
   authority: { render: renderAuthority, cleanup: cleanupAuthority },
+  area: { render: renderArea, cleanup: cleanupArea },
+  demo: { render: renderDemo, cleanup: null },
   login: { render: renderLogin, cleanup: null },
   register: { render: renderRegister, cleanup: null },
 };
 
 async function handleRoute() {
   const hash = window.location.hash.replace('#', '') || 'home';
-  const [path, queryString] = hash.split('?');
+  const [fullPath, queryString] = hash.split('?');
+  
+  const pathParts = fullPath.split('/');
+  const path = pathParts[0];
+  
   const route = routes[path] || routes['home'];
 
   const params = {};
+  if (pathParts.length > 1) {
+    params.wardName = pathParts[1];
+  }
   if (queryString) {
     const urlParams = new URLSearchParams(queryString);
     for (const [k, v] of urlParams) params[k] = v;
@@ -123,7 +158,7 @@ function renderLogin(container) {
           <form id="login-form" class="space-y-4">
             <div>
               <label class="block text-label-sm font-bold text-on-surface mb-1 uppercase">Email</label>
-              <input type="email" id="login-email" class="w-full px-4 py-3 rounded-lg bg-surface-container border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-on-surface" required value="citizen@test.com">
+              <input type="email" id="login-email" class="w-full px-4 py-3 rounded-lg bg-surface-container border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-on-surface" required value="citizen@example.com">
             </div>
             <div>
               <label class="block text-label-sm font-bold text-on-surface mb-1 uppercase">Password</label>
@@ -139,8 +174,8 @@ function renderLogin(container) {
           </p>
           
           <div class="mt-8 p-4 bg-surface-container-low rounded-lg border border-outline-variant/30 text-center text-sm text-on-surface-variant">
-            <strong>Test accounts:</strong><br>
-            citizen@test.com | mod@test.com | admin@test.com<br>
+            <strong>Demo accounts:</strong><br>
+            citizen@example.com | moderator@example.com | admin@example.com<br>
             Password: test123
           </div>
         </div>
@@ -231,6 +266,141 @@ export async function initApp() {
   await checkAuthOnLoad();
   window.addEventListener('hashchange', handleRoute);
   handleRoute(); // initial render
+  
+  // Offline Banner Logic
+  window.addEventListener('offline', () => showOfflineBanner());
+  window.addEventListener('online', () => hideOfflineBanner());
+  if (!navigator.onLine) showOfflineBanner();
+
+  initLiveCounter();
+  initKeyboardShortcuts();
+  
+  // Global handler for issue cards
+  window._viewIssue = (id) => {
+    navigate('map', { focusIssue: id });
+  };
+}
+
+function initKeyboardShortcuts() {
+  document.addEventListener('keydown', (e) => {
+    // Ignore if user is typing in an input or textarea
+    if (document.activeElement && ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+      return;
+    }
+    
+    // Check if modifiers are pressed to prevent overriding native shortcuts
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+    if (e.key === 'Escape') {
+      closeShortcutsModal();
+      return;
+    }
+
+    const key = e.key.toLowerCase();
+    if (key === 'r') navigate('report');
+    else if (key === 'm') navigate('map');
+    else if (key === 'd') navigate('dashboard');
+    else if (e.key === '?') showShortcutsModal();
+  });
+}
+
+function showShortcutsModal() {
+  if (document.getElementById('shortcuts-modal')) return;
+  const modal = document.createElement('div');
+  modal.id = 'shortcuts-modal';
+  modal.className = 'fixed inset-0 bg-black/60 z-[9999] flex items-center justify-center backdrop-blur-sm animate-fade-in';
+  modal.innerHTML = `
+    <div class="bg-surface p-8 rounded-2xl max-w-md w-full shadow-2xl relative" onclick="event.stopPropagation()">
+      <button class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-variant text-on-surface transition-colors" onclick="this.closest('#shortcuts-modal').remove()">✕</button>
+      <h2 class="font-display-xl text-2xl text-on-surface mb-6">Keyboard Shortcuts</h2>
+      <div class="space-y-3">
+        <div class="flex justify-between items-center py-2 border-b border-outline-variant/30">
+          <kbd class="px-3 py-1 bg-surface-variant text-on-surface font-mono rounded shadow-sm font-bold border border-outline-variant">R</kbd>
+          <span class="text-on-surface-variant font-medium">New Report</span>
+        </div>
+        <div class="flex justify-between items-center py-2 border-b border-outline-variant/30">
+          <kbd class="px-3 py-1 bg-surface-variant text-on-surface font-mono rounded shadow-sm font-bold border border-outline-variant">M</kbd>
+          <span class="text-on-surface-variant font-medium">Map View</span>
+        </div>
+        <div class="flex justify-between items-center py-2 border-b border-outline-variant/30">
+          <kbd class="px-3 py-1 bg-surface-variant text-on-surface font-mono rounded shadow-sm font-bold border border-outline-variant">D</kbd>
+          <span class="text-on-surface-variant font-medium">Dashboard</span>
+        </div>
+        <div class="flex justify-between items-center py-2">
+          <kbd class="px-3 py-1 bg-surface-variant text-on-surface font-mono rounded shadow-sm font-bold border border-outline-variant">?</kbd>
+          <span class="text-on-surface-variant font-medium">Show Shortcuts</span>
+        </div>
+      </div>
+    </div>
+  `;
+  modal.onclick = closeShortcutsModal;
+  document.body.appendChild(modal);
+}
+
+function closeShortcutsModal() {
+  const modal = document.getElementById('shortcuts-modal');
+  if (modal) modal.remove();
+}
+
+let liveCounterInterval = null;
+
+async function updateLiveCounter() {
+  if (document.visibilityState !== 'visible') return;
+  try {
+    const stats = await api.insights.stats();
+    document.title = `(${stats.open_issues} open) Community Hero`;
+  } catch (err) {
+    // Ignore errors for background tasks
+  }
+}
+
+function initLiveCounter() {
+  updateLiveCounter();
+  
+  const startInterval = () => {
+    if (!liveCounterInterval) {
+      liveCounterInterval = setInterval(updateLiveCounter, 30000);
+    }
+  };
+  
+  const stopInterval = () => {
+    if (liveCounterInterval) {
+      clearInterval(liveCounterInterval);
+      liveCounterInterval = null;
+    }
+  };
+
+  startInterval();
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      updateLiveCounter();
+      startInterval();
+    } else {
+      stopInterval();
+    }
+  });
+}
+
+function showOfflineBanner() {
+  let banner = document.getElementById('offline-banner');
+  if (!banner) {
+    banner = document.createElement('div');
+    banner.id = 'offline-banner';
+    banner.className = 'fixed bottom-0 left-0 w-full bg-error text-white text-center py-2 text-sm font-bold z-[9999] transition-transform translate-y-full duration-300';
+    banner.innerHTML = '⚠️ You are currently offline. Some features may be unavailable.';
+    document.body.appendChild(banner);
+    // Trigger reflow
+    void banner.offsetWidth;
+  }
+  banner.classList.remove('translate-y-full');
+}
+
+function hideOfflineBanner() {
+  const banner = document.getElementById('offline-banner');
+  if (banner) {
+    banner.classList.add('translate-y-full');
+  }
 }
 
 // Bootstrap

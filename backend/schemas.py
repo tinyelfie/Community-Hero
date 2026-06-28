@@ -31,6 +31,7 @@ class UserOut(BaseModel):
     email: str
     role: UserRole
     points: int
+    is_verified_reporter: bool = False
     created_at: datetime
 
     model_config = {"from_attributes": True}
@@ -62,7 +63,7 @@ class CommentOut(BaseModel):
     body: str
     is_authority_update: bool
     created_at: datetime
-    user: UserOut
+    user: Optional[UserOut] = None
 
     model_config = {"from_attributes": True}
 
@@ -80,12 +81,18 @@ class IssueOut(BaseModel):
     image_url: Optional[str]
     ai_summary: Optional[str]
     ai_tags: Optional[str]
+    ai_resolution_suggestion: Optional[str] = None
+    resolution_image_url: Optional[str] = None
     vote_count: int
+    is_escalated: bool = False
+    estimated_cost_min: Optional[int] = None
+    estimated_cost_max: Optional[int] = None
     reported_by: UUID
     reporter: Optional[UserOut] = None
     assignee: Optional[UserOut] = None
     created_at: datetime
     updated_at: datetime
+    status_changed_at: datetime
 
     model_config = {"from_attributes": True}
 
@@ -126,6 +133,10 @@ class StatsOut(BaseModel):
     resolution_rate: float
     issues_by_category: dict
     monthly_trend: List[dict]
+    resolved_last_24h: int
+    weekly_reports: int
+    verified_this_month: int
+    top_user_name: str
 
 
 class HeatmapPoint(BaseModel):
@@ -181,3 +192,26 @@ class NotificationOut(BaseModel):
     created_at: datetime
 
     model_config = {"from_attributes": True}
+
+class DigestOut(BaseModel):
+    id: UUID
+    generated_at: datetime
+    content: str
+    week_start: datetime
+    week_end: datetime
+
+    model_config = {"from_attributes": True}
+
+
+# ---------- Verification Schemas ----------
+
+class MicroVerificationCreate(BaseModel):
+    photo_visible: bool
+    location_accurate: bool
+    perceived_severity: str
+
+class CommunityAssessmentOut(BaseModel):
+    total_assessments: int
+    photo_visible_percent: float
+    location_accurate_percent: float
+    most_common_severity: Optional[str] = None

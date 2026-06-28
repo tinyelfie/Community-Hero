@@ -28,7 +28,7 @@ def start_servers():
     
     # Start frontend with fixed MIME types for Windows
     frontend_process = subprocess.Popen(
-        ["python", "-c", "import http.server, socketserver, mimetypes; mimetypes.add_type('application/javascript', '.js'); mimetypes.add_type('text/css', '.css'); socketserver.TCPServer(('', 5500), http.server.SimpleHTTPRequestHandler).serve_forever()"],
+        ["python", "-c", "import http.server, socketserver, mimetypes; mimetypes.add_type('application/javascript', '.js'); mimetypes.add_type('text/css', '.css'); socketserver.TCPServer(('127.0.0.1', 5500), http.server.SimpleHTTPRequestHandler).serve_forever()"],
         cwd=os.path.join(os.path.dirname(__file__), "..", "..", "frontend")
     )
     
@@ -36,6 +36,15 @@ def start_servers():
     for _ in range(15):
         try:
             resp = requests.get("http://localhost:8000/docs")
+            if resp.status_code == 200:
+                break
+        except requests.exceptions.ConnectionError:
+            time.sleep(1)
+            
+    # Wait for frontend
+    for _ in range(15):
+        try:
+            resp = requests.get("http://127.0.0.1:5500/")
             if resp.status_code == 200:
                 break
         except requests.exceptions.ConnectionError:

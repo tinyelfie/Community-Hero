@@ -85,7 +85,7 @@ def test_update_status_unauthorized(client, auth_token):
     resp2 = client.patch(
         f"/api/issues/{issue_id}/status",
         headers=headers,
-        json={"status": "resolved"}
+        data={"status": "resolved"}
     )
     assert resp2.status_code == 403
 
@@ -106,7 +106,7 @@ def test_update_status_admin(client, auth_token, admin_token):
     resp2 = client.patch(
         f"/api/issues/{issue_id}/status",
         headers=admin_headers,
-        json={"status": "resolved"}
+        data={"status": "resolved"}
     )
     assert resp2.status_code == 200
     assert resp2.json()["status"] == "resolved"

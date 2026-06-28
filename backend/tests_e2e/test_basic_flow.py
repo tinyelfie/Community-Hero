@@ -5,14 +5,14 @@ import time
 def test_homepage_loads(page: Page):
     page.on("pageerror", lambda err: print(f"JS ERROR: {err.name}: {err.message} \n {err.stack}"))
     page.on("console", lambda msg: print(f"CONSOLE: {msg.text}"))
-    page.goto("http://localhost:3000/")
+    page.goto("http://127.0.0.1:5500/")
     expect(page).to_have_title("Community Hero | Better Cities, Together")
     expect(page.locator("button:has-text('Report an Issue')").first).to_be_visible()
 
 def test_login_flow(page: Page):
     page.on("pageerror", lambda err: print(f"JS ERROR: {err.name}: {err.message} \n {err.stack}"))
     page.on("console", lambda msg: print(f"CONSOLE: {msg.text}"))
-    page.goto("http://localhost:3000/#login")
+    page.goto("http://127.0.0.1:5500/#login")
     
     # Wait for login form to load
     page.wait_for_selector("#login-email")
@@ -34,7 +34,7 @@ def test_report_issue_flow(page: Page):
     page.on("pageerror", lambda err: print(f"JS ERROR: {err.name}: {err.message} \n {err.stack}"))
     page.on("console", lambda msg: print(f"CONSOLE: {msg.text}"))
     # Ensure logged in first (tests are isolated by default so we login again)
-    page.goto("http://localhost:3000/#login")
+    page.goto("http://127.0.0.1:5500/#login")
     page.wait_for_selector("#login-email")
     page.fill("#login-email", "citizen@test.com")
     page.fill("#login-password", "test123")
@@ -44,7 +44,7 @@ def test_report_issue_flow(page: Page):
     page.wait_for_selector("text=Report an Issue", timeout=5000)
     
     # Navigate to report page
-    page.goto("http://localhost:3000/#report")
+    page.goto("http://127.0.0.1:3000/#report")
     
     # Fill report form
     page.wait_for_selector("#report-title")

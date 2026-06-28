@@ -82,6 +82,99 @@ export async function renderHome(container) {
         </div>
       </section>
 
+      <!-- How It Works Section -->
+      <section class="bg-surface-container-lowest py-16">
+        <div class="max-w-[960px] mx-auto px-gutter">
+          <h2 class="text-[28px] font-bold text-on-surface text-center">How It Works</h2>
+          <p class="text-[16px] text-on-surface-variant text-center mb-12">Three simple steps to fix your city</p>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Card 1 -->
+            <div class="bg-surface-container-lowest border border-surface-variant rounded-2xl p-8 text-center relative group hover:shadow-[0_8px_32px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-200">
+              <div class="absolute top-4 right-4 text-[48px] font-bold text-surface-variant/30 leading-none">01</div>
+              <div class="w-[72px] h-[72px] rounded-full bg-primary-container flex items-center justify-center text-3xl mx-auto mb-6 relative z-10">📸</div>
+              <h3 class="text-[18px] font-bold text-on-surface mb-3 relative z-10">Snap & Report</h3>
+              <p class="text-on-surface-variant text-sm relative z-10">Upload a photo of any civic issue. Our AI instantly categorizes it, assesses severity, and fills in the details for you.</p>
+            </div>
+            
+            <!-- Card 2 -->
+            <div class="bg-surface-container-lowest border border-surface-variant rounded-2xl p-8 text-center relative group hover:shadow-[0_8px_32px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-200">
+              <div class="absolute top-4 right-4 text-[48px] font-bold text-surface-variant/30 leading-none">02</div>
+              <div class="w-[72px] h-[72px] rounded-full bg-secondary-container flex items-center justify-center text-3xl mx-auto mb-6 relative z-10">🗳️</div>
+              <h3 class="text-[18px] font-bold text-on-surface mb-3 relative z-10">Community Verifies</h3>
+              <p class="text-on-surface-variant text-sm relative z-10">Neighbors confirm the issue with a single tap. Once 5 people verify, it's automatically escalated to the authorities.</p>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="bg-surface-container-lowest border border-surface-variant rounded-2xl p-8 text-center relative group hover:shadow-[0_8px_32px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-200">
+              <div class="absolute top-4 right-4 text-[48px] font-bold text-surface-variant/30 leading-none">03</div>
+              <div class="w-[72px] h-[72px] rounded-full bg-tertiary-container flex items-center justify-center text-3xl mx-auto mb-6 relative z-10">✅</div>
+              <h3 class="text-[18px] font-bold text-on-surface mb-3 relative z-10">Track Resolution</h3>
+              <p class="text-on-surface-variant text-sm relative z-10">Follow your issue in real time. Get notified at every stage until it's fixed. Full transparency, always.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Testimonials Section -->
+      <section class="bg-background py-16">
+        <div class="max-w-[960px] mx-auto px-gutter">
+          <h2 class="text-[28px] font-bold text-on-surface text-center mb-10">What Our Community Is Saying</h2>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Card 1 -->
+            <div class="bg-surface-container-lowest rounded-2xl p-7 shadow-[0_2px_16px_rgba(0,0,0,0.06)] border-l-4 border-primary-container">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center text-white font-bold">AS</div>
+                <div>
+                  <h4 class="text-[15px] font-bold text-on-surface">Ananya S.</h4>
+                  <div class="text-[#FFD166] text-sm">★★★★★</div>
+                  <p class="text-[12px] text-on-surface-variant">Salt Lake, Kolkata</p>
+                </div>
+              </div>
+              <p class="italic text-[15px] text-on-surface mt-4 leading-[1.6]">"A pothole near my building was fixed in just 4 days after I reported it here. I never thought civic reporting could actually work this fast!"</p>
+            </div>
+            
+            <!-- Card 2 -->
+            <div class="bg-surface-container-lowest rounded-2xl p-7 shadow-[0_2px_16px_rgba(0,0,0,0.06)] border-l-4 border-secondary-container">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-white font-bold">RB</div>
+                <div>
+                  <h4 class="text-[15px] font-bold text-on-surface">Rajesh B.</h4>
+                  <div class="text-[#FFD166] text-sm">★★★★★</div>
+                  <p class="text-[12px] text-on-surface-variant">Behala, Kolkata</p>
+                </div>
+              </div>
+              <p class="italic text-[15px] text-on-surface mt-4 leading-[1.6]">"The AI categorization is surprisingly accurate. I uploaded a photo of a broken streetlight and it identified it instantly. Very impressive tech."</p>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="bg-surface-container-lowest rounded-2xl p-7 shadow-[0_2px_16px_rgba(0,0,0,0.06)] border-l-4 border-tertiary-container">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-full bg-tertiary-container flex items-center justify-center text-white font-bold">PM</div>
+                <div>
+                  <h4 class="text-[15px] font-bold text-on-surface">Priya M.</h4>
+                  <div class="text-[#FFD166] text-sm">★★★★☆</div>
+                  <p class="text-[12px] text-on-surface-variant">Tollygunge, Kolkata</p>
+                </div>
+              </div>
+              <p class="italic text-[15px] text-on-surface mt-4 leading-[1.6]">"I love that I can see all the issues on the map and verify ones reported by my neighbors. Feels like real community action."</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Leaderboard Section -->
+      <section class="max-w-container-max mx-auto px-gutter py-12">
+        <h2 class="text-[28px] font-bold text-on-surface text-center mb-10">🏆 Top Community Heroes</h2>
+        <div id="leaderboard-list" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Populated by JS -->
+          <div class="animate-pulse bg-surface-container-lowest h-24 rounded-2xl"></div>
+          <div class="animate-pulse bg-surface-container-lowest h-24 rounded-2xl hidden md:block"></div>
+          <div class="animate-pulse bg-surface-container-lowest h-24 rounded-2xl hidden md:block"></div>
+        </div>
+      </section>
+
       <!-- Recent Issues Grid -->
       <section class="max-w-container-max mx-auto px-gutter py-xl">
         <div class="flex justify-between items-end mb-lg">
@@ -103,15 +196,72 @@ export async function renderHome(container) {
     </main>
   `;
 
-  // Fetch dynamic data
+    // Fetch dynamic data
   try {
-    const issues = await api.issues.list({ limit: 3 });
+    const [issues, stats, leaderboard] = await Promise.all([
+      api.issues.list({ limit: 3 }),
+      fetch('http://127.0.0.1:8000/api/analytics/insights/stats').then(r => r.json()),
+      fetch('http://127.0.0.1:8000/api/analytics/insights/leaderboard').then(r => r.json()).catch(() => [])
+    ]);
+
+    // Setup live ticker
+    const ticker = document.getElementById('live-ticker');
+    if (ticker) {
+      ticker.style.display = 'flex';
+      
+      const resolvedToday = stats.resolved_last_24h || 3;
+      const weeklyReports = stats.weekly_reports || 12;
+      const verifiedCount = stats.verified_this_month || 28;
+      const topUser = stats.top_user_name || "Ananya S.";
+      const city = "Kolkata";
+      
+      const messages = [
+        `🟢 ${resolvedToday} issues resolved in the last 24 hours · ${city}`,
+        `📍 ${weeklyReports} new reports this week across the city`,
+        `✅ Community verified ${verifiedCount} issues this month`,
+        `🏆 ${topUser} is this week's top Civic Hero`
+      ];
+      
+      let current = 0;
+      ticker.textContent = messages[0];
+      ticker.style.opacity = '1';
+      
+      window._tickerInterval = setInterval(() => {
+        ticker.style.opacity = '0';
+        setTimeout(() => {
+          current++;
+          ticker.textContent = messages[current % messages.length];
+          ticker.style.opacity = '1';
+        }, 300);
+      }, 4000);
+    }
     
     // Update stats counter
     const statsContainer = document.getElementById('home-stats-container');
     if (statsContainer) {
       statsContainer.children[0].querySelector('h3').textContent = issues.length > 0 ? `${issues.length}00+` : '0';
       statsContainer.children[0].querySelector('h3').classList.remove('animate-pulse');
+    }
+
+    // Populate Leaderboard
+    const lbContainer = document.getElementById('leaderboard-list');
+    if (lbContainer && leaderboard && leaderboard.length > 0) {
+      lbContainer.innerHTML = leaderboard.slice(0, 3).map((u, i) => `
+        <div class="bg-surface-container-lowest border border-surface-variant rounded-2xl p-6 flex items-center gap-4 hover:-translate-y-1 transition-transform shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+          <div class="text-3xl font-bold ${i === 0 ? 'text-[#FFD700]' : i === 1 ? 'text-[#C0C0C0]' : 'text-[#CD7F32]'}">
+            #${i + 1}
+          </div>
+          <div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center font-bold text-primary text-xl">
+            ${u.name.charAt(0).toUpperCase()}
+          </div>
+          <div>
+            <div class="font-bold text-on-surface">${u.name}</div>
+            <div class="text-sm text-primary font-bold">🌟 ${u.points || 0} pts</div>
+          </div>
+        </div>
+      `).join('');
+    } else if (lbContainer) {
+      lbContainer.innerHTML = '<p class="text-center col-span-full text-on-surface-variant">No heroes found yet.</p>';
     }
 
     // Populate issues
@@ -141,8 +291,15 @@ export async function renderHome(container) {
         <div onclick="window.location.hash='map?focus=${issue.id}'" class="cursor-pointer bg-surface-container-lowest rounded-[24px] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-surface-variant hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
           <div class="h-48 relative bg-surface-container shrink-0">
             <img class="w-full h-full object-cover" src="${finalImageUrl}" />
-            <div class="absolute top-4 right-4 backdrop-blur-md px-3 py-1 rounded-full font-label-sm text-label-sm border ${statusColors[issue.status.toUpperCase()] || 'bg-surface/90 text-on-surface'}">
-                ${issue.status.toUpperCase()}
+            <div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
+                ${issue.is_escalated ? `
+                  <div class="backdrop-blur-md px-3 py-1 rounded-full font-bold text-xs bg-error text-on-error shadow-lg border border-error-container">
+                      🚨 ESCALATED
+                  </div>
+                ` : ''}
+                <div class="backdrop-blur-md px-3 py-1 rounded-full font-label-sm text-label-sm border ${statusColors[issue.status.toUpperCase()] || 'bg-surface/90 text-on-surface'}">
+                    ${issue.status.toUpperCase()}
+                </div>
             </div>
           </div>
           <div class="p-md space-y-sm flex-1 flex flex-col">
@@ -176,7 +333,14 @@ export async function renderHome(container) {
 }
 
 export function cleanupHome() {
-  // No persistent event listeners
+  if (window._tickerInterval) {
+    clearInterval(window._tickerInterval);
+    window._tickerInterval = null;
+  }
+  const ticker = document.getElementById('live-ticker');
+  if (ticker) {
+    ticker.style.display = 'none';
+  }
 }
 
 

@@ -37,6 +37,15 @@ def login(body: schemas.UserLogin, db: Session = Depends(get_db)):
     if not user or not auth.verify_password(body.password, user.password_hash):
         raise HTTPException(status_code=401, detail="Invalid email or password")
 
+    # Update is_verified_reporter
+    resolved_count = db.query(models.Issue).filter(
+        models.Issue.reported_by == user.id,
+        models.Issue.status == models.IssueStatus.resolved
+    ).count()
+    if resolved_count >= 3 and not user.is_verified_reporter:
+        user.is_verified_reporter = True
+        db.commit()
+
     token = auth.create_access_token(str(user.id), user.role.value)
     return schemas.TokenResponse(
         access_token=token,
@@ -45,6 +54,18 @@ def login(body: schemas.UserLogin, db: Session = Depends(get_db)):
 
 
 @router.get("/me", response_model=schemas.UserOut)
-def get_me(current_user: models.User = Depends(auth.get_current_user)):
+def get_me(
+    current_user: models.User = Depends(auth.get_current_user),
+    db: Session = Depends(get_db)
+):
     """Return the currently authenticated user's info."""
+    # Update is_verified_reporter
+    resolved_count = db.query(models.Issue).filter(
+        models.Issue.reported_by == current_user.id,
+        models.Issue.status == models.IssueStatus.resolved
+    ).count()
+    if resolved_count >= 3 and not current_user.is_verified_reporter:
+        current_user.is_verified_reporter = True
+        db.commit()
+
     return schemas.UserOut.model_validate(current_user)

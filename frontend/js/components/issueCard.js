@@ -3,6 +3,8 @@
  * Reusable issue card HTML builder
  */
 
+import { getAuthState } from '../app.js';
+
 const CATEGORY_ICONS = {
   pothole:     '🕳️',
   streetlight: '💡',
@@ -10,6 +12,15 @@ const CATEGORY_ICONS = {
   waste:       '🗑️',
   drainage:    '🌊',
   other:       '📌',
+};
+
+const SLA_DAYS = {
+  water_leak: 2,
+  streetlight: 3,
+  pothole: 7,
+  waste: 5,
+  drainage: 4,
+  other: 7
 };
 
 const STATUS_LABELS = {
@@ -59,7 +70,9 @@ export function buildIssueCard(issue, opts = {}) {
   const dateStr = formatDate(issue.created_at);
   const address = issue.address || 'Location unknown';
   const summary = issue.ai_summary || issue.description || 'No description available.';
-  const imageUrl = issue.image_url ? `https://community-hero-api.onrender.com${issue.image_url}` : null;
+  const imageUrl = issue.image_url 
+    ? (issue.image_url.startsWith('http') ? issue.image_url : `https://community-hero-api.onrender.com${issue.image_url}`) 
+    : null;
 
   if (compact) {
     return `
@@ -79,7 +92,7 @@ export function buildIssueCard(issue, opts = {}) {
 
   const keyword = (issue.category || 'city').replace('_', ' ');
   const lockId = parseInt(issue.id.substring(0,8), 16) % 1000 || 1;
-  const finalImageUrl = imageUrl || `assets/categories/${issue.category || 'other'}.jpg`;
+  const finalImageUrl = imageUrl || `https://loremflickr.com/800/600/${keyword},india,street?lock=${lockId}`;
 
   const imageHtml = finalImageUrl
     ? (finalImageUrl.match(/\.(mp4|webm|ogg)$/i)
@@ -88,20 +101,59 @@ export function buildIssueCard(issue, opts = {}) {
     : '';
   const placeholderHtml = `<div class="issue-card__image" style="${finalImageUrl ? 'display:none' : ''}">${icon}</div>`;
 
+  const { user } = getAuthState();
+  const isAdmin = user && (user.role === 'admin' || user.role === 'moderator');
+  
+  let costHtml = '';
+  if (isAdmin && issue.estimated_cost_min != null && issue.estimated_cost_max != null) {
+    const minCost = issue.estimated_cost_min.toLocaleString('en-IN');
+    const maxCost = issue.estimated_cost_max.toLocaleString('en-IN');
+    costHtml = `<div class="px-2 py-1 bg-green-100 text-green-800 border border-green-300 rounded-md text-[10px] font-bold mt-2 inline-flex items-center gap-1">💰 ₹${minCost} – ₹${maxCost} estimated.</div>`;
+  }
+
+  let slaHtml = '';
+  let borderStyle = '';
+  if (issue.status === 'in_progress' && issue.status_changed_at) {
+    const sla = SLA_DAYS[issue.category] || SLA_DAYS.other;
+    const statusDate = new Date(issue.status_changed_at);
+    const deadline = new Date(statusDate.getTime() + sla * 86400000);
+    const now = new Date();
+    const daysRemaining = Math.ceil((deadline - now) / 86400000);
+    
+    if (daysRemaining > 0) {
+      const formattedDeadline = deadline.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      slaHtml = `<div class="px-2 py-1 bg-[#B7E4C7]/30 text-[#425B46] border border-[#B7E4C7] rounded-md text-xs font-bold mb-2 inline-flex items-center gap-1">⏱️ ${daysRemaining} days remaining · Due ${formattedDeadline}</div>`;
+    } else {
+      slaHtml = `<div class="px-2 py-1 bg-red-100 text-red-600 border border-red-300 rounded-md text-xs font-bold mb-2 inline-flex items-center gap-1">🚨 Overdue</div>`;
+      borderStyle = 'border-left: 4px solid #ef4444 !important;';
+    }
+  }
+
+  const reporterHtml = issue.reporter ? 
+    `${issue.reporter.name} ${issue.reporter.is_verified_reporter ? '<span title="Verified Reporter — 3+ issues successfully resolved." class="text-blue-500 font-bold cursor-help ml-1">✓</span>' : ''}` 
+    : 'Citizen';
+
   return `
     <div class="issue-card card" data-status="${issue.status}" data-id="${issue.id}"
-         onclick="window._viewIssue?.('${issue.id}')" style="cursor:pointer">
+         onclick="window._viewIssue?.('${issue.id}')" style="cursor:pointer; ${borderStyle}">
       ${imageHtml}${placeholderHtml}
       <div class="issue-card__body">
         <div class="issue-card__meta">
           <span class="badge badge--${catClass}">${icon} ${(issue.category || 'other').replace('_', ' ')}</span>
           <span class="chip chip--${issue.severity}">${severityLabel}</span>
         </div>
+        ${slaHtml}
+        ${costHtml}
         <h3 class="issue-card__title">${issue.title}</h3>
         <p class="issue-card__summary">${summary}</p>
         <div class="issue-card__address">
           <span>📍</span>
           <span>${address}</span>
+        </div>
+        <div class="flex items-center justify-between mb-3">
+          <div class="text-xs text-on-surface-variant flex items-center gap-1">
+            👤 <span>${reporterHtml}</span>
+          </div>
         </div>
       </div>
       <div class="issue-card__footer">
@@ -111,6 +163,7 @@ export function buildIssueCard(issue, opts = {}) {
         </div>
         <div class="flex items-center gap-2">
           <span class="text-xs text-muted">${dateStr}</span>
+          <button class="btn btn--sm bg-surface-variant hover:bg-outline-variant transition-colors" onclick="event.stopPropagation();window._shareIssue?.('${issue.title.replace(/'/g, "\\'")}', event.target.closest('.issue-card'))">📤 Share</button>
           ${showActions ? `<button class="btn btn--sm btn--sakura" onclick="event.stopPropagation();window._viewIssue?.('${issue.id}')">View</button>` : ''}
         </div>
       </div>
@@ -138,5 +191,48 @@ export function renderIssueList(container, issues, opts = {}) {
   }
   container.innerHTML = issues.map(i => buildIssueCard(i, opts)).join('');
 }
+
+window._shareIssue = async (title, cardEl) => {
+  if (!window.html2canvas) {
+    window.toast?.error('Sharing not ready yet. Please try again.');
+    return;
+  }
+  
+  // Add branding footer
+  const branding = document.createElement('div');
+  branding.className = 'w-full text-center text-white text-xs font-bold py-2 mt-2 bg-[#FF8FA3] rounded-b-lg';
+  branding.textContent = 'Reported on Community Hero — your city, your voice';
+  cardEl.appendChild(branding);
+  
+  try {
+    const canvas = await window.html2canvas(cardEl, { scale: 2, useCORS: true });
+    cardEl.removeChild(branding);
+    
+    canvas.toBlob((blob) => {
+      if (!blob) return;
+      const file = new File([blob], 'community-hero-issue.png', { type: 'image/png' });
+      
+      if (navigator.share) {
+        navigator.share({
+          title: title,
+          text: 'Check out this civic issue on Community Hero',
+          files: [file]
+        }).catch(err => console.error('Share failed:', err));
+      } else {
+        // Fallback for desktop
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'community-hero-issue.png';
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    }, 'image/png');
+  } catch (e) {
+    console.error('Failed to capture card', e);
+    if (branding.parentNode === cardEl) cardEl.removeChild(branding);
+    window.toast?.error('Failed to capture image for sharing.');
+  }
+};
 
 export default { buildIssueCard, renderIssueList, formatDate, getCategoryClass };
