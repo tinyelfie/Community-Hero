@@ -4,7 +4,8 @@
  * All API calls go through this module.
  */
 
-const API_BASE = 'https://community-hero-api.onrender.com/api';
+const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '';
+const API_BASE = isLocal ? 'http://127.0.0.1:8000/api' : 'https://community-hero-api.onrender.com/api';
 
 /** Get the stored JWT token */
 function getToken() {
@@ -47,7 +48,7 @@ async function request(path, options = {}) {
 
 // ── Auth ──────────────────────────────────────────────────────────
 
-export const api = {
+const api = {
   auth: {
     register: (name, email, password) =>
       request('/auth/register', {
@@ -176,3 +177,4 @@ export const api = {
 };
 
 export default api;
+export { API_BASE };

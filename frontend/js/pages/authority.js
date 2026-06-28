@@ -60,22 +60,35 @@ export async function renderAuthority(container) {
 
   initMap();
   
+  setTimeout(() => {
+    if (mapInstance) mapInstance.invalidateSize();
+  }, 300);
+  
   document.getElementById('btn-optimize').addEventListener('click', handleOptimize);
 }
+
+const INDIA_CENTER = { lat: 20.5937, lng: 78.9629 };
 
 function initMap() {
   if (mapInstance) {
     mapInstance.remove();
   }
   
-  // Default to City Center (e.g. New York or standard location, assuming the app is used there)
-  // Let's use the average coordinates of issues or a fixed depot.
-  // We'll use a fixed depot for the demo (latitude: 40.7128, longitude: -74.0060 - NYC)
-  const depot = [40.7128, -74.0060];
+  const indiaBounds = L.latLngBounds(
+    [6.0, 68.1], // Southwest (Kerala / Gujarat)
+    [37.6, 97.4] // Northeast (Kashmir / Arunachal)
+  );
+
+  const depot = [21.1458, 79.0882]; // Nagpur
 
   mapInstance = L.map('auth-map', {
+    center: [INDIA_CENTER.lat, INDIA_CENTER.lng],
+    zoom: 4,
+    minZoom: 4,
+    maxBounds: indiaBounds,
+    maxBoundsViscosity: 1.0,
     zoomControl: false
-  }).setView(depot, 13);
+  });
 
   L.control.zoom({ position: 'bottomright' }).addTo(mapInstance);
 
@@ -103,21 +116,26 @@ async function handleOptimize() {
     btn.disabled = true;
     
     try {
-        const depotLat = 40.7128;
-        const depotLng = -74.0060;
+        const depotLat = 21.1458;
+        const depotLng = 79.0882;
         
         const res = await api.authority.optimizeRoute(depotLat, depotLng, category || null);
         
-        if (!res.route || res.route.length === 0) {
+        let optimizedRoute = res.route || [];
+        if (optimizedRoute.length > 15) {
+            optimizedRoute = optimizedRoute.slice(0, 15);
+        }
+        
+        if (optimizedRoute.length === 0) {
             toast.info("No open issues found for this category.");
             listEl.innerHTML = '<div class="text-on-surface-variant text-center mt-10">No issues to route.</div>';
             if (routingLayer) routingLayer.remove();
             return;
         }
         
-        drawRoute(res.route, [depotLat, depotLng]);
-        renderList(res.route);
-        toast.success(`Route optimized for ${res.route.length} stops!`);
+        drawRoute(optimizedRoute, [depotLat, depotLng]);
+        renderList(optimizedRoute);
+        toast.success(`Route optimized for ${optimizedRoute.length} stops!`);
         
     } catch (e) {
         toast.error("Failed to optimize route.");
@@ -158,7 +176,7 @@ function drawRoute(route, depot) {
         color: '#4ECDC4',
         weight: 4,
         opacity: 0.8,
-        dashArray: '10, 10'
+        dashArray: '5, 10'
     }).addTo(routingLayer);
     
     mapInstance.fitBounds(polyline.getBounds(), { padding: [50, 50] });
@@ -169,17 +187,25 @@ function renderList(route) {
     listEl.innerHTML = '';
     
     route.forEach((stop, idx) => {
-        listEl.innerHTML += `
-            <div class="bg-surface-container-low p-4 rounded-xl mb-3 border border-outline-variant/30 flex gap-4 items-center">
-                <div class="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold shrink-0">
-                    ${idx + 1}
-                </div>
-                <div>
-                    <h4 class="font-bold text-on-surface text-sm truncate">${stop.title}</h4>
-                    <p class="text-xs text-on-surface-variant">${stop.address || 'Location unknown'}</p>
-                </div>
+        const item = document.createElement('div');
+        item.className = 'bg-surface-container-low p-4 rounded-xl mb-3 border border-outline-variant/30 flex gap-4 items-center cursor-pointer hover:bg-surface-variant transition-colors';
+        item.innerHTML = `
+            <div class="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold shrink-0">
+                ${idx + 1}
+            </div>
+            <div>
+                <h4 class="font-bold text-on-surface text-sm truncate">${stop.title}</h4>
+                <p class="text-xs text-on-surface-variant">${stop.address || 'Location unknown'}</p>
             </div>
         `;
+        
+        item.addEventListener('click', () => {
+            if (mapInstance) {
+                mapInstance.flyTo([stop.latitude, stop.longitude], 16, { duration: 1.5 });
+            }
+        });
+        
+        listEl.appendChild(item);
     });
 }
 

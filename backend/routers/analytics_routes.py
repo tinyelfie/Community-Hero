@@ -324,29 +324,3 @@ def get_latest_digest(db: Session = Depends(get_db)):
     if not digest:
         raise HTTPException(status_code=404, detail="No digest found")
     return schemas.DigestOut.model_validate(digest)
-
-@router.get("/ward-density", response_model=dict)
-def get_ward_density(db: Session = Depends(get_db)):
-    """Return issue count for 6 hardcoded wards based on rough bounding boxes."""
-    wards = {
-        "Salt Lake": {"min_lat": 22.56, "max_lat": 22.60, "min_lng": 88.40, "max_lng": 88.44},
-        "Ballygunge": {"min_lat": 22.51, "max_lat": 22.54, "min_lng": 88.35, "max_lng": 88.38},
-        "Behala": {"min_lat": 22.48, "max_lat": 22.51, "min_lng": 88.29, "max_lng": 88.32},
-        "Tollygunge": {"min_lat": 22.49, "max_lat": 22.51, "min_lng": 88.33, "max_lng": 88.35},
-        "Shyambazar": {"min_lat": 22.59, "max_lat": 22.61, "min_lng": 88.36, "max_lng": 88.38},
-        "Park Street": {"min_lat": 22.54, "max_lat": 22.56, "min_lng": 88.34, "max_lng": 88.36},
-    }
-    
-    # Initialize counts to 0
-    results = {w: 0 for w in wards}
-    
-    issues = db.query(models.Issue.latitude, models.Issue.longitude).all()
-    
-    for lat, lng in issues:
-        for w, bounds in wards.items():
-            if (bounds["min_lat"] <= lat <= bounds["max_lat"] and
-                bounds["min_lng"] <= lng <= bounds["max_lng"]):
-                results[w] += 1
-                break
-                
-    return results

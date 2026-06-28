@@ -1,4 +1,4 @@
-import api from '../api.js';
+import api, { API_BASE } from '../api.js';
 import { getAuthState } from '../app.js';
 
 export async function renderProfile(container) {
@@ -86,7 +86,7 @@ export async function renderProfile(container) {
     const reportsHtml = profile.reported_issues.slice(0, 10).map(issue => `
       <div class="bg-surface border border-outline-variant rounded-2xl p-4 hover:shadow-md hover:border-primary/50 transition-all cursor-pointer flex gap-4" onclick="window.location.hash='map?focus=${issue.id}'">
         <div class="w-24 h-24 rounded-xl bg-surface-variant shrink-0 flex items-center justify-center overflow-hidden border border-outline-variant/50">
-          <img src="${issue.image_url ? `https://community-hero-api.onrender.com${issue.image_url}` : `https://picsum.photos/seed/${issue.id}/400/300`}" class="w-full h-full object-cover">
+          <img src="${issue.image_url ? `${API_BASE.replace('/api', '')}${issue.image_url}` : `https://picsum.photos/seed/${issue.id}/400/300`}" class="w-full h-full object-cover">
         </div>
         <div class="flex-1 flex flex-col justify-center">
           <div class="flex items-center gap-2 mb-1">

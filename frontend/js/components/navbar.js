@@ -14,7 +14,7 @@ export function renderNavbar() {
       <div class="flex justify-between items-center h-20 px-gutter max-w-container-max mx-auto">
         <div class="flex items-center gap-sm cursor-pointer" onclick="window.location.hash='home'">
           <span class="material-symbols-outlined text-primary text-headline-lg" data-icon="account_balance">account_balance</span>
-          <h1 class="font-display-xl text-headline-lg-mobile md:text-display-xl bg-gradient-to-r from-primary to-tertiary bg-clip-text text-transparent">Community Hero</h1>
+          <h1 class="font-brand text-title-md md:text-headline-lg bg-gradient-to-r from-primary to-tertiary bg-clip-text text-transparent pt-2 pb-1 leading-normal whitespace-nowrap">Community Hero</h1>
         </div>
         <div class="flex items-center gap-md">
           <button id="dark-mode-toggle" class="hover:scale-105 hover:opacity-80 transition-all duration-300 text-on-surface-variant">
@@ -103,16 +103,17 @@ export function updateNavAuth() {
         <span id="nav-notification-badge" class="absolute -top-1 -right-1 bg-error text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full hidden">0</span>
       </div>
       <a href="#profile" class="flex items-center gap-2 mr-2 hover:bg-surface-variant p-1 rounded-full pr-3 transition-colors">
-        <div id="user-points" style="font-weight:bold; color:#FF8FA3; font-size:14px;">🌟 ${user.reputation || 0} pts</div>
+        <div class="nav-user-points" title="Your Reputation Points">
+          <div id="user-points" style="font-weight:bold; color:#FF8FA3; font-size:14px;">🌟 ${user.points || 0}</div>
+        </div>
         <div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-sm">${initials}</div>
-        <span class="font-medium text-sm hidden lg:block text-on-surface hover:text-primary transition-colors">${user.name.split(' ')[0]}</span>
       </a>
       <button class="border border-outline text-on-surface-variant px-4 py-2 rounded-full font-label-sm text-label-sm hover:bg-surface-variant transition-colors" id="nav-logout-btn">Logout</button>
     `;
     document.getElementById('nav-logout-btn')?.addEventListener('click', () => logout());
     
     // Fetch notifications
-    import('../api.js').then(({ api }) => {
+    import('../api.js').then(({ default: api }) => {
       api.notifications.list().then(notifs => {
         if (notifs && notifs.length > 0) {
             const badge = document.getElementById('nav-notification-badge');

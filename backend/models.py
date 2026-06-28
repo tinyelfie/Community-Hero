@@ -23,6 +23,11 @@ class IssueCategory(str, enum.Enum):
     water_leak = "water_leak"
     waste = "waste"
     drainage = "drainage"
+    fallen_tree = "fallen_tree"
+    broken_sidewalk = "broken_sidewalk"
+    stray_animal = "stray_animal"
+    illegal_parking = "illegal_parking"
+    vandalism = "vandalism"
     other = "other"
 
 

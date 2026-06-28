@@ -1,4 +1,4 @@
-import api from '../api.js';
+import api, { API_BASE } from '../api.js';
 import toast from '../components/toast.js';
 import { navigate, showFloatingPoints } from '../app.js';
 
@@ -39,7 +39,7 @@ export function renderReport(container) {
           <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
             <div class="space-y-sm">
               <label class="block font-label-sm text-on-surface-variant px-1">Category</label>
-              <select id="report-category" class="w-full bg-surface-container-low border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 transition-all outline-none appearance-none cursor-pointer">
+              <select id="report-category" class="w-full bg-primary text-white focus:ring-2 focus:ring-primary-container rounded-lg p-3 transition-all outline-none appearance-none cursor-pointer shadow-md">
                 <option value="Infrastructure">Infrastructure</option>
                 <option value="Sanitation">Sanitation</option>
                 <option value="Public Safety">Public Safety</option>
@@ -49,7 +49,7 @@ export function renderReport(container) {
             </div>
             <div class="space-y-sm">
               <label class="block font-label-sm text-on-surface-variant px-1">Severity</label>
-              <select id="report-severity" class="w-full bg-surface-container-low border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 transition-all outline-none appearance-none cursor-pointer">
+              <select id="report-severity" class="w-full bg-primary text-white focus:ring-2 focus:ring-primary-container rounded-lg p-3 transition-all outline-none appearance-none cursor-pointer shadow-md">
                 <option value="low">Low (Cosmetic)</option>
                 <option value="medium">Medium (Nuisance)</option>
                 <option value="high">High (Safety Hazard)</option>
@@ -312,7 +312,7 @@ function updateMapLocation(lat, lng) {
 
 async function checkNearbyIssues(lat, lng) {
   try {
-    const res = await fetch(`http://127.0.0.1:8000/api/issues?lat=${lat}&lng=${lng}&radius_km=0.5&status=open&limit=3`);
+    const res = await fetch(`${API_BASE}/issues?lat=${lat}&lng=${lng}&radius_km=0.5&status=open&limit=3`);
     const issues = await res.json();
     const container = document.getElementById('nearby-warning-container');
     
@@ -450,7 +450,7 @@ function setupMediaPreview() {
         formData.append('image', file);
         
         try {
-          const res = await fetch('http://127.0.0.1:8000/api/ai/preview', {
+          const res = await fetch(`${API_BASE}/ai/preview`, {
             method: 'POST',
             body: formData
           });

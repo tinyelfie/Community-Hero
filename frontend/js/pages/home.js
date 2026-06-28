@@ -1,5 +1,5 @@
 import { navigate, getAuthState } from '../app.js';
-import api from '../api.js';
+import api, { API_BASE } from '../api.js';
 
 import toast from '../components/toast.js';
 
@@ -200,8 +200,8 @@ export async function renderHome(container) {
   try {
     const [issues, stats, leaderboard] = await Promise.all([
       api.issues.list({ limit: 3 }),
-      fetch('http://127.0.0.1:8000/api/analytics/insights/stats').then(r => r.json()),
-      fetch('http://127.0.0.1:8000/api/analytics/insights/leaderboard').then(r => r.json()).catch(() => [])
+      fetch(`${API_BASE}/insights/stats`).then(r => r.json()),
+      fetch(`${API_BASE}/insights/leaderboard`).then(r => r.json()).catch(() => [])
     ]);
 
     // Setup live ticker
@@ -255,8 +255,8 @@ export async function renderHome(container) {
             ${u.name.charAt(0).toUpperCase()}
           </div>
           <div>
-            <div class="font-bold text-on-surface">${u.name}</div>
-            <div class="text-sm text-primary font-bold">🌟 ${u.points || 0} pts</div>
+            <div class="font-bold text-on-surface">${u.name} ${u.is_verified_reporter ? '<span class="text-blue-500 font-bold" title="Verified Reporter">✓</span>' : ''}</div>
+            <div class="text-sm text-primary font-bold">🌟 ${u.points || 0}</div>
           </div>
         </div>
       `).join('');
@@ -285,7 +285,7 @@ export async function renderHome(container) {
       const dateStr = new Date(issue.created_at).toLocaleDateString();
       const keyword = (issue.category || 'city').replace('_', ' ');
       const lockId = parseInt(issue.id.substring(0,8), 16) % 1000 || 1;
-      const finalImageUrl = issue.image_url ? `http://127.0.0.1:8000${issue.image_url}` : `assets/categories/${issue.category || 'other'}.jpg`;
+      const finalImageUrl = issue.image_url ? `${API_BASE.replace('/api', '')}${issue.image_url}` : `assets/categories/${issue.category || 'other'}.jpg`;
 
       grid.innerHTML += `
         <div onclick="window.location.hash='map?focus=${issue.id}'" class="cursor-pointer bg-surface-container-lowest rounded-[24px] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-surface-variant hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">

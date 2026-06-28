@@ -1,3 +1,4 @@
+import api, { API_BASE } from '../api.js';
 /**
  * Community Hero — components/issueCard.js
  * Reusable issue card HTML builder
@@ -71,7 +72,7 @@ export function buildIssueCard(issue, opts = {}) {
   const address = issue.address || 'Location unknown';
   const summary = issue.ai_summary || issue.description || 'No description available.';
   const imageUrl = issue.image_url 
-    ? (issue.image_url.startsWith('http') ? issue.image_url : `https://community-hero-api.onrender.com${issue.image_url}`) 
+    ? (issue.image_url.startsWith('http') ? issue.image_url : `${API_BASE.replace('/api', '')}${issue.image_url}`) 
     : null;
 
   if (compact) {
@@ -130,8 +131,8 @@ export function buildIssueCard(issue, opts = {}) {
   }
 
   const reporterHtml = issue.reporter ? 
-    `${issue.reporter.name} ${issue.reporter.is_verified_reporter ? '<span title="Verified Reporter — 3+ issues successfully resolved." class="text-blue-500 font-bold cursor-help ml-1">✓</span>' : ''}` 
-    : 'Citizen';
+    `🌟 ${issue.reporter.points || 0} ${issue.reporter.is_verified_reporter ? '<span title="Verified Reporter — 3+ issues successfully resolved." class="text-blue-500 font-bold cursor-help ml-1">✓</span>' : ''}` 
+    : '🌟 0';
 
   return `
     <div class="issue-card card" data-status="${issue.status}" data-id="${issue.id}"

@@ -50,6 +50,9 @@ def optimize_route(
     route = []
     
     while unvisited:
+        if len(route) >= 15:
+            break
+            
         nearest = None
         min_dist = float('inf')
         for issue in unvisited:

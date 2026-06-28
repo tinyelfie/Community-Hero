@@ -3,7 +3,7 @@
  * Full-screen interactive map with markers, heatmap, hotspots, sidebar, info drawer
  */
 
-import api from '../api.js';
+import api, { API_BASE } from '../api.js';
 import { buildIssueCard, getCategoryClass, formatDate } from '../components/issueCard.js';
 import toast from '../components/toast.js';
 import { getAuthState, showFloatingPoints } from '../app.js';
@@ -14,12 +14,10 @@ let markers = [];
 let markerClusterGroup = null;
 let heatmapLayer = null;
 let hotspotCircles = [];
-let zonesLayerGroup = null;
 let selectedIssueId = null;
 let heatmapActive = false;
 let hotspotsActive = false;
-let zonesActive = false;
-let activeFilters = { category: '', status: '', sort: 'votes' };
+let activeFilters = { category: 'NONE', status: '', sort: 'votes' };
 let timelineMin = 0;
 let timelineMax = 0;
 let timelineInterval = null;
@@ -33,7 +31,7 @@ const WARDS = [
   { name: "Park Street", bounds: [[22.54, 88.34], [22.56, 88.36]] }
 ];
 
-const KOLKATA_CENTER = { lat: 22.5726, lng: 88.3639 };
+const INDIA_CENTER = { lat: 20.5937, lng: 78.9629 };
 
 const CATEGORY_COLORS = {
   pothole:     '#FFD166',
@@ -59,7 +57,7 @@ export async function renderMap(container, opts = {}) {
 
           <!-- Category filters -->
           <div class="flex flex-wrap gap-2 mb-3" id="category-filters">
-            <button class="px-3 py-1 rounded-full text-xs font-bold border transition-colors bg-primary text-white border-primary filter-pill active" data-cat="">All</button>
+            <button class="px-3 py-1 rounded-full text-xs font-bold border border-outline-variant text-on-surface-variant hover:bg-surface-variant transition-colors filter-pill" data-cat="">All</button>
             <button class="px-3 py-1 rounded-full text-xs font-bold border border-outline-variant text-on-surface-variant hover:bg-surface-variant transition-colors filter-pill" data-cat="pothole">🕳️ Pothole</button>
             <button class="px-3 py-1 rounded-full text-xs font-bold border border-outline-variant text-on-surface-variant hover:bg-surface-variant transition-colors filter-pill" data-cat="streetlight">💡 Light</button>
             <button class="px-3 py-1 rounded-full text-xs font-bold border border-outline-variant text-on-surface-variant hover:bg-surface-variant transition-colors filter-pill" data-cat="water_leak">💧 Water</button>
@@ -112,28 +110,11 @@ export async function renderMap(container, opts = {}) {
           <button class="bg-surface border border-outline-variant px-4 py-2 rounded-full font-label-sm text-sm text-on-surface shadow-md hover:bg-surface-variant transition-colors flex items-center justify-center gap-2" id="hotspot-toggle-btn">
             ⚠️ Hotspots
           </button>
-          <button class="bg-surface border border-outline-variant px-4 py-2 rounded-full font-label-sm text-sm text-on-surface shadow-md hover:bg-surface-variant transition-colors flex items-center justify-center gap-2" id="zones-toggle-btn">
-            🗺️ Show Zones
-          </button>
         </div>
 
         <!-- Issue count badge -->
         <div class="absolute top-4 left-4 bg-surface px-4 py-2 rounded-full font-label-sm text-sm shadow-md text-on-surface z-[400]" id="issue-count-badge">
           Loading...
-        </div>
-
-        <!-- Timeline Scrubber -->
-        <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-[400] bg-surface border border-outline-variant rounded-xl shadow-md p-4 w-[90%] md:w-[600px] flex flex-col gap-2">
-          <div class="flex justify-between items-center text-sm font-bold text-on-surface">
-            <span>Issue Timeline</span>
-            <span id="timeline-date-display">All Time</span>
-          </div>
-          <div class="flex items-center gap-4">
-            <button id="timeline-play-btn" class="w-10 h-10 flex-shrink-0 flex items-center justify-center bg-primary text-white rounded-full hover:bg-primary/90 transition-colors">
-              <span class="material-symbols-outlined" id="timeline-play-icon">play_arrow</span>
-            </button>
-            <input type="range" id="timeline-scrubber" min="0" max="100" value="100" class="flex-1 cursor-pointer accent-primary">
-          </div>
         </div>
 
         <!-- Info Drawer -->
@@ -176,13 +157,13 @@ export async function renderMap(container, opts = {}) {
 
 function initMap() {
   const indiaBounds = L.latLngBounds(
-    [8.4, 68.1], // Southwest (Kerala / Gujarat)
+    [6.0, 68.1], // Southwest (Kerala / Gujarat)
     [37.6, 97.4] // Northeast (Kashmir / Arunachal)
   );
   mapInstance = L.map('google-map', {
-    center: [KOLKATA_CENTER.lat, KOLKATA_CENTER.lng],
-    zoom: 12,
-    minZoom: 5,
+    center: [INDIA_CENTER.lat, INDIA_CENTER.lng],
+    zoom: 4,
+    minZoom: 4,
     maxBounds: indiaBounds,
     maxBoundsViscosity: 1.0,
     zoomControl: false,
@@ -250,7 +231,7 @@ function initMap() {
 
 async function loadIssues() {
   try {
-    const rawIssues = await api.issues.list({ limit: 200 });
+    const rawIssues = await api.issues.list({ limit: 1000 });
     
     // Geofencing logic
     const cachedLoc = localStorage.getItem('civichero_last_location');
@@ -285,7 +266,6 @@ async function loadIssues() {
       allIssues = rawIssues;
     }
 
-    initTimeline();
     renderSidebarList();
     if (mapInstance) renderMarkers();
     updateIssueBadge();
@@ -387,24 +367,7 @@ function renderMarkers() {
   }
   markers = [];
 
-  markerClusterGroup = L.markerClusterGroup({
-    iconCreateFunction: function(cluster) {
-      const count = cluster.getChildCount();
-      const size = 16 + Math.min(count * 2, 16);
-      return L.divIcon({
-        html: `<div style="
-          width: ${size*2}px; height: ${size*2}px; 
-          background: #FFCAD4; 
-          border: 2px solid #FF8FA3;
-          border-radius: 50%;
-          display: flex; align-items: center; justify-content: center;
-          color: #425B46; font-size: 12px; font-weight: 700;
-        ">${count}</div>`,
-        className: 'custom-cluster-icon',
-        iconSize: [size*2, size*2]
-      });
-    }
-  });
+  markerClusterGroup = L.layerGroup();
 
   const filtered = getFilteredIssues();
 
@@ -441,11 +404,7 @@ function renderMarkers() {
     marker.createdAt = new Date(issue.created_at).getTime();
     markers.push(marker);
     
-    // Only add to cluster if it matches timeline
-    const scrubber = document.getElementById('timeline-scrubber');
-    if (!scrubber || marker.createdAt <= parseInt(scrubber.value)) {
-      markerClusterGroup.addLayer(marker);
-    }
+    markerClusterGroup.addLayer(marker);
   });
 
   mapInstance.addLayer(markerClusterGroup);
@@ -505,13 +464,14 @@ async function selectIssue(issueId) {
 function renderDrawerContent(issue) {
   const { user } = getAuthState();
   const isAdmin = user && (user.role === 'admin' || user.role === 'moderator');
-  const imageUrl = issue.image_url ? `https://community-hero-api.onrender.com${issue.image_url}` : null;
+  const HOST = API_BASE.replace('/api', '');
+  const imageUrl = issue.image_url ? `${HOST}${issue.image_url}` : null;
   const dateStr = formatDate(issue.created_at);
   const icon = CATEGORY_ICONS[issue.category] || '📌';
 
   const keyword = (issue.category || 'city').replace('_', ' ');
   const lockId = parseInt(issue.id.substring(0,8), 16) % 1000 || 1;
-  const resImageUrl = issue.resolution_image_url ? `https://community-hero-api.onrender.com${issue.resolution_image_url}` : null;
+  const resImageUrl = issue.resolution_image_url ? `${HOST}${issue.resolution_image_url}` : null;
   const finalImageUrl = imageUrl || `assets/categories/${issue.category || 'other'}.jpg`;
 
   let heroImageHTML = '';
@@ -750,7 +710,7 @@ function renderDrawerContent(issue) {
         
         // Fetch AI suggestion
         try {
-          const res = await fetch(`http://127.0.0.1:8000/api/issues/${issue.id}/resolution-suggestion`, {
+          const res = await fetch(`${API_BASE}/issues/${issue.id}/resolution-suggestion`, {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
           });
           const data = await res.json();
@@ -802,7 +762,7 @@ function renderDrawerContent(issue) {
       }
 
       try {
-        const res = await fetch(`http://127.0.0.1:8000/api/issues/${issue.id}/status`, {
+        const res = await fetch(`${API_BASE}/issues/${issue.id}/status`, {
           method: 'PATCH',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -949,8 +909,9 @@ window._printIssue = async (issueId) => {
     }
     
     const dateStr = formatDate(issue.created_at);
-    const imageUrl = issue.image_url ? `https://community-hero-api.onrender.com${issue.image_url}` : '';
-    const resolutionUrl = issue.resolution_image_url ? `https://community-hero-api.onrender.com${issue.resolution_image_url}` : '';
+    const HOST = API_BASE.replace('/api', '');
+    const imageUrl = issue.image_url ? `${HOST}${issue.image_url}` : '';
+    const resolutionUrl = issue.resolution_image_url ? `${HOST}${issue.resolution_image_url}` : '';
     const nowStr = new Date().toLocaleString('en-IN');
     
     let html = `
@@ -959,7 +920,7 @@ window._printIssue = async (issueId) => {
       <head>
         <title>Community Hero Report - ${issue.id}</title>
         <style>
-          body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; line-height: 1.6; margin: 0; padding: 40px; background: #fff; }
+          body { font-family: 'Corbel', serif; color: #333; line-height: 1.6; margin: 0; padding: 40px; background: #fff; }
           .header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 30px; }
           .header h1 { margin: 0; font-size: 24px; color: #7c535c; }
           .header .subtitle { font-size: 14px; color: #666; font-weight: bold; }
@@ -1072,7 +1033,6 @@ window._printIssue = async (issueId) => {
 function attachMapControls() {
   document.getElementById('heatmap-toggle-btn').addEventListener('click', toggleHeatmap);
   document.getElementById('hotspot-toggle-btn').addEventListener('click', toggleHotspots);
-  document.getElementById('zones-toggle-btn').addEventListener('click', toggleZones);
   
   const zoomIn = document.getElementById('zoom-in-btn');
   const zoomOut = document.getElementById('zoom-out-btn');
@@ -1127,11 +1087,12 @@ async function toggleHeatmap() {
       toast.error('Heatmap plugin not loaded');
       return;
     }
-    const heatData = data.map(p => [p.lat, p.lng, p.weight]);
+    const heatData = data.map(p => [p.lat, p.lng, Math.min(p.weight, 10)]);
     heatmapLayer = L.heatLayer(heatData, {
-      radius: 30,
+      radius: 25,
       blur: 20,
-      maxZoom: 16
+      maxZoom: 12,
+      max: 3
     }).addTo(mapInstance);
     heatmapActive = true;
     btn.classList.add('bg-primary-container', 'border-primary', 'shadow-inner');
@@ -1157,65 +1118,19 @@ async function toggleHotspots() {
   try {
     const predictions = await api.insights.predictions();
     hotspotCircles = predictions.map(p => {
-      return L.circleMarker([p.lat, p.lng], {
-        color: '#ba1a1a',
-        fillColor: '#ba1a1a',
-        fillOpacity: 0.2,
-        radius: 20, // 20 pixels radius
-        weight: 2
-      }).addTo(mapInstance).bindPopup(`Predicted hotspot: ${p.predicted_count} issues`);
+      const icon = L.divIcon({
+        className: 'custom-hotspot',
+        html: `<div class="hotspot-glow"></div>`,
+        iconSize: [16, 16],
+        iconAnchor: [8, 8]
+      });
+      return L.marker([p.lat, p.lng], { icon }).addTo(mapInstance).bindPopup(`Predicted hotspot: ${p.predicted_count} issues`);
     });
     hotspotsActive = true;
     btn.classList.add('bg-primary-container', 'border-primary', 'shadow-inner');
     btn.classList.remove('bg-surface', 'border-outline-variant');
   } catch (e) {
     toast.error('Could not load hotspot predictions');
-  }
-}
-
-async function toggleZones() {
-  const btn = document.getElementById('zones-toggle-btn');
-  if (!mapInstance) { toast.info('Map not initialized'); return; }
-
-  if (zonesActive) {
-    if (zonesLayerGroup) {
-      zonesLayerGroup.clearLayers();
-      mapInstance.removeLayer(zonesLayerGroup);
-    }
-    zonesLayerGroup = null;
-    zonesActive = false;
-    btn.classList.remove('bg-primary-container', 'border-primary', 'shadow-inner');
-    btn.classList.add('bg-surface', 'border-outline-variant');
-    return;
-  }
-
-  try {
-    const res = await fetch('http://127.0.0.1:8000/api/analytics/ward-density');
-    const densities = await res.json();
-
-    zonesLayerGroup = L.layerGroup().addTo(mapInstance);
-
-    WARDS.forEach(ward => {
-      const count = densities[ward.name] || 0;
-      let fillColor = '#55EFC4'; // Green (0-2)
-      if (count >= 6) fillColor = '#FF6B6B'; // Red (6+)
-      else if (count >= 3) fillColor = '#FFD166'; // Yellow (3-5)
-
-      L.rectangle(ward.bounds, {
-        color: fillColor,
-        weight: 2,
-        fillColor: fillColor,
-        fillOpacity: 0.4
-      })
-      .bindPopup(`<b>${ward.name}</b><br>Issues: ${count}`)
-      .addTo(zonesLayerGroup);
-    });
-
-    zonesActive = true;
-    btn.classList.add('bg-primary-container', 'border-primary', 'shadow-inner');
-    btn.classList.remove('bg-surface', 'border-outline-variant');
-  } catch (e) {
-    toast.error('Could not load zone densities');
   }
 }
 
@@ -1227,21 +1142,12 @@ export function cleanupMap() {
   heatmapLayer = null;
   hotspotCircles.forEach(c => c.remove());
   hotspotCircles = [];
-  if (zonesLayerGroup && mapInstance) {
-    zonesLayerGroup.clearLayers();
-    mapInstance.removeLayer(zonesLayerGroup);
-  }
-  zonesLayerGroup = null;
   heatmapActive = false;
   hotspotsActive = false;
-  zonesActive = false;
   if (mapInstance) {
     mapInstance.remove();
     mapInstance = null;
   }
-
-  // Load Community Assessment
-  loadCommunityAssessment(issue.id);
 }
 
 async function loadCommunityAssessment(issueId) {
@@ -1405,26 +1311,26 @@ function renderStepper(status) {
   const labels = ['Reported', 'Verified', 'Working', 'Resolved'];
   const currentIndex = steps.indexOf(status) !== -1 ? steps.indexOf(status) : 0;
   
-  let html = \`<div class="status-stepper">\`;
+  let html = `<div class="status-stepper">`;
   
   for (let i = 0; i < steps.length; i++) {
     let classes = 'step';
     if (i <= currentIndex) classes += ' completed';
     if (i === currentIndex) classes += ' active';
 
-    html += \`
-      <div class="\${classes}">
+    html += `
+      <div class="${classes}">
         <div class="step-dot"></div>
-        <div class="step-label">\${labels[i]}</div>
+        <div class="step-label">${labels[i]}</div>
       </div>
-    \`;
+    `;
     
     if (i < steps.length - 1) {
       const lineClass = i < currentIndex ? 'step-line completed' : 'step-line';
-      html += \`<div class="\${lineClass}"></div>\`;
+      html += `<div class="${lineClass}"></div>`;
     }
   }
   
-  html += \`</div>\`;
+  html += `</div>`;
   return html;
 }

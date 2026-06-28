@@ -21,19 +21,19 @@ def seed_demo_data(db: Session = Depends(get_db)):
     admin = models.User(
         email="admin@example.com",
         name="Admin User",
-        password_hash="$2b$12$igpBBzbvsKS.KJU8ElMVZ.Pyf6EJCx2c7lCI4DmjzTJVmaAgPBoFm",
+        password_hash="$2b$12$P8ftY8Ouhh9VXI6P0LKXsuHhisjh.L90LbjWIQvH2TmesW0Fc24t2",
         role=models.UserRole.admin
     )
     moderator = models.User(
         email="moderator@example.com",
         name="Sarah (Moderator)",
-        password_hash="$2b$12$igpBBzbvsKS.KJU8ElMVZ.Pyf6EJCx2c7lCI4DmjzTJVmaAgPBoFm",
+        password_hash="$2b$12$P8ftY8Ouhh9VXI6P0LKXsuHhisjh.L90LbjWIQvH2TmesW0Fc24t2",
         role=models.UserRole.moderator
     )
     citizen = models.User(
         email="citizen@example.com",
         name="Ananya S.",
-        password_hash="$2b$12$igpBBzbvsKS.KJU8ElMVZ.Pyf6EJCx2c7lCI4DmjzTJVmaAgPBoFm",
+        password_hash="$2b$12$P8ftY8Ouhh9VXI6P0LKXsuHhisjh.L90LbjWIQvH2TmesW0Fc24t2",
         role=models.UserRole.citizen,
         points=150
     )

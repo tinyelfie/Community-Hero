@@ -1,4 +1,4 @@
-import api from '../api.js';
+import api, { API_BASE } from '../api.js';
 
 let chartInstances = [];
 
@@ -130,7 +130,7 @@ export async function renderDashboard(container) {
             legend: { position: 'right', labels: { color: '#64748b', font: { family: 'Corben', size: 14 } } },
             tooltip: {
               backgroundColor: 'rgba(48, 49, 45, 0.95)',
-              titleFont: { family: 'Ultra', size: 16 },
+              titleFont: { family: 'Corben', size: 16 },
               bodyFont: { family: 'Corben', size: 14 },
               padding: 12,
               cornerRadius: 12,
@@ -188,7 +188,7 @@ export async function renderDashboard(container) {
             legend: { display: false },
             tooltip: {
               backgroundColor: 'rgba(48, 49, 45, 0.95)',
-              titleFont: { family: 'Ultra', size: 16 },
+              titleFont: { family: 'Corben', size: 16 },
               bodyFont: { family: 'Corben', size: 14 },
               padding: 12,
               cornerRadius: 12,
@@ -206,16 +206,40 @@ export async function renderDashboard(container) {
 
     // Load AI Insights
     try {
-      const predictions = await api.insights.predictions();
-      if (predictions && predictions.length > 0) {
+      const allPredictions = await api.insights.predictions();
+      if (allPredictions && allPredictions.length > 0) {
+        const predictions = allPredictions.slice(0, 9);
         document.getElementById('ai-insights').classList.remove('hidden');
-        document.getElementById('predictions-list').innerHTML = predictions.map(p => `
+        document.getElementById('predictions-list').innerHTML = predictions.map((p, index) => `
           <div style="background: #FFCAD4; border: 1px solid #FF8FA3; border-radius: 12px; padding: 16px; color: #425B46;">
-            <div style="font-weight: bold; margin-bottom: 8px;">📍 Location: ${p.lat.toFixed(4)}, ${p.lng.toFixed(4)}</div>
+            <div style="font-weight: bold; margin-bottom: 8px;">📍 Location: <span id="pred-loc-${index}">${p.lat.toFixed(4)}, ${p.lng.toFixed(4)}</span></div>
             <div style="margin-bottom: 4px;">Predicted Issues: <strong>${p.predicted_count}</strong></div>
             <div style="font-size: 13px; opacity: 0.8;">Severity Risk: High</div>
           </div>
         `).join('');
+
+        // Reverse geocode sequentially to respect Nominatim rate limits (1 req/sec)
+        (async () => {
+          for (let i = 0; i < predictions.length; i++) {
+            const p = predictions[i];
+            const el = document.getElementById(`pred-loc-${i}`);
+            if (!el) continue;
+            try {
+              el.textContent = "Loading location...";
+              const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${p.lat}&lon=${p.lng}&zoom=14`);
+              if (res.ok) {
+                const data = await res.json();
+                const locName = data.address?.suburb || data.address?.neighbourhood || data.address?.city_district || data.address?.city || data.name || `${p.lat.toFixed(4)}, ${p.lng.toFixed(4)}`;
+                el.textContent = locName;
+              } else {
+                el.textContent = `${p.lat.toFixed(4)}, ${p.lng.toFixed(4)}`;
+              }
+            } catch(e) {
+              el.textContent = `${p.lat.toFixed(4)}, ${p.lng.toFixed(4)}`;
+            }
+            await new Promise(r => setTimeout(r, 1000));
+          }
+        })();
       }
     } catch (e) {
       console.warn("Failed to load predictions", e);
@@ -223,7 +247,7 @@ export async function renderDashboard(container) {
 
     // Load Weekly Digest
     try {
-      const digestRes = await fetch('http://127.0.0.1:8000/api/digests/latest');
+      const digestRes = await fetch(`${API_BASE}/digests/latest`);
       if (digestRes.ok) {
         const digest = await digestRes.json();
         document.getElementById('weekly-digest-container').classList.remove('hidden');
