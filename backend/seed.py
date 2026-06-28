@@ -138,23 +138,26 @@ def seed():
     citizens.append(test_citizen)
     officials.append(test_admin)
     
-    # Generate Citizens
-    for _ in range(NUM_CITIZENS):
+    # Load exact deterministic users from JSON
+    import json
+    with open(os.path.join(os.path.dirname(__file__), 'users.json'), 'r', encoding='utf-8') as f:
+        user_data = json.load(f)
+        
+    for cit in user_data['citizens']:
         u = models.User(
-            name=fake.name(),
-            email=fake.unique.email().replace('@', '@citizen.').lower(),
+            name=cit['name'],
+            email=cit['email'],
             password_hash=password_hash,
             role=models.UserRole.citizen,
-            points=random.randint(0, 500)
+            points=cit['points']
         )
         users.append(u)
         citizens.append(u)
         
-    # Generate Gov Officials
-    for _ in range(NUM_GOV):
+    for gov in user_data['officials']:
         u = models.User(
-            name=fake.name(),
-            email=fake.unique.email().replace('@', '@gov.').lower(),
+            name=gov['name'],
+            email=gov['email'],
             password_hash=password_hash,
             role=models.UserRole.admin,
             points=0
