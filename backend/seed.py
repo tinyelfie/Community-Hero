@@ -1,771 +1,209 @@
-
-import sys
 import os
-sys.path.insert(0, os.path.dirname(__file__))
-
-from database import SessionLocal, create_tables, Base, engine
-from auth import hash_password
-import models
-from datetime import datetime, timedelta
+import sys
+import random
+import requests
 import uuid
+from datetime import datetime, timedelta
+from faker import Faker
 
-Base.metadata.drop_all(bind=engine)
-create_tables()
-db = SessionLocal()
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-for table in [models.Comment, models.Vote, models.Issue, models.User]:
-    db.query(table).delete()
-db.commit()
+from database import SessionLocal, engine, Base
+import models
+from auth import hash_password
 
-users = [
-    models.User(
-        id=uuid.UUID("00000000-0000-0000-0000-000000000001"),
-        name="Rahul Sharma",
-        email="citizen@test.com",
-        password_hash=hash_password("test123"),
-        role=models.UserRole.citizen,
-        points=120,
-    ),
-    models.User(
-        id=uuid.UUID("00000000-0000-0000-0000-000000000002"),
-        name="Priya Patel",
-        email="mod@test.com",
-        password_hash=hash_password("test123"),
-        role=models.UserRole.moderator,
-        points=450,
-    ),
-    models.User(
-        id=uuid.UUID("00000000-0000-0000-0000-000000000003"),
-        name="Amit Singh",
-        email="admin@test.com",
-        password_hash=hash_password("test123"),
-        role=models.UserRole.admin,
-        points=890,
-    ),
-]
-for u in users:
-    db.add(u)
-db.commit()
+fake = Faker('en_IN')
 
-issues_data = [
-    {
-        "title": "Other issue reported in Chennai",
-        "description": "This is a high severity other issue in the Chennai area.",
-        "category": "other",
-        "severity": "high",
-        "status": "in_progress",
-        "latitude": 13.0671,
-        "longitude": 80.2977,
-        "address": "Somewhere in Chennai, India",
-        "vote_count": 136,
-        "ai_summary": "Automated summary for other in Chennai.",
-        "ai_tags": "other, Chennai, issue",
-        "days_ago": 54
-    },
-    {
-        "title": "Drainage issue reported in Delhi",
-        "description": "This is a critical severity drainage issue in the Delhi area.",
-        "category": "drainage",
-        "severity": "critical",
-        "status": "in_progress",
-        "latitude": 28.584,
-        "longitude": 77.2293,
-        "address": "Somewhere in Delhi, India",
-        "vote_count": 25,
-        "ai_summary": "Automated summary for drainage in Delhi.",
-        "ai_tags": "drainage, Delhi, issue",
-        "days_ago": 89
-    },
-    {
-        "title": "Other issue reported in Lucknow",
-        "description": "This is a low severity other issue in the Lucknow area.",
-        "category": "other",
-        "severity": "low",
-        "status": "verified",
-        "latitude": 26.8784,
-        "longitude": 80.9771,
-        "address": "Somewhere in Lucknow, India",
-        "vote_count": 100,
-        "ai_summary": "Automated summary for other in Lucknow.",
-        "ai_tags": "other, Lucknow, issue",
-        "days_ago": 100
-    },
-    {
-        "title": "Drainage issue reported in Bangalore",
-        "description": "This is a low severity drainage issue in the Bangalore area.",
-        "category": "drainage",
-        "severity": "low",
-        "status": "verified",
-        "latitude": 12.9382,
-        "longitude": 77.5754,
-        "address": "Somewhere in Bangalore, India",
-        "vote_count": 32,
-        "ai_summary": "Automated summary for drainage in Bangalore.",
-        "ai_tags": "drainage, Bangalore, issue",
-        "days_ago": 16
-    },
-    {
-        "title": "Pothole issue reported in Jaipur",
-        "description": "This is a critical severity pothole issue in the Jaipur area.",
-        "category": "pothole",
-        "severity": "critical",
-        "status": "open",
-        "latitude": 26.8703,
-        "longitude": 75.7737,
-        "address": "Somewhere in Jaipur, India",
-        "vote_count": 83,
-        "ai_summary": "Automated summary for pothole in Jaipur.",
-        "ai_tags": "pothole, Jaipur, issue",
-        "days_ago": 43
-    },
-    {
-        "title": "Streetlight issue reported in Jaipur",
-        "description": "This is a critical severity streetlight issue in the Jaipur area.",
-        "category": "streetlight",
-        "severity": "critical",
-        "status": "in_progress",
-        "latitude": 26.8728,
-        "longitude": 75.7633,
-        "address": "Somewhere in Jaipur, India",
-        "vote_count": 30,
-        "ai_summary": "Automated summary for streetlight in Jaipur.",
-        "ai_tags": "streetlight, Jaipur, issue",
-        "days_ago": 80
-    },
-    {
-        "title": "Pothole issue reported in Bangalore",
-        "description": "This is a high severity pothole issue in the Bangalore area.",
-        "category": "pothole",
-        "severity": "high",
-        "status": "open",
-        "latitude": 12.9495,
-        "longitude": 77.641,
-        "address": "Somewhere in Bangalore, India",
-        "vote_count": 10,
-        "ai_summary": "Automated summary for pothole in Bangalore.",
-        "ai_tags": "pothole, Bangalore, issue",
-        "days_ago": 22
-    },
-    {
-        "title": "Waste issue reported in Lucknow",
-        "description": "This is a medium severity waste issue in the Lucknow area.",
-        "category": "waste",
-        "severity": "medium",
-        "status": "open",
-        "latitude": 26.8217,
-        "longitude": 80.9387,
-        "address": "Somewhere in Lucknow, India",
-        "vote_count": 48,
-        "ai_summary": "Automated summary for waste in Lucknow.",
-        "ai_tags": "waste, Lucknow, issue",
-        "days_ago": 27
-    },
-    {
-        "title": "Waste issue reported in Hyderabad",
-        "description": "This is a low severity waste issue in the Hyderabad area.",
-        "category": "waste",
-        "severity": "low",
-        "status": "resolved",
-        "latitude": 17.4272,
-        "longitude": 78.5132,
-        "address": "Somewhere in Hyderabad, India",
-        "vote_count": 2,
-        "ai_summary": "Automated summary for waste in Hyderabad.",
-        "ai_tags": "waste, Hyderabad, issue",
-        "days_ago": 78
-    },
-    {
-        "title": "Streetlight issue reported in Hyderabad",
-        "description": "This is a low severity streetlight issue in the Hyderabad area.",
-        "category": "streetlight",
-        "severity": "low",
-        "status": "resolved",
-        "latitude": 17.3587,
-        "longitude": 78.4433,
-        "address": "Somewhere in Hyderabad, India",
-        "vote_count": 123,
-        "ai_summary": "Automated summary for streetlight in Hyderabad.",
-        "ai_tags": "streetlight, Hyderabad, issue",
-        "days_ago": 98
-    },
-    {
-        "title": "Waste issue reported in Ahmedabad",
-        "description": "This is a critical severity waste issue in the Ahmedabad area.",
-        "category": "waste",
-        "severity": "critical",
-        "status": "verified",
-        "latitude": 22.9923,
-        "longitude": 72.5852,
-        "address": "Somewhere in Ahmedabad, India",
-        "vote_count": 61,
-        "ai_summary": "Automated summary for waste in Ahmedabad.",
-        "ai_tags": "waste, Ahmedabad, issue",
-        "days_ago": 5
-    },
-    {
-        "title": "Streetlight issue reported in Chennai",
-        "description": "This is a high severity streetlight issue in the Chennai area.",
-        "category": "streetlight",
-        "severity": "high",
-        "status": "open",
-        "latitude": 13.0526,
-        "longitude": 80.2335,
-        "address": "Somewhere in Chennai, India",
-        "vote_count": 143,
-        "ai_summary": "Automated summary for streetlight in Chennai.",
-        "ai_tags": "streetlight, Chennai, issue",
-        "days_ago": 41
-    },
-    {
-        "title": "Drainage issue reported in Kolkata",
-        "description": "This is a high severity drainage issue in the Kolkata area.",
-        "category": "drainage",
-        "severity": "high",
-        "status": "in_progress",
-        "latitude": 22.5915,
-        "longitude": 88.3297,
-        "address": "Somewhere in Kolkata, India",
-        "vote_count": 139,
-        "ai_summary": "Automated summary for drainage in Kolkata.",
-        "ai_tags": "drainage, Kolkata, issue",
-        "days_ago": 83
-    },
-    {
-        "title": "Pothole issue reported in Bangalore",
-        "description": "This is a low severity pothole issue in the Bangalore area.",
-        "category": "pothole",
-        "severity": "low",
-        "status": "verified",
-        "latitude": 12.9665,
-        "longitude": 77.6029,
-        "address": "Somewhere in Bangalore, India",
-        "vote_count": 75,
-        "ai_summary": "Automated summary for pothole in Bangalore.",
-        "ai_tags": "pothole, Bangalore, issue",
-        "days_ago": 63
-    },
-    {
-        "title": "Other issue reported in Chennai",
-        "description": "This is a low severity other issue in the Chennai area.",
-        "category": "other",
-        "severity": "low",
-        "status": "resolved",
-        "latitude": 13.0408,
-        "longitude": 80.2736,
-        "address": "Somewhere in Chennai, India",
-        "vote_count": 84,
-        "ai_summary": "Automated summary for other in Chennai.",
-        "ai_tags": "other, Chennai, issue",
-        "days_ago": 75
-    },
-    {
-        "title": "Drainage issue reported in Pune",
-        "description": "This is a high severity drainage issue in the Pune area.",
-        "category": "drainage",
-        "severity": "high",
-        "status": "open",
-        "latitude": 18.4862,
-        "longitude": 73.8317,
-        "address": "Somewhere in Pune, India",
-        "vote_count": 126,
-        "ai_summary": "Automated summary for drainage in Pune.",
-        "ai_tags": "drainage, Pune, issue",
-        "days_ago": 83
-    },
-    {
-        "title": "Streetlight issue reported in Hyderabad",
-        "description": "This is a medium severity streetlight issue in the Hyderabad area.",
-        "category": "streetlight",
-        "severity": "medium",
-        "status": "in_progress",
-        "latitude": 17.3873,
-        "longitude": 78.4436,
-        "address": "Somewhere in Hyderabad, India",
-        "vote_count": 71,
-        "ai_summary": "Automated summary for streetlight in Hyderabad.",
-        "ai_tags": "streetlight, Hyderabad, issue",
-        "days_ago": 6
-    },
-    {
-        "title": "Streetlight issue reported in Chennai",
-        "description": "This is a medium severity streetlight issue in the Chennai area.",
-        "category": "streetlight",
-        "severity": "medium",
-        "status": "open",
-        "latitude": 13.0604,
-        "longitude": 80.2506,
-        "address": "Somewhere in Chennai, India",
-        "vote_count": 38,
-        "ai_summary": "Automated summary for streetlight in Chennai.",
-        "ai_tags": "streetlight, Chennai, issue",
-        "days_ago": 77
-    },
-    {
-        "title": "Water_leak issue reported in Lucknow",
-        "description": "This is a medium severity water_leak issue in the Lucknow area.",
-        "category": "water_leak",
-        "severity": "medium",
-        "status": "in_progress",
-        "latitude": 26.8395,
-        "longitude": 80.94,
-        "address": "Somewhere in Lucknow, India",
-        "vote_count": 61,
-        "ai_summary": "Automated summary for water_leak in Lucknow.",
-        "ai_tags": "water_leak, Lucknow, issue",
-        "days_ago": 94
-    },
-    {
-        "title": "Waste issue reported in Delhi",
-        "description": "This is a medium severity waste issue in the Delhi area.",
-        "category": "waste",
-        "severity": "medium",
-        "status": "resolved",
-        "latitude": 28.6333,
-        "longitude": 77.2173,
-        "address": "Somewhere in Delhi, India",
-        "vote_count": 95,
-        "ai_summary": "Automated summary for waste in Delhi.",
-        "ai_tags": "waste, Delhi, issue",
-        "days_ago": 24
-    },
-    {
-        "title": "Water_leak issue reported in Mumbai",
-        "description": "This is a low severity water_leak issue in the Mumbai area.",
-        "category": "water_leak",
-        "severity": "low",
-        "status": "in_progress",
-        "latitude": 19.1206,
-        "longitude": 72.8633,
-        "address": "Somewhere in Mumbai, India",
-        "vote_count": 117,
-        "ai_summary": "Automated summary for water_leak in Mumbai.",
-        "ai_tags": "water_leak, Mumbai, issue",
-        "days_ago": 25
-    },
-    {
-        "title": "Streetlight issue reported in Kolkata",
-        "description": "This is a high severity streetlight issue in the Kolkata area.",
-        "category": "streetlight",
-        "severity": "high",
-        "status": "resolved",
-        "latitude": 22.5748,
-        "longitude": 88.3394,
-        "address": "Somewhere in Kolkata, India",
-        "vote_count": 60,
-        "ai_summary": "Automated summary for streetlight in Kolkata.",
-        "ai_tags": "streetlight, Kolkata, issue",
-        "days_ago": 14
-    },
-    {
-        "title": "Streetlight issue reported in Ahmedabad",
-        "description": "This is a low severity streetlight issue in the Ahmedabad area.",
-        "category": "streetlight",
-        "severity": "low",
-        "status": "resolved",
-        "latitude": 22.986,
-        "longitude": 72.5672,
-        "address": "Somewhere in Ahmedabad, India",
-        "vote_count": 74,
-        "ai_summary": "Automated summary for streetlight in Ahmedabad.",
-        "ai_tags": "streetlight, Ahmedabad, issue",
-        "days_ago": 3
-    },
-    {
-        "title": "Water_leak issue reported in Jaipur",
-        "description": "This is a high severity water_leak issue in the Jaipur area.",
-        "category": "water_leak",
-        "severity": "high",
-        "status": "resolved",
-        "latitude": 26.9091,
-        "longitude": 75.8306,
-        "address": "Somewhere in Jaipur, India",
-        "vote_count": 130,
-        "ai_summary": "Automated summary for water_leak in Jaipur.",
-        "ai_tags": "water_leak, Jaipur, issue",
-        "days_ago": 93
-    },
-    {
-        "title": "Streetlight issue reported in Bangalore",
-        "description": "This is a low severity streetlight issue in the Bangalore area.",
-        "category": "streetlight",
-        "severity": "low",
-        "status": "resolved",
-        "latitude": 13.0052,
-        "longitude": 77.6366,
-        "address": "Somewhere in Bangalore, India",
-        "vote_count": 86,
-        "ai_summary": "Automated summary for streetlight in Bangalore.",
-        "ai_tags": "streetlight, Bangalore, issue",
-        "days_ago": 27
-    },
-    {
-        "title": "Streetlight issue reported in Mumbai",
-        "description": "This is a medium severity streetlight issue in the Mumbai area.",
-        "category": "streetlight",
-        "severity": "medium",
-        "status": "resolved",
-        "latitude": 19.0575,
-        "longitude": 72.9251,
-        "address": "Somewhere in Mumbai, India",
-        "vote_count": 1,
-        "ai_summary": "Automated summary for streetlight in Mumbai.",
-        "ai_tags": "streetlight, Mumbai, issue",
-        "days_ago": 92
-    },
-    {
-        "title": "Water_leak issue reported in Jaipur",
-        "description": "This is a critical severity water_leak issue in the Jaipur area.",
-        "category": "water_leak",
-        "severity": "critical",
-        "status": "verified",
-        "latitude": 26.9423,
-        "longitude": 75.8073,
-        "address": "Somewhere in Jaipur, India",
-        "vote_count": 103,
-        "ai_summary": "Automated summary for water_leak in Jaipur.",
-        "ai_tags": "water_leak, Jaipur, issue",
-        "days_ago": 51
-    },
-    {
-        "title": "Drainage issue reported in Hyderabad",
-        "description": "This is a medium severity drainage issue in the Hyderabad area.",
-        "category": "drainage",
-        "severity": "medium",
-        "status": "in_progress",
-        "latitude": 17.3391,
-        "longitude": 78.4474,
-        "address": "Somewhere in Hyderabad, India",
-        "vote_count": 114,
-        "ai_summary": "Automated summary for drainage in Hyderabad.",
-        "ai_tags": "drainage, Hyderabad, issue",
-        "days_ago": 87
-    },
-    {
-        "title": "Pothole issue reported in Chennai",
-        "description": "This is a medium severity pothole issue in the Chennai area.",
-        "category": "pothole",
-        "severity": "medium",
-        "status": "verified",
-        "latitude": 13.1003,
-        "longitude": 80.2548,
-        "address": "Somewhere in Chennai, India",
-        "vote_count": 57,
-        "ai_summary": "Automated summary for pothole in Chennai.",
-        "ai_tags": "pothole, Chennai, issue",
-        "days_ago": 76
-    },
-    {
-        "title": "Streetlight issue reported in Hyderabad",
-        "description": "This is a low severity streetlight issue in the Hyderabad area.",
-        "category": "streetlight",
-        "severity": "low",
-        "status": "in_progress",
-        "latitude": 17.3862,
-        "longitude": 78.516,
-        "address": "Somewhere in Hyderabad, India",
-        "vote_count": 141,
-        "ai_summary": "Automated summary for streetlight in Hyderabad.",
-        "ai_tags": "streetlight, Hyderabad, issue",
-        "days_ago": 10
-    },
-    {
-        "title": "Pothole issue reported in Jaipur",
-        "description": "This is a critical severity pothole issue in the Jaipur area.",
-        "category": "pothole",
-        "severity": "critical",
-        "status": "in_progress",
-        "latitude": 26.9371,
-        "longitude": 75.8132,
-        "address": "Somewhere in Jaipur, India",
-        "vote_count": 14,
-        "ai_summary": "Automated summary for pothole in Jaipur.",
-        "ai_tags": "pothole, Jaipur, issue",
-        "days_ago": 44
-    },
-    {
-        "title": "Other issue reported in Delhi",
-        "description": "This is a high severity other issue in the Delhi area.",
-        "category": "other",
-        "severity": "high",
-        "status": "resolved",
-        "latitude": 28.6271,
-        "longitude": 77.2363,
-        "address": "Somewhere in Delhi, India",
-        "vote_count": 89,
-        "ai_summary": "Automated summary for other in Delhi.",
-        "ai_tags": "other, Delhi, issue",
-        "days_ago": 12
-    },
-    {
-        "title": "Pothole issue reported in Lucknow",
-        "description": "This is a low severity pothole issue in the Lucknow area.",
-        "category": "pothole",
-        "severity": "low",
-        "status": "in_progress",
-        "latitude": 26.8338,
-        "longitude": 80.9586,
-        "address": "Somewhere in Lucknow, India",
-        "vote_count": 28,
-        "ai_summary": "Automated summary for pothole in Lucknow.",
-        "ai_tags": "pothole, Lucknow, issue",
-        "days_ago": 94
-    },
-    {
-        "title": "Water_leak issue reported in Lucknow",
-        "description": "This is a medium severity water_leak issue in the Lucknow area.",
-        "category": "water_leak",
-        "severity": "medium",
-        "status": "verified",
-        "latitude": 26.8423,
-        "longitude": 80.9614,
-        "address": "Somewhere in Lucknow, India",
-        "vote_count": 3,
-        "ai_summary": "Automated summary for water_leak in Lucknow.",
-        "ai_tags": "water_leak, Lucknow, issue",
-        "days_ago": 4
-    },
-    {
-        "title": "Other issue reported in Lucknow",
-        "description": "This is a high severity other issue in the Lucknow area.",
-        "category": "other",
-        "severity": "high",
-        "status": "resolved",
-        "latitude": 26.804,
-        "longitude": 80.9652,
-        "address": "Somewhere in Lucknow, India",
-        "vote_count": 54,
-        "ai_summary": "Automated summary for other in Lucknow.",
-        "ai_tags": "other, Lucknow, issue",
-        "days_ago": 19
-    },
-    {
-        "title": "Streetlight issue reported in Jaipur",
-        "description": "This is a medium severity streetlight issue in the Jaipur area.",
-        "category": "streetlight",
-        "severity": "medium",
-        "status": "verified",
-        "latitude": 26.9462,
-        "longitude": 75.7678,
-        "address": "Somewhere in Jaipur, India",
-        "vote_count": 129,
-        "ai_summary": "Automated summary for streetlight in Jaipur.",
-        "ai_tags": "streetlight, Jaipur, issue",
-        "days_ago": 44
-    },
-    {
-        "title": "Streetlight issue reported in Chennai",
-        "description": "This is a high severity streetlight issue in the Chennai area.",
-        "category": "streetlight",
-        "severity": "high",
-        "status": "resolved",
-        "latitude": 13.091,
-        "longitude": 80.2916,
-        "address": "Somewhere in Chennai, India",
-        "vote_count": 71,
-        "ai_summary": "Automated summary for streetlight in Chennai.",
-        "ai_tags": "streetlight, Chennai, issue",
-        "days_ago": 69
-    },
-    {
-        "title": "Drainage issue reported in Delhi",
-        "description": "This is a low severity drainage issue in the Delhi area.",
-        "category": "drainage",
-        "severity": "low",
-        "status": "open",
-        "latitude": 28.6378,
-        "longitude": 77.2229,
-        "address": "Somewhere in Delhi, India",
-        "vote_count": 14,
-        "ai_summary": "Automated summary for drainage in Delhi.",
-        "ai_tags": "drainage, Delhi, issue",
-        "days_ago": 23
-    },
-    {
-        "title": "Drainage issue reported in Hyderabad",
-        "description": "This is a critical severity drainage issue in the Hyderabad area.",
-        "category": "drainage",
-        "severity": "critical",
-        "status": "verified",
-        "latitude": 17.3918,
-        "longitude": 78.4464,
-        "address": "Somewhere in Hyderabad, India",
-        "vote_count": 28,
-        "ai_summary": "Automated summary for drainage in Hyderabad.",
-        "ai_tags": "drainage, Hyderabad, issue",
-        "days_ago": 49
-    },
-    {
-        "title": "Pothole issue reported in Kolkata",
-        "description": "This is a critical severity pothole issue in the Kolkata area.",
-        "category": "pothole",
-        "severity": "critical",
-        "status": "verified",
-        "latitude": 22.5315,
-        "longitude": 88.3434,
-        "address": "Somewhere in Kolkata, India",
-        "vote_count": 113,
-        "ai_summary": "Automated summary for pothole in Kolkata.",
-        "ai_tags": "pothole, Kolkata, issue",
-        "days_ago": 70
-    },
-    {
-        "title": "Other issue reported in Chennai",
-        "description": "This is a low severity other issue in the Chennai area.",
-        "category": "other",
-        "severity": "low",
-        "status": "in_progress",
-        "latitude": 13.1288,
-        "longitude": 80.2888,
-        "address": "Somewhere in Chennai, India",
-        "vote_count": 118,
-        "ai_summary": "Automated summary for other in Chennai.",
-        "ai_tags": "other, Chennai, issue",
-        "days_ago": 2
-    },
-    {
-        "title": "Pothole issue reported in Kolkata",
-        "description": "This is a high severity pothole issue in the Kolkata area.",
-        "category": "pothole",
-        "severity": "high",
-        "status": "resolved",
-        "latitude": 22.5957,
-        "longitude": 88.4003,
-        "address": "Somewhere in Kolkata, India",
-        "vote_count": 27,
-        "ai_summary": "Automated summary for pothole in Kolkata.",
-        "ai_tags": "pothole, Kolkata, issue",
-        "days_ago": 44
-    },
-    {
-        "title": "Water_leak issue reported in Hyderabad",
-        "description": "This is a medium severity water_leak issue in the Hyderabad area.",
-        "category": "water_leak",
-        "severity": "medium",
-        "status": "resolved",
-        "latitude": 17.3356,
-        "longitude": 78.4614,
-        "address": "Somewhere in Hyderabad, India",
-        "vote_count": 36,
-        "ai_summary": "Automated summary for water_leak in Hyderabad.",
-        "ai_tags": "water_leak, Hyderabad, issue",
-        "days_ago": 44
-    },
-    {
-        "title": "Pothole issue reported in Kolkata",
-        "description": "This is a high severity pothole issue in the Kolkata area.",
-        "category": "pothole",
-        "severity": "high",
-        "status": "resolved",
-        "latitude": 22.5582,
-        "longitude": 88.3421,
-        "address": "Somewhere in Kolkata, India",
-        "vote_count": 114,
-        "ai_summary": "Automated summary for pothole in Kolkata.",
-        "ai_tags": "pothole, Kolkata, issue",
-        "days_ago": 78
-    },
-    {
-        "title": "Waste issue reported in Kolkata",
-        "description": "This is a medium severity waste issue in the Kolkata area.",
-        "category": "waste",
-        "severity": "medium",
-        "status": "verified",
-        "latitude": 22.5894,
-        "longitude": 88.3388,
-        "address": "Somewhere in Kolkata, India",
-        "vote_count": 98,
-        "ai_summary": "Automated summary for waste in Kolkata.",
-        "ai_tags": "waste, Kolkata, issue",
-        "days_ago": 47
-    },
-    {
-        "title": "Waste issue reported in Ahmedabad",
-        "description": "This is a medium severity waste issue in the Ahmedabad area.",
-        "category": "waste",
-        "severity": "medium",
-        "status": "resolved",
-        "latitude": 23.0554,
-        "longitude": 72.5671,
-        "address": "Somewhere in Ahmedabad, India",
-        "vote_count": 91,
-        "ai_summary": "Automated summary for waste in Ahmedabad.",
-        "ai_tags": "waste, Ahmedabad, issue",
-        "days_ago": 2
-    },
-    {
-        "title": "Streetlight issue reported in Bangalore",
-        "description": "This is a critical severity streetlight issue in the Bangalore area.",
-        "category": "streetlight",
-        "severity": "critical",
-        "status": "open",
-        "latitude": 13.0216,
-        "longitude": 77.6418,
-        "address": "Somewhere in Bangalore, India",
-        "vote_count": 50,
-        "ai_summary": "Automated summary for streetlight in Bangalore.",
-        "ai_tags": "streetlight, Bangalore, issue",
-        "days_ago": 86
-    },
-    {
-        "title": "Water_leak issue reported in Pune",
-        "description": "This is a low severity water_leak issue in the Pune area.",
-        "category": "water_leak",
-        "severity": "low",
-        "status": "verified",
-        "latitude": 18.5546,
-        "longitude": 73.8534,
-        "address": "Somewhere in Pune, India",
-        "vote_count": 91,
-        "ai_summary": "Automated summary for water_leak in Pune.",
-        "ai_tags": "water_leak, Pune, issue",
-        "days_ago": 34
-    },
-    {
-        "title": "Waste issue reported in Pune",
-        "description": "This is a low severity waste issue in the Pune area.",
-        "category": "waste",
-        "severity": "low",
-        "status": "open",
-        "latitude": 18.4918,
-        "longitude": 73.8149,
-        "address": "Somewhere in Pune, India",
-        "vote_count": 139,
-        "ai_summary": "Automated summary for waste in Pune.",
-        "ai_tags": "waste, Pune, issue",
-        "days_ago": 15
-    },
-    {
-        "title": "Other issue reported in Ahmedabad",
-        "description": "This is a low severity other issue in the Ahmedabad area.",
-        "category": "other",
-        "severity": "low",
-        "status": "in_progress",
-        "latitude": 23.0,
-        "longitude": 72.5498,
-        "address": "Somewhere in Ahmedabad, India",
-        "vote_count": 130,
-        "ai_summary": "Automated summary for other in Ahmedabad.",
-        "ai_tags": "other, Ahmedabad, issue",
-        "days_ago": 39
-    }
+# Configuration
+NUM_CITIZENS = 200
+NUM_GOV = 25
+NUM_ISSUES = 500
+
+CATEGORIES = [
+    models.IssueCategory.pothole,
+    models.IssueCategory.streetlight,
+    models.IssueCategory.water_leak,
+    models.IssueCategory.waste,
+    models.IssueCategory.drainage,
+    models.IssueCategory.fallen_tree,
+    models.IssueCategory.broken_sidewalk,
+    models.IssueCategory.stray_animal,
+    models.IssueCategory.illegal_parking,
+    models.IssueCategory.vandalism
 ]
 
-# unquote enums
-for item in issues_data:
-    item['category'] = getattr(models.IssueCategory, item['category'])
-    item['severity'] = getattr(models.IssueSeverity, item['severity'])
-    item['status'] = getattr(models.IssueStatus, item['status'])
+# Major Indian Cities for realistic distribution
+CITIES = [
+    {"name": "Mumbai", "lat": 19.0760, "lng": 72.8777},
+    {"name": "Delhi", "lat": 28.7041, "lng": 77.1025},
+    {"name": "Bangalore", "lat": 12.9716, "lng": 77.5946},
+    {"name": "Hyderabad", "lat": 17.3850, "lng": 78.4867},
+    {"name": "Ahmedabad", "lat": 23.0225, "lng": 72.5714},
+    {"name": "Chennai", "lat": 13.0827, "lng": 80.2707},
+    {"name": "Kolkata", "lat": 22.5726, "lng": 88.3639},
+    {"name": "Pune", "lat": 18.5204, "lng": 73.8567},
+    {"name": "Jaipur", "lat": 26.9124, "lng": 75.7873},
+    {"name": "Lucknow", "lat": 26.8467, "lng": 80.9462},
+    {"name": "Kanpur", "lat": 26.4499, "lng": 80.3319},
+    {"name": "Nagpur", "lat": 21.1458, "lng": 79.0882},
+    {"name": "Indore", "lat": 22.7196, "lng": 75.8577},
+    {"name": "Thane", "lat": 19.2183, "lng": 72.9781},
+    {"name": "Bhopal", "lat": 23.2599, "lng": 77.4126},
+    {"name": "Visakhapatnam", "lat": 17.6868, "lng": 83.2185},
+    {"name": "Patna", "lat": 25.5941, "lng": 85.1376},
+    {"name": "Vadodara", "lat": 22.3072, "lng": 73.1812},
+    {"name": "Ghaziabad", "lat": 28.6692, "lng": 77.4538},
+    {"name": "Ludhiana", "lat": 30.9010, "lng": 75.8573},
+]
 
-reporter_ids = [u.id for u in users]
-for i, data in enumerate(issues_data):
-    days = data.pop("days_ago")
-    created = datetime.utcnow() - timedelta(days=days)
-    issue = models.Issue(
-        **data,
-        reported_by=reporter_ids[i % 3],
-        created_at=created,
-        updated_at=created,
-    )
-    db.add(issue)
-db.commit()
-print("Seeding complete with 50 issues across India and Indian users.")
+def get_random_location():
+    city = random.choice(CITIES)
+    # Add small random offset (roughly within a 15-20km radius)
+    lat_offset = random.uniform(-0.15, 0.15)
+    lng_offset = random.uniform(-0.15, 0.15)
+    return city["lat"] + lat_offset, city["lng"] + lng_offset
+
+def download_images():
+    print("Downloading 10 category images...")
+    os.makedirs("uploads", exist_ok=True)
+    images = {}
+    for cat in CATEGORIES:
+        filename = f"{cat.value}.jpg"
+        filepath = os.path.join("uploads", filename)
+        images[cat] = filename
+        
+        if os.path.exists(filepath):
+            print(f"Skipping {cat.value}, already exists.")
+            continue
+            
+        print(f"Fetching image for {cat.value}...")
+        # Use loremflickr with category keyword
+        keyword = cat.value.replace("_", ",")
+        url = f"https://loremflickr.com/800/600/{keyword}"
+        try:
+            r = requests.get(url, timeout=10)
+            if r.status_code == 200:
+                with open(filepath, 'wb') as f:
+                    f.write(r.content)
+            else:
+                print(f"Failed to fetch {url} (status {r.status_code})")
+        except Exception as e:
+            print(f"Error fetching {url}: {e}")
+            
+    return images
+
+def seed():
+    print("Dropping and recreating database...")
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
+    
+    db = SessionLocal()
+    
+    images = download_images()
+    
+    print(f"Generating {NUM_CITIZENS} Citizens and {NUM_GOV} Gov Officials...")
+    users = []
+    citizens = []
+    officials = []
+    
+    password_hash = hash_password("password123")
+    
+    # Generate Citizens
+    for _ in range(NUM_CITIZENS):
+        u = models.User(
+            name=fake.name(),
+            email=fake.unique.email().replace('@', '@citizen.').lower(),
+            password_hash=password_hash,
+            role=models.UserRole.citizen,
+            points=random.randint(0, 500)
+        )
+        users.append(u)
+        citizens.append(u)
+        
+    # Generate Gov Officials
+    for _ in range(NUM_GOV):
+        u = models.User(
+            name=fake.name(),
+            email=fake.unique.email().replace('@', '@gov.').lower(),
+            password_hash=password_hash,
+            role=models.UserRole.admin,
+            points=0
+        )
+        users.append(u)
+        officials.append(u)
+        
+    db.add_all(users)
+    db.commit()
+    
+    print(f"Generating {NUM_ISSUES} Issues...")
+    issues = []
+    now = datetime.utcnow()
+    
+    for _ in range(NUM_ISSUES):
+        cat = random.choice(CATEGORIES)
+        reporter = random.choice(citizens)
+        
+        # Mix of statuses
+        r = random.random()
+        if r < 0.4:
+            status = models.IssueStatus.resolved
+        elif r < 0.7:
+            status = models.IssueStatus.verified
+        elif r < 0.9:
+            status = models.IssueStatus.open
+        else:
+            status = models.IssueStatus.in_progress
+            
+        created_at = now - timedelta(days=random.randint(1, 180), hours=random.randint(0, 24))
+        
+        lat, lng = get_random_location()
+        issue = models.Issue(
+            title=fake.sentence(nb_words=6)[:250],
+            description=fake.paragraph(nb_sentences=3),
+            category=cat,
+            severity=random.choice(list(models.IssueSeverity)),
+            status=status,
+            latitude=lat,
+            longitude=lng,
+            address=fake.address(),
+            image_url=f"/uploads/{images.get(cat, 'default.jpg')}",
+            reported_by=reporter.id,
+            vote_count=random.randint(1, 100) if status != models.IssueStatus.open else random.randint(1, 5),
+            created_at=created_at,
+            updated_at=created_at + timedelta(days=random.randint(1, 10)),
+            status_changed_at=created_at + timedelta(days=random.randint(1, 10))
+        )
+        
+        if status == models.IssueStatus.resolved:
+            issue.assigned_to = random.choice(officials).id
+            
+        issues.append(issue)
+        
+    db.add_all(issues)
+    db.commit()
+    
+    # Generate credentials.md
+    print("Writing credentials.md...")
+    with open("../credentials.md", "w", encoding="utf-8") as f:
+        f.write("# Generated User Credentials\n\n")
+        f.write("All passwords are: `password123`\n\n")
+        
+        f.write("## Government Officials\n\n")
+        f.write("| Name | Email | Role |\n")
+        f.write("|---|---|---|\n")
+        for u in officials:
+            f.write(f"| {u.name} | {u.email} | Gov/Admin |\n")
+            
+        f.write("\n## Citizens\n\n")
+        f.write("| Name | Email | Points |\n")
+        f.write("|---|---|---|\n")
+        for u in citizens:
+            f.write(f"| {u.name} | {u.email} | {u.points} |\n")
+            
+        f.write(f"\n## Generated Incidents Summary\n")
+        f.write(f"Total Incidents: {NUM_ISSUES}\n")
+        
+    print("Mass seeding complete!")
+
+if __name__ == "__main__":
+    seed()
