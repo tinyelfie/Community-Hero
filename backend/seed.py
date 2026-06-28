@@ -1,14 +1,11 @@
 import os
-import sys
+import json
 import random
-import requests
 import uuid
+import sys
 from datetime import datetime, timedelta
-from faker import Faker
-
-# Make generation deterministic so Render matches local exactly
-Faker.seed(42)
-random.seed(42)
+import pandas as pd
+import shutil
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
@@ -16,27 +13,19 @@ from database import SessionLocal, engine, Base
 import models
 from auth import hash_password
 
-fake = Faker('en_IN')
+CATEGORIES = {
+    "pothole": models.IssueCategory.pothole,
+    "streetlight": models.IssueCategory.streetlight,
+    "water_leak": models.IssueCategory.water_leak,
+    "waste": models.IssueCategory.waste,
+    "drainage": models.IssueCategory.drainage,
+    "fallen_tree": models.IssueCategory.fallen_tree,
+    "broken_sidewalk": models.IssueCategory.broken_sidewalk,
+    "stray_animal": models.IssueCategory.stray_animal,
+    "illegal_parking": models.IssueCategory.illegal_parking,
+    "vandalism": models.IssueCategory.vandalism
+}
 
-# Configuration
-NUM_CITIZENS = 200
-NUM_GOV = 25
-NUM_ISSUES = 500
-
-CATEGORIES = [
-    models.IssueCategory.pothole,
-    models.IssueCategory.streetlight,
-    models.IssueCategory.water_leak,
-    models.IssueCategory.waste,
-    models.IssueCategory.drainage,
-    models.IssueCategory.fallen_tree,
-    models.IssueCategory.broken_sidewalk,
-    models.IssueCategory.stray_animal,
-    models.IssueCategory.illegal_parking,
-    models.IssueCategory.vandalism
-]
-
-# Major Indian Cities for realistic distribution
 CITIES = [
     {"name": "Mumbai", "lat": 19.0760, "lng": 72.8777},
     {"name": "Delhi", "lat": 28.7041, "lng": 77.1025},
@@ -48,52 +37,44 @@ CITIES = [
     {"name": "Pune", "lat": 18.5204, "lng": 73.8567},
     {"name": "Jaipur", "lat": 26.9124, "lng": 75.7873},
     {"name": "Lucknow", "lat": 26.8467, "lng": 80.9462},
-    {"name": "Kanpur", "lat": 26.4499, "lng": 80.3319},
-    {"name": "Nagpur", "lat": 21.1458, "lng": 79.0882},
-    {"name": "Indore", "lat": 22.7196, "lng": 75.8577},
-    {"name": "Thane", "lat": 19.2183, "lng": 72.9781},
-    {"name": "Bhopal", "lat": 23.2599, "lng": 77.4126},
-    {"name": "Visakhapatnam", "lat": 17.6868, "lng": 83.2185},
-    {"name": "Patna", "lat": 25.5941, "lng": 85.1376},
-    {"name": "Vadodara", "lat": 22.3072, "lng": 73.1812},
-    {"name": "Ghaziabad", "lat": 28.6692, "lng": 77.4538},
-    {"name": "Ludhiana", "lat": 30.9010, "lng": 75.8573},
 ]
 
-def get_random_location():
-    city = random.choice(CITIES)
-    # Add small random offset (roughly within a 15-20km radius)
-    lat_offset = random.uniform(-0.15, 0.15)
-    lng_offset = random.uniform(-0.15, 0.15)
+def get_random_location(city_name=None):
+    city = None
+    if city_name:
+        for c in CITIES:
+            if c["name"].lower() == str(city_name).lower():
+                city = c
+                break
+    if not city:
+        city = random.choice(CITIES)
+    lat_offset = random.uniform(-0.1, 0.1)
+    lng_offset = random.uniform(-0.1, 0.1)
     return city["lat"] + lat_offset, city["lng"] + lng_offset
 
-def download_images():
-    print("Downloading 10 category images...")
+def copy_images():
+    print("Copying images from Pictures to uploads...")
     os.makedirs("uploads", exist_ok=True)
+    pics_dir = "../Pictures"
+    if not os.path.exists(pics_dir):
+        print(f"Pictures directory {pics_dir} not found!")
+        return {}
+    
     images = {}
-    for cat in CATEGORIES:
-        filename = f"{cat.value}.jpg"
-        filepath = os.path.join("uploads", filename)
-        images[cat] = filename
-        
-        if os.path.exists(filepath):
-            print(f"Skipping {cat.value}, already exists.")
-            continue
+    for filename in os.listdir(pics_dir):
+        if filename.endswith(".jpg"):
+            cat_name = filename.replace(".jpg", "").lower().replace(" ", "_")
+            if cat_name == "street_light":
+                cat_name = "streetlight"
+            elif cat_name == "waste_management":
+                cat_name = "waste"
+                
+            shutil.copy(os.path.join(pics_dir, filename), os.path.join("uploads", filename))
             
-        print(f"Fetching image for {cat.value}...")
-        # Use loremflickr with category keyword
-        keyword = cat.value.replace("_", ",")
-        url = f"https://loremflickr.com/800/600/{keyword}"
-        try:
-            r = requests.get(url, timeout=10)
-            if r.status_code == 200:
-                with open(filepath, 'wb') as f:
-                    f.write(r.content)
-            else:
-                print(f"Failed to fetch {url} (status {r.status_code})")
-        except Exception as e:
-            print(f"Error fetching {url}: {e}")
-            
+            for key, val in CATEGORIES.items():
+                if key == cat_name:
+                    images[val] = filename
+                    break
     return images
 
 def seed():
@@ -103,23 +84,28 @@ def seed():
     
     db = SessionLocal()
     
-    images = download_images()
+    images = copy_images()
     
-    print(f"Generating {NUM_CITIZENS} Citizens and {NUM_GOV} Gov Officials...")
+    print("Loading users from users.json...")
+    with open("users.json", "r", encoding="utf-8") as f:
+        user_data = json.load(f)
+        
+    password_hash = hash_password("password123")
+    
     users = []
     citizens = []
     officials = []
     
-    password_hash = hash_password("password123")
-    
-    # Always include the three reliable test accounts
     test_citizen = models.User(
         name="Citizen Tester",
         email="citizen@test.com",
         password_hash=password_hash,
         role=models.UserRole.citizen,
-        points=250
+        points=150
     )
+    users.append(test_citizen)
+    citizens.append(test_citizen)
+    
     test_mod = models.User(
         name="Moderator Tester",
         email="mod@test.com",
@@ -127,37 +113,33 @@ def seed():
         role=models.UserRole.moderator,
         points=500
     )
+    users.append(test_mod)
+    
     test_admin = models.User(
         name="Admin Tester",
         email="admin@test.com",
         password_hash=password_hash,
         role=models.UserRole.admin,
-        points=999
+        points=0
     )
-    users.extend([test_citizen, test_mod, test_admin])
-    citizens.append(test_citizen)
+    users.append(test_admin)
     officials.append(test_admin)
     
-    # Load exact deterministic users from JSON
-    import json
-    with open(os.path.join(os.path.dirname(__file__), 'users.json'), 'r', encoding='utf-8') as f:
-        user_data = json.load(f)
-        
-    for cit in user_data['citizens']:
+    for cit in user_data["citizens"]:
         u = models.User(
-            name=cit['name'],
-            email=cit['email'],
+            name=cit["name"],
+            email=cit["email"],
             password_hash=password_hash,
             role=models.UserRole.citizen,
-            points=cit['points']
+            points=cit["points"]
         )
         users.append(u)
         citizens.append(u)
         
-    for gov in user_data['officials']:
+    for gov in user_data["officials"]:
         u = models.User(
-            name=gov['name'],
-            email=gov['email'],
+            name=gov["name"],
+            email=gov["email"],
             password_hash=password_hash,
             role=models.UserRole.admin,
             points=0
@@ -168,15 +150,24 @@ def seed():
     db.add_all(users)
     db.commit()
     
-    print(f"Generating {NUM_ISSUES} Issues...")
+    print("Reading incidents.xlsx...")
+    if not os.path.exists("incidents.xlsx"):
+        print("Error: incidents.xlsx not found.")
+        return
+        
+    df = pd.read_excel("incidents.xlsx")
     issues = []
     now = datetime.utcnow()
     
-    for _ in range(NUM_ISSUES):
-        cat = random.choice(CATEGORIES)
+    for idx, row in df.iterrows():
+        if pd.isna(row["category"]) or pd.isna(row["title"]):
+            continue
+            
+        cat_str = str(row["category"]).lower().strip()
+        cat = CATEGORIES.get(cat_str, models.IssueCategory.other)
+        
         reporter = random.choice(citizens)
         
-        # Mix of statuses
         r = random.random()
         if r < 0.4:
             status = models.IssueStatus.resolved
@@ -189,17 +180,27 @@ def seed():
             
         created_at = now - timedelta(days=random.randint(1, 180), hours=random.randint(0, 24))
         
-        lat, lng = get_random_location()
+        city = str(row["city"]).strip() if not pd.isna(row["city"]) else None
+        lat, lng = get_random_location(city)
+        
+        sev_str = str(row["severity"]).lower().strip() if not pd.isna(row["severity"]) else "low"
+        try:
+            severity = models.IssueSeverity(sev_str)
+        except ValueError:
+            severity = models.IssueSeverity.low
+            
+        img_filename = images.get(cat, "default.jpg")
+        
         issue = models.Issue(
-            title=fake.sentence(nb_words=6)[:250],
-            description=fake.paragraph(nb_sentences=3),
+            title=str(row["title"])[:250],
+            description=str(row["description"]),
             category=cat,
-            severity=random.choice(list(models.IssueSeverity)),
+            severity=severity,
             status=status,
             latitude=lat,
             longitude=lng,
-            address=fake.address(),
-            image_url=f"/uploads/{images.get(cat, 'default.jpg')}",
+            address=str(row["address"]) if not pd.isna(row["address"]) else None,
+            image_url=f"/uploads/{img_filename}",
             reported_by=reporter.id,
             vote_count=random.randint(1, 100) if status != models.IssueStatus.open else random.randint(1, 5),
             created_at=created_at,
@@ -212,31 +213,10 @@ def seed():
             
         issues.append(issue)
         
+    print(f"Adding {len(issues)} issues to database...")
     db.add_all(issues)
     db.commit()
-    
-    # Generate credentials.md
-    print("Writing credentials.md...")
-    with open("../credentials.md", "w", encoding="utf-8") as f:
-        f.write("# Generated User Credentials\n\n")
-        f.write("All passwords are: `password123`\n\n")
-        
-        f.write("## Government Officials\n\n")
-        f.write("| Name | Email | Role |\n")
-        f.write("|---|---|---|\n")
-        for u in officials:
-            f.write(f"| {u.name} | {u.email} | Gov/Admin |\n")
-            
-        f.write("\n## Citizens\n\n")
-        f.write("| Name | Email | Points |\n")
-        f.write("|---|---|---|\n")
-        for u in citizens:
-            f.write(f"| {u.name} | {u.email} | {u.points} |\n")
-            
-        f.write(f"\n## Generated Incidents Summary\n")
-        f.write(f"Total Incidents: {NUM_ISSUES}\n")
-        
-    print("Mass seeding complete!")
+    print("Database seeding complete!")
 
 if __name__ == "__main__":
     seed()
