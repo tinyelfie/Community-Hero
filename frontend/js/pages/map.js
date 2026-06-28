@@ -233,38 +233,8 @@ async function loadIssues() {
   try {
     const rawIssues = await api.issues.list({ limit: 1000 });
     
-    // Geofencing logic
-    const cachedLoc = localStorage.getItem('civichero_last_location');
-    let filteredByGeofence = false;
-    
-    if (cachedLoc) {
-      try {
-        const parsed = JSON.parse(cachedLoc);
-        const now = Date.now();
-        if (now - parsed.timestamp < 7 * 24 * 60 * 60 * 1000) {
-          allIssues = rawIssues.filter(issue => getHaversineDistance(parsed.lat, parsed.lng, issue.latitude, issue.longitude) <= 2);
-          filteredByGeofence = true;
-          
-          if (mapInstance) {
-            mapInstance.setView([parsed.lat, parsed.lng], 13);
-          }
-          
-          showGeofenceBanner();
-        } else {
-          updateGeolocationCache();
-          allIssues = rawIssues;
-        }
-      } catch (e) {
-        allIssues = rawIssues;
-      }
-    } else {
-      updateGeolocationCache();
-      allIssues = rawIssues;
-    }
-    
-    if (!filteredByGeofence) {
-      allIssues = rawIssues;
-    }
+    // Geofencing disabled - user requested to see all 500 incidents nationwide
+    allIssues = rawIssues;
 
     renderSidebarList();
     if (mapInstance) renderMarkers();
