@@ -108,6 +108,32 @@ def seed():
     
     password_hash = hash_password("password123")
     
+    # Always include the three reliable test accounts
+    test_citizen = models.User(
+        name="Citizen Tester",
+        email="citizen@test.com",
+        password_hash=password_hash,
+        role=models.UserRole.citizen,
+        points=250
+    )
+    test_mod = models.User(
+        name="Moderator Tester",
+        email="mod@test.com",
+        password_hash=password_hash,
+        role=models.UserRole.moderator,
+        points=500
+    )
+    test_admin = models.User(
+        name="Admin Tester",
+        email="admin@test.com",
+        password_hash=password_hash,
+        role=models.UserRole.admin,
+        points=999
+    )
+    users.extend([test_citizen, test_mod, test_admin])
+    citizens.append(test_citizen)
+    officials.append(test_admin)
+    
     # Generate Citizens
     for _ in range(NUM_CITIZENS):
         u = models.User(
