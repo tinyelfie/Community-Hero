@@ -6,7 +6,7 @@ def test_homepage_loads(page: Page):
     page.on("pageerror", lambda err: print(f"JS ERROR: {err.name}: {err.message} \n {err.stack}"))
     page.on("console", lambda msg: print(f"CONSOLE: {msg.text}"))
     page.goto("http://127.0.0.1:5500/")
-    expect(page).to_have_title("Community Hero | Better Cities, Together")
+    expect(page).to_have_title("Nagrik | Better Cities, Together")
     expect(page.locator("button:has-text('Report an Issue')").first).to_be_visible()
 
 def test_login_flow(page: Page):

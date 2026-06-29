@@ -1,5 +1,5 @@
 /**
- * Community Hero — components/navbar.js
+ * Nagrik — components/navbar.js
  * Sticky navigation bar rendering and state management
  */
 
@@ -14,7 +14,7 @@ export function renderNavbar() {
       <div class="flex justify-between items-center h-20 px-gutter max-w-container-max mx-auto">
         <div class="flex items-center gap-sm cursor-pointer" onclick="window.location.hash='home'">
           <span class="material-symbols-outlined text-primary text-headline-lg" data-icon="account_balance">account_balance</span>
-          <h1 class="font-brand text-title-md md:text-headline-lg bg-gradient-to-r from-primary to-tertiary bg-clip-text text-transparent pt-2 pb-1 leading-normal whitespace-nowrap">Community Hero</h1>
+          <h1 class="font-brand text-title-md md:text-headline-lg bg-gradient-to-r from-primary to-tertiary bg-clip-text text-transparent pt-2 pb-1 leading-normal whitespace-nowrap">Nagrik</h1>
         </div>
         <div class="flex items-center gap-md">
           <button id="dark-mode-toggle" class="hover:scale-105 hover:opacity-80 transition-all duration-300 text-on-surface-variant">

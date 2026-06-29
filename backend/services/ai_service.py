@@ -66,7 +66,7 @@ def analyze_issue_image(image_path: str) -> dict:
 
     try:
         img = Image.open(image_path)
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-1.5-flash-latest")
         response = model.generate_content([img, _CLASSIFICATION_PROMPT])
         result = _extract_json(response.text)
 
@@ -100,7 +100,7 @@ def generate_resolution_suggestion(category: str, description: str) -> str:
     )
 
     try:
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-1.5-flash-latest")
         response = model.generate_content(prompt)
         return response.text.strip()[:600]
     except Exception as e:
@@ -142,7 +142,7 @@ def check_duplicate(new_title: str, new_desc: str, existing_issues: list) -> dic
     """
 
     try:
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-1.5-flash-latest")
         response = model.generate_content(prompt)
         result = _extract_json(response.text)
         return {
@@ -186,7 +186,7 @@ def generate_resolution_suggestion_with_context(category: str, description: str,
     """
 
     try:
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-1.5-flash-latest")
         response = model.generate_content(prompt)
         return response.text.strip()
     except Exception as e:
@@ -214,7 +214,7 @@ def generate_weekly_digest(stats_text: str) -> str:
     """
 
     try:
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-1.5-flash-latest")
         response = model.generate_content(prompt)
         return response.text.strip()
     except Exception as e:
@@ -239,7 +239,7 @@ def estimate_issue_cost(category: str, severity: str) -> dict:
     """
     
     try:
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-1.5-flash-latest")
         response = model.generate_content(prompt)
         result = _extract_json(response.text)
         
@@ -258,4 +258,28 @@ def estimate_issue_cost(category: str, severity: str) -> dict:
     except Exception as e:
         print(f"[AI] estimate_issue_cost error: {e}")
         return {"estimated_cost_min": None, "estimated_cost_max": None}
+
+def draft_description(title: str, category: str, severity: str) -> str:
+    """
+    Generate a one-line description for an issue report.
+    """
+    if not _GEMINI_AVAILABLE:
+        return f"A {severity} severity issue regarding {category} was reported: {title}. Please investigate and take necessary action."
+
+    prompt = (
+        f"You are a helpful assistant for a civic reporting app. "
+        f"Based on the following issue details, write EXACTLY ONE sentence describing the issue "
+        f"and requesting attention. Do not include any markdown, bullet points, or extra text.\n\n"
+        f"Title: {title}\n"
+        f"Category: {category}\n"
+        f"Severity: {severity}"
+    )
+
+    try:
+        model = genai.GenerativeModel("gemini-1.5-flash-latest")
+        response = model.generate_content(prompt)
+        return response.text.strip()
+    except Exception as e:
+        print(f"[AI] draft_description error: {e}")
+        return f"A {severity} severity issue regarding {category} was reported: {title}. Please investigate and take necessary action."
 

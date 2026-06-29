@@ -6,6 +6,7 @@ let mapInstance = null;
 let currentMarker = null;
 
 export function renderReport(container) {
+  window.locationInteracted = false;
   container.innerHTML = `
     <main class="pt-24 pb-32 px-gutter max-w-2xl mx-auto space-y-lg">
       <!-- Intro Section -->
@@ -14,7 +15,7 @@ export function renderReport(container) {
         <p class="text-on-surface-variant font-body-md">Your contribution helps keep our community beautiful and safe. Detailed reports are processed 40% faster.</p>
       </section>
 
-      <form class="space-y-lg" id="report-form">
+      <form class="space-y-lg" id="report-form" novalidate>
         <!-- Draft Banner -->
         <div id="draft-banner" class="hidden glass-card p-4 rounded-xl shadow-lg border border-primary/30 flex-col md:flex-row items-center justify-between gap-4 mb-6">
           <div class="flex items-center gap-2 text-on-surface-variant font-bold">
@@ -33,23 +34,32 @@ export function renderReport(container) {
             <span class="font-label-sm text-label-sm uppercase tracking-wider">Step 1: Details</span>
           </div>
           <div class="space-y-sm">
-            <label class="block font-label-sm text-on-surface-variant px-1">Issue Title</label>
+            <label class="block font-label-sm text-on-surface-variant px-1">Issue Title <span class="text-error">*</span></label>
             <input id="report-title" class="w-full bg-surface-container-low border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 transition-all duration-300 outline-none" placeholder="e.g., Pothole on Maple Avenue" type="text" required/>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
             <div class="space-y-sm">
-              <label class="block font-label-sm text-on-surface-variant px-1">Category</label>
+              <label class="block font-label-sm text-on-surface-variant px-1">Category <span class="text-error">*</span></label>
               <select id="report-category" class="w-full bg-primary text-white focus:ring-2 focus:ring-primary-container rounded-lg p-3 transition-all outline-none appearance-none cursor-pointer shadow-md">
-                <option value="Infrastructure">Infrastructure</option>
-                <option value="Sanitation">Sanitation</option>
-                <option value="Public Safety">Public Safety</option>
-                <option value="Greenery/Parks">Greenery/Parks</option>
-                <option value="Other">Other</option>
+                <option value="" disabled selected>Select a category...</option>
+                <option value="pothole">Pothole / Road Repair</option>
+                <option value="streetlight">Broken Streetlight</option>
+                <option value="water_leak">Water Leak / Flooding</option>
+                <option value="waste">Waste / Garbage Dump</option>
+                <option value="drainage">Drainage / Sewer Issue</option>
+                <option value="fallen_tree">Fallen Tree / Branch</option>
+                <option value="broken_sidewalk">Broken Sidewalk</option>
+                <option value="stray_animal">Stray Animal Danger</option>
+                <option value="illegal_parking">Illegal Parking / Encroachment</option>
+                <option value="vandalism">Vandalism</option>
+                <option value="custom">Please Specify...</option>
               </select>
+              <input id="report-category-custom" class="w-full bg-surface-container-low border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 transition-all duration-300 outline-none hidden mt-2" placeholder="Enter your custom category" type="text"/>
             </div>
             <div class="space-y-sm">
-              <label class="block font-label-sm text-on-surface-variant px-1">Severity</label>
+              <label class="block font-label-sm text-on-surface-variant px-1">Severity <span class="text-error">*</span></label>
               <select id="report-severity" class="w-full bg-primary text-white focus:ring-2 focus:ring-primary-container rounded-lg p-3 transition-all outline-none appearance-none cursor-pointer shadow-md">
+                <option value="" disabled selected>Select severity...</option>
                 <option value="low">Low (Cosmetic)</option>
                 <option value="medium">Medium (Nuisance)</option>
                 <option value="high">High (Safety Hazard)</option>
@@ -58,7 +68,12 @@ export function renderReport(container) {
             </div>
           </div>
           <div class="space-y-sm">
-            <label class="block font-label-sm text-on-surface-variant px-1">Description</label>
+            <div class="flex justify-between items-center px-1">
+              <label class="block font-label-sm text-on-surface-variant">Description <span class="text-error">*</span></label>
+              <button type="button" id="btn-write-ai" class="text-xs text-primary font-bold flex items-center gap-1 hover:bg-primary/10 px-2 py-1 rounded transition-colors" title="Write with AI">
+                <span class="material-symbols-outlined" style="font-size: 14px;">auto_awesome</span> Write with AI
+              </button>
+            </div>
             <textarea id="report-description" class="w-full bg-surface-container-low border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 transition-all duration-300 outline-none resize-none" placeholder="Describe the issue in detail. Include landmarks or specific context..." rows="4" required></textarea>
             <div style="text-align:right; font-size:12px; color:#888; margin-top:4px;">
               <span id="desc-counter">0</span>/500
@@ -80,7 +95,7 @@ export function renderReport(container) {
               <p class="text-[10px] text-on-surface-variant/60">Maximum 3 files • JPEG, PNG</p>
             </div>
           </div>
-          <input type="file" id="report-media" class="hidden" accept="image/*,video/*" />
+          <input type="file" id="report-media" class="hidden" accept="image/*,video/*" multiple />
           
           <!-- Preview Area (Empty State) -->
           <div class="grid grid-cols-3 gap-sm" id="media-preview-container">
@@ -90,14 +105,14 @@ export function renderReport(container) {
           </div>
           
           <!-- AI Analysis Container -->
-          <div id="ai-analysis-container" class="mt-4"></div>
+          <div id="ai-analysis-container" class="mt-4 hidden"></div>
         </div>
 
         <!-- 3. Location Section -->
         <div class="glass-card p-md rounded-xl space-y-md shadow-[0_4px_20px_rgba(124,83,92,0.05)] overflow-hidden">
           <div class="flex items-center gap-2 text-primary font-bold">
             <span class="material-symbols-outlined">location_on</span>
-            <span class="font-label-sm text-label-sm uppercase tracking-wider">Step 3: Location</span>
+            <span class="font-label-sm text-label-sm uppercase tracking-wider">Step 3: Location <span class="text-error">*</span></span>
           </div>
           <div class="space-y-sm">
             <div class="relative">
@@ -145,12 +160,74 @@ export function renderReport(container) {
   setupDescriptionCounter();
   setupSubmit();
   setupDrafting();
+  setupCustomCategory();
+  setupAI();
+}
+
+function setupCustomCategory() {
+  const select = document.getElementById('report-category');
+  const customInput = document.getElementById('report-category-custom');
+  select.addEventListener('change', () => {
+    if (select.value === 'custom') {
+      customInput.classList.remove('hidden');
+      customInput.required = true;
+      customInput.focus();
+    } else {
+      customInput.classList.add('hidden');
+      customInput.required = false;
+      customInput.value = '';
+    }
+  });
+}
+
+function setupAI() {
+  const btn = document.getElementById('btn-write-ai');
+  btn.addEventListener('click', async () => {
+    const title = document.getElementById('report-title').value;
+    const category = document.getElementById('report-category').value;
+    const severity = document.getElementById('report-severity').value;
+    
+    if (!title || !category || !severity) {
+      toast.error('Please enter a title, category, and severity first');
+      return;
+    }
+    
+    const originalHTML = btn.innerHTML;
+    btn.innerHTML = '<span class="material-symbols-outlined animate-spin" style="font-size: 14px;">progress_activity</span> Generating...';
+    btn.disabled = true;
+    
+    try {
+      const res = await fetch(`${API_BASE}/issues/draft-description`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('Nagrik_token')}`
+        },
+        body: JSON.stringify({ title, category, severity })
+      });
+      const data = await res.json();
+      if (data.description) {
+        document.getElementById('report-description').value = data.description;
+        document.getElementById('desc-counter').textContent = data.description.length;
+        saveDraft();
+      } else {
+        toast.error('Failed to generate description');
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to generate description');
+    }
+    
+    btn.innerHTML = originalHTML;
+    btn.disabled = false;
+  });
 }
 
 function saveDraft() {
   const draft = {
     title: document.getElementById('report-title').value,
     category: document.getElementById('report-category').value,
+    customCategory: document.getElementById('report-category-custom') ? document.getElementById('report-category-custom').value : '',
     severity: document.getElementById('report-severity').value,
     description: document.getElementById('report-description').value,
     lat: document.getElementById('report-lat').value,
@@ -172,7 +249,17 @@ function setupDrafting() {
       try {
         const draft = JSON.parse(draftStr);
         if (draft.title) document.getElementById('report-title').value = draft.title;
-        if (draft.category) document.getElementById('report-category').value = draft.category;
+        if (draft.category) {
+          document.getElementById('report-category').value = draft.category;
+          if (draft.category === 'custom') {
+            const customInput = document.getElementById('report-category-custom');
+            if (customInput) {
+              customInput.classList.remove('hidden');
+              customInput.required = true;
+              customInput.value = draft.customCategory || '';
+            }
+          }
+        }
         if (draft.severity) document.getElementById('report-severity').value = draft.severity;
         if (draft.description) document.getElementById('report-description').value = draft.description;
         if (draft.lat) document.getElementById('report-lat').value = draft.lat;
@@ -181,6 +268,7 @@ function setupDrafting() {
         
         // Move map marker
         if (draft.lat && draft.lng && currentMarker && mapInstance) {
+           window.locationInteracted = true;
            const lat = parseFloat(draft.lat);
            const lng = parseFloat(draft.lng);
            currentMarker.setLatLng([lat, lng]);
@@ -256,6 +344,7 @@ function setupMap() {
   document.getElementById('report-lng').value = initialLng;
   
   if (prefillLat && prefillLng) {
+    window.locationInteracted = true;
     mapInstance.setView([initialLat, initialLng], 15);
     sessionStorage.removeItem('prefill_lat');
     sessionStorage.removeItem('prefill_lng');
@@ -263,6 +352,7 @@ function setupMap() {
   }
 
   currentMarker.on('dragend', function (e) {
+    window.locationInteracted = true;
     const pos = currentMarker.getLatLng();
     document.getElementById('report-lat').value = pos.lat;
     document.getElementById('report-lng').value = pos.lng;
@@ -271,6 +361,7 @@ function setupMap() {
   });
 
   mapInstance.on('click', function(e) {
+    window.locationInteracted = true;
     currentMarker.setLatLng(e.latlng);
     document.getElementById('report-lat').value = e.latlng.lat;
     document.getElementById('report-lng').value = e.latlng.lng;
@@ -284,6 +375,7 @@ function setupMap() {
       toast.success('Locating you...', '📍');
       navigator.geolocation.getCurrentPosition(
         (position) => {
+          window.locationInteracted = true;
           const lat = position.coords.latitude;
           const lng = position.coords.longitude;
           updateMapLocation(lat, lng);
@@ -379,6 +471,7 @@ function setupLocationSearch() {
           div.className = "p-4 hover:bg-surface-variant cursor-pointer border-b border-outline-variant/30 text-body-md text-on-surface";
           div.textContent = place.display_name;
           div.onclick = () => {
+            window.locationInteracted = true;
             input.value = place.display_name;
             resultsDiv.classList.add('hidden');
             updateMapLocation(parseFloat(place.lat), parseFloat(place.lon));
@@ -417,158 +510,67 @@ function setupLocationSearch() {
   });
 }
 
+window.selectedFiles = [];
+
 function setupMediaPreview() {
   const input = document.getElementById('report-media');
   const previewContainer = document.getElementById('media-preview-container');
   const dropzoneInner = document.getElementById('dropzone-inner');
   const aiContainer = document.getElementById('ai-analysis-container');
 
-  input.addEventListener('change', async (e) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
+  window.removeFile = (index) => {
+    window.selectedFiles.splice(index, 1);
+    renderPreviews();
+  };
+
+  function renderPreviews() {
+    if (window.selectedFiles.length === 0) {
+      dropzoneInner.innerHTML = `
+        <span class="material-symbols-outlined text-4xl text-primary/60 group-hover:scale-110 transition-transform duration-500">upload_file</span>
+        <p class="font-label-sm text-primary">Drop photos here or <span class="underline">browse</span></p>
+        <p class="text-[10px] text-on-surface-variant/60">Maximum 3 files • JPEG, PNG</p>
+      `;
+      previewContainer.innerHTML = `
+        <div class="aspect-square bg-surface-container rounded-lg border border-outline-variant/30 flex items-center justify-center text-outline-variant">
+          <span class="material-symbols-outlined">image</span>
+        </div>
+      `;
+      return;
+    }
+
+    dropzoneInner.innerHTML = `<p class="text-primary font-bold">${window.selectedFiles.length} file(s) selected</p>`;
+    
+    let html = '';
+    window.selectedFiles.forEach((file, index) => {
       const url = URL.createObjectURL(file);
-      
-      dropzoneInner.innerHTML = `<p class="text-primary font-bold">1 file selected: ${file.name}</p>`;
-      
       if (file.type.startsWith('image/')) {
-        previewContainer.innerHTML = `
-          <div class="aspect-square bg-surface-container rounded-lg border border-outline-variant/30 flex items-center justify-center overflow-hidden">
+        html += `
+          <div class="relative aspect-square bg-surface-container rounded-lg border border-outline-variant/30 overflow-hidden">
             <img src="${url}" class="w-full h-full object-cover">
+            <button type="button" onclick="event.stopPropagation(); window.removeFile(${index})" class="absolute top-1 right-1 bg-black/60 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-black/80 transition-colors">✕</button>
           </div>
         `;
-
-        // 1. Show loading state
-        aiContainer.innerHTML = `
-          <div id="ai-analysis-loading" style="display: flex; align-items: center; gap: 8px; justify-content: center; padding: 16px;">
-            <div class="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2" style="border-color: #FFCAD4;"></div>
-            <span style="font-size: 14px; color: #425B46; font-style: italic;">✨ AI is analyzing your image...</span>
-          </div>
-        `;
-
-        // 2. Create FormData and POST
-        const formData = new FormData();
-        formData.append('image', file);
-        
-        try {
-          const res = await fetch(`${API_BASE}/ai/preview`, {
-            method: 'POST',
-            body: formData
-          });
-          const aiResult = await res.json();
-          
-          if (aiResult.success) {
-            const category_conf = 88 + Math.floor(Math.random() * 10);
-            const severity_conf = 74 + Math.floor(Math.random() * 18);
-            const tagsHtml = (aiResult.tags || []).map(t => `<span class="tag-chip">#${t}</span>`).join('');
-            
-            // 3. Show AI analysis card
-            aiContainer.innerHTML = `
-              <style>
-                .ai-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-                .ai-label { width: 72px; font-size: 13px; color: #888; }
-                .ai-value { width: 100px; font-size: 13px; font-weight: 600; color: #425B46; text-transform: capitalize; }
-                .confidence-bar-track { flex: 1; height: 6px; background: #F0EDE8; border-radius: 99px; overflow: hidden; }
-                .confidence-bar-fill { height: 100%; border-radius: 99px; transition: width 0.8s ease; width: 0%; }
-                .confidence-pct { width: 36px; font-size: 12px; color: #888; text-align: right; }
-                .tag-chip { background: #F0EDE8; color: #425B46; font-size: 12px; padding: 4px 10px; border-radius: 99px; }
-              </style>
-              <div id="ai-preview-card" style="
-                background: white;
-                border: 1.5px solid #FFCAD4;
-                border-radius: 12px;
-                padding: 20px;
-                margin-top: 16px;
-                box-shadow: 0 4px 16px rgba(255,202,212,0.3);
-              ">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
-                  <span style="font-size:18px;">✨</span>
-                  <span style="font-weight:700; color:#425B46; font-size:15px;">
-                    AI Analysis Complete
-                  </span>
-                  <span style="margin-left:auto; font-size:12px; color:#888;">
-                    gemini-1.5-flash
-                  </span>
-                </div>
-
-                <div class="ai-row">
-                  <span class="ai-label">Category</span>
-                  <span class="ai-value" id="ai-category">${aiResult.category.replace('_', ' ')}</span>
-                  <div class="confidence-bar-track">
-                    <div class="confidence-bar-fill" id="cat-fill" style="background: #FFCAD4;"></div>
-                  </div>
-                  <span class="confidence-pct">${category_conf}%</span>
-                </div>
-
-                <div class="ai-row">
-                  <span class="ai-label">Severity</span>
-                  <span class="ai-value severity-${aiResult.severity}" id="ai-severity">${aiResult.severity}</span>
-                  <div class="confidence-bar-track">
-                    <div class="confidence-bar-fill" id="sev-fill" style="background: #FF8FA3;"></div>
-                  </div>
-                  <span class="confidence-pct">${severity_conf}%</span>
-                </div>
-
-                <div style="margin-top:14px; padding-top:14px; border-top:1px solid #E8E4D9;">
-                  <div style="font-size:12px; color:#888; margin-bottom:6px;">AI Summary</div>
-                  <div id="ai-summary" style="font-size:14px; color:#425B46; line-height:1.6;">${aiResult.summary}</div>
-                </div>
-
-                <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
-                  ${tagsHtml}
-                </div>
-
-                <div style="margin-top:14px; font-size:12px; color:#888; font-style:italic;">
-                  These fields have been pre-filled below. You can edit them before submitting.
-                </div>
-              </div>
-            `;
-            
-            // Animate bars on mount
-            setTimeout(() => {
-              const catFill = document.getElementById('cat-fill');
-              const sevFill = document.getElementById('sev-fill');
-              if(catFill) catFill.style.width = category_conf + '%';
-              if(sevFill) sevFill.style.width = severity_conf + '%';
-            }, 50);
-
-            // Auto-populate
-            // Category mapping
-            const catSelect = document.getElementById('report-category');
-            const targetCat = Object.values(catSelect.options).find(opt => opt.value.toLowerCase() === aiResult.category.toLowerCase() || opt.value.toLowerCase().includes(aiResult.category.toLowerCase()));
-            if (targetCat) catSelect.value = targetCat.value;
-            else if (['pothole', 'streetlight', 'water_leak', 'waste', 'drainage'].includes(aiResult.category.toLowerCase())) {
-                const map = {
-                    'pothole': 'Infrastructure',
-                    'streetlight': 'Infrastructure',
-                    'water_leak': 'Infrastructure',
-                    'waste': 'Sanitation',
-                    'drainage': 'Sanitation'
-                };
-                catSelect.value = map[aiResult.category.toLowerCase()] || 'Other';
-            } else {
-                catSelect.value = 'Other';
-            }
-            
-            document.getElementById('report-severity').value = aiResult.severity;
-            document.getElementById('report-title').value = aiResult.category.charAt(0).toUpperCase() + aiResult.category.slice(1).replace('_', ' ') + ' Issue';
-            document.getElementById('report-description').value = aiResult.summary;
-            
-          } else {
-            aiContainer.innerHTML = '';
-          }
-        } catch (err) {
-          console.error(err);
-          aiContainer.innerHTML = '';
-        }
       } else {
-        previewContainer.innerHTML = `
-          <div class="aspect-square bg-surface-container rounded-lg border border-outline-variant/30 flex flex-col items-center justify-center text-primary">
+        html += `
+          <div class="relative aspect-square bg-surface-container rounded-lg border border-outline-variant/30 flex flex-col items-center justify-center text-primary">
             <span class="material-symbols-outlined text-3xl">videocam</span>
             <span class="text-[10px] mt-1 line-clamp-1 px-2">${file.name}</span>
+            <button type="button" onclick="event.stopPropagation(); window.removeFile(${index})" class="absolute top-1 right-1 bg-black/60 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-black/80 transition-colors">✕</button>
           </div>
         `;
-        aiContainer.innerHTML = '';
       }
+    });
+    previewContainer.innerHTML = html;
+  }
+
+  input.addEventListener('change', (e) => {
+    if (e.target.files) {
+      for (const file of e.target.files) {
+        if (window.selectedFiles.length < 3) {
+          window.selectedFiles.push(file);
+        }
+      }
+      renderPreviews();
     }
   });
 }
@@ -584,7 +586,7 @@ function setupSubmit() {
     const loading = document.getElementById('btnLoading');
 
     // Get auth token first
-    const token = localStorage.getItem('Community Hero_token');
+    const token = localStorage.getItem('Nagrik_token');
     if (!token) {
       toast.error('Please login first to submit a report');
       navigate('login');
@@ -600,10 +602,37 @@ function setupSubmit() {
     btn.disabled = true;
 
     try {
+      const title = document.getElementById('report-title').value;
+      const description = document.getElementById('report-description').value;
+      const catSelect = document.getElementById('report-category');
+      let finalCategory = catSelect.value;
+      if (finalCategory === 'custom') {
+        const customVal = document.getElementById('report-category-custom').value;
+        if (customVal) finalCategory = customVal;
+      }
+      const severity = document.getElementById('report-severity').value;
+
+      if (!title || !finalCategory || !severity || !description) {
+        toast.error('Fill everything in step 1');
+        text.classList.remove('hidden');
+        loading.classList.add('hidden');
+        btn.disabled = false;
+        return;
+      }
+
+      if (!window.locationInteracted) {
+        toast.error('Please pinpoint the exact location in Step 3');
+        text.classList.remove('hidden');
+        loading.classList.add('hidden');
+        btn.disabled = false;
+        return;
+      }
+
       const formData = new FormData();
-      formData.append('title', document.getElementById('report-title').value);
-      formData.append('description', document.getElementById('report-description').value);
-      formData.append('category', document.getElementById('report-category').value);
+      formData.append('title', title);
+      formData.append('description', description);
+      formData.append('category', finalCategory);
+      formData.append('severity', severity);
       formData.append('latitude', document.getElementById('report-lat').value);
       formData.append('longitude', document.getElementById('report-lng').value);
 
@@ -614,10 +643,9 @@ function setupSubmit() {
         }
       }
 
-      const fileInput = document.getElementById('report-media');
-      if (fileInput.files[0]) {
-        formData.append('media', fileInput.files[0]);
-      }
+      if (window.selectedFiles[0]) formData.append('image', window.selectedFiles[0]);
+      if (window.selectedFiles[1]) formData.append('image2', window.selectedFiles[1]);
+      if (window.selectedFiles[2]) formData.append('image3', window.selectedFiles[2]);
 
       const res = await api.issues.create(formData);
       

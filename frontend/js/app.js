@@ -1,5 +1,5 @@
 /**
- * Community Hero — app.js
+ * Nagrik — app.js
  * Client-side hash router, auth state management, and app initialization
  */
 
@@ -25,8 +25,8 @@ export function getAuthState() {
 
 export function setAuthState(token, user) {
   authState = { token, user };
-  if (token) localStorage.setItem('Community Hero_token', token);
-  else localStorage.removeItem('Community Hero_token');
+  if (token) localStorage.setItem('Nagrik_token', token);
+  else localStorage.removeItem('Nagrik_token');
   updateNavAuth();
 }
 
@@ -46,7 +46,7 @@ export function navigate(path, state = {}) {
 }
 
 async function checkAuthOnLoad() {
-  const token = localStorage.getItem('Community Hero_token');
+  const token = localStorage.getItem('Nagrik_token');
   if (!token) return;
   try {
     const user = await api.auth.me();
@@ -153,16 +153,16 @@ function renderLogin(container) {
             <span class="text-3xl">👋</span>
           </div>
           <h2 class="font-display-xl text-3xl text-center text-on-surface mb-2">Welcome Back</h2>
-          <p class="text-center text-on-surface-variant font-body-md mb-8">Log in to Community Hero</p>
+          <p class="text-center text-on-surface-variant font-body-md mb-8">Log in to Nagrik</p>
           
           <form id="login-form" class="space-y-4">
             <div>
               <label class="block text-label-sm font-bold text-on-surface mb-1 uppercase">Email</label>
-              <input type="email" id="login-email" class="w-full px-4 py-3 rounded-lg bg-surface-container border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-on-surface" required value="citizen@example.com">
+              <input type="email" id="login-email" class="w-full px-4 py-3 rounded-lg bg-surface-container border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-on-surface" required value="kapadiavincent@gov.example.net">
             </div>
             <div>
               <label class="block text-label-sm font-bold text-on-surface mb-1 uppercase">Password</label>
-              <input type="password" id="login-password" class="w-full px-4 py-3 rounded-lg bg-surface-container border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-on-surface" required value="test123">
+              <input type="password" id="login-password" class="w-full px-4 py-3 rounded-lg bg-surface-container border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-on-surface" required value="password123">
             </div>
             <button type="submit" id="login-submit" class="w-full py-4 mt-6 sakura-gradient text-white rounded-full font-title-md shine-effect shadow-lg hover:scale-[1.02] active:scale-95 transition-all">
               Log In
@@ -174,9 +174,9 @@ function renderLogin(container) {
           </p>
           
           <div class="mt-8 p-4 bg-surface-container-low rounded-lg border border-outline-variant/30 text-center text-sm text-on-surface-variant">
-            <strong>Demo accounts:</strong><br>
-            citizen@example.com | moderator@example.com | admin@example.com<br>
-            Password: test123
+            <strong>Demo account:</strong><br>
+            kapadiavincent@gov.example.net<br>
+            Password: password123
           </div>
         </div>
       </div>
@@ -212,7 +212,7 @@ function renderRegister(container) {
           <div class="w-16 h-16 bg-surface-container rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-white/10">
             <span class="text-3xl">🌟</span>
           </div>
-          <h2 class="font-display-xl text-3xl text-center text-on-surface mb-2">Join Community Hero</h2>
+          <h2 class="font-display-xl text-3xl text-center text-on-surface mb-2">Join Nagrik</h2>
           <p class="text-center text-on-surface-variant font-body-md mb-8">Create an account to report issues and earn points.</p>
           
           <form id="register-form" class="space-y-4">
@@ -348,7 +348,7 @@ async function updateLiveCounter() {
   if (document.visibilityState !== 'visible') return;
   try {
     const stats = await api.insights.stats();
-    document.title = `(${stats.open_issues} open) Community Hero`;
+    document.title = `(${stats.open_issues} open) Nagrik`;
   } catch (err) {
     // Ignore errors for background tasks
   }

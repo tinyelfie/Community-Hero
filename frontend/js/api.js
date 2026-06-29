@@ -1,15 +1,15 @@
 /**
- * Community Hero — api.js
+ * Nagrik — api.js
  * Centralized fetch wrapper with automatic JWT injection.
  * All API calls go through this module.
  */
 
 const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '';
-const API_BASE = isLocal ? 'http://127.0.0.1:8000/api' : 'https://community-hero-api.onrender.com/api';
+const API_BASE = isLocal ? 'http://127.0.0.1:8000/api' : 'https://nagrik-api.onrender.com/api';
 
 /** Get the stored JWT token */
 function getToken() {
-  return localStorage.getItem('Community Hero_token');
+  return localStorage.getItem('Nagrik_token');
 }
 
 /** Core fetch wrapper — automatically injects Authorization header */

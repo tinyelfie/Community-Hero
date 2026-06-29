@@ -25,7 +25,7 @@ async def reverse_geocode(lat: float, lng: float) -> str:
     """Use Nominatim Geocoding API to get a human-readable address."""
     try:
         url = f"https://nominatim.openstreetmap.org/reverse?lat={lat}&lon={lng}&format=json"
-        headers = {"User-Agent": "CommunityHero/1.0"}
+        headers = {"User-Agent": "Nagrik/1.0"}
         async with httpx.AsyncClient(timeout=5) as client:
             resp = await client.get(url, headers=headers)
             data = resp.json()
@@ -40,46 +40,6 @@ def enrich_issue_with_ai(issue_id: str, image_path: str, db_url: str):
     """Background task: run Gemini AI on image and update issue record."""
     from sqlalchemy import create_engine
     from sqlalchemy.orm import sessionmaker
-    engine = create_engine(db_url)
-    Session = sessionmaker(bind=engine)
-    db = Session()
-    try:
-        import uuid
-        try:
-            issue_uuid = uuid.UUID(issue_id)
-        except ValueError:
-            return
-            
-        issue = db.query(models.Issue).filter(models.Issue.id == issue_uuid).first()
-        if not issue:
-            return
-        result = ai_service.analyze_issue_image(image_path)
-        issue.ai_summary = result.get("summary", "")
-        issue.ai_tags = ", ".join(result.get("tags", []))
-        category_val = result.get("category", "other")
-        severity_val = result.get("severity", "low")
-        try:
-            issue.category = models.IssueCategory(category_val)
-        except ValueError:
-            pass
-        try:
-            issue.severity = models.IssueSeverity(severity_val)
-        except ValueError:
-            pass
-            
-        # Estimate cost
-        cost_est = ai_service.estimate_issue_cost(category_val, severity_val)
-        issue.estimated_cost_min = cost_est.get("estimated_cost_min")
-        issue.estimated_cost_max = cost_est.get("estimated_cost_max")
-        
-        issue.updated_at = datetime.utcnow()
-        db.commit()
-    except Exception as e:
-        print(f"AI enrichment error: {e}")
-    finally:
-        db.close()
-
-
 @router.get("", response_model=List[schemas.IssueOut])
 async def list_issues(
     category: Optional[str] = None,
@@ -96,11 +56,7 @@ async def list_issues(
     query = db.query(models.Issue)
 
     if category:
-        try:
-            cat = models.IssueCategory(category)
-            query = query.filter(models.Issue.category == cat)
-        except ValueError:
-            pass
+        query = query.filter(models.Issue.category == category)
 
     if status:
         try:
@@ -133,50 +89,35 @@ async def create_issue(
     category: Optional[str] = Form("other"),
     severity: Optional[str] = Form("low"),
     image: Optional[UploadFile] = File(None),
+    image2: Optional[UploadFile] = File(None),
+    image3: Optional[UploadFile] = File(None),
     force_submit: bool = Form(False),
     duplicate_issue_id: Optional[str] = Form(None),
     current_user: models.User = Depends(auth.get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Create a new civic issue report with optional image. Triggers AI enrichment in background."""
-    if not force_submit:
-        # Check for duplicates within 1km
-        open_issues = db.query(models.Issue).filter(models.Issue.status == models.IssueStatus.open).all()
-        nearby = [i for i in open_issues if haversine_km(latitude, longitude, i.latitude, i.longitude) <= 1.0]
-        if nearby:
-            dup_result = ai_service.check_duplicate(title, description, nearby)
-            if dup_result.get("is_duplicate") and dup_result.get("matching_issue_id"):
-                import uuid
-                try:
-                    match_id = uuid.UUID(dup_result["matching_issue_id"])
-                    match_issue = next((i for i in nearby if i.id == match_id), None)
-                    if match_issue:
-                        return {
-                            "duplicate_detected": True,
-                            "matching_issue": {
-                                "id": str(match_issue.id),
-                                "title": match_issue.title,
-                                "distance": round(haversine_km(latitude, longitude, match_issue.latitude, match_issue.longitude), 2),
-                                "vote_count": match_issue.vote_count
-                            }
-                        }
-                except Exception as e:
-                    print(f"Duplicate check error: {e}")
-
-    # Save image
-    image_url = None
-    image_path = None
+    """Create a new civic issue report with optional images."""
+    urls = []
+    
     if image and image.filename:
-        image_url, image_path = await storage.save_upload(image)
+        url, _ = await storage.save_upload(image)
+        urls.append(url)
+    
+    if image2 and image2.filename:
+        url2, _ = await storage.save_upload(image2)
+        urls.append(url2)
+        
+    if image3 and image3.filename:
+        url3, _ = await storage.save_upload(image3)
+        urls.append(url3)
+        
+    image_url = ",".join(urls) if urls else None
 
     # Reverse geocode
     address = await reverse_geocode(latitude, longitude)
 
     # Validate enums
-    try:
-        cat = models.IssueCategory(category)
-    except ValueError:
-        cat = models.IssueCategory.other
+    cat = category if category else "other"
     try:
         sev = models.IssueSeverity(severity)
     except ValueError:
@@ -220,11 +161,6 @@ async def create_issue(
     db.add(sub)
     db.commit()
 
-    # Background AI enrichment
-    if image_path:
-        from config import DATABASE_URL
-        background_tasks.add_task(enrich_issue_with_ai, str(issue.id), image_path, DATABASE_URL)
-
     return schemas.IssueOut.model_validate(issue)
 
 
@@ -243,6 +179,17 @@ async def ai_preview(
     except Exception:
         pass
     return result
+
+
+@router.post("/draft-description", response_model=dict)
+def draft_description(
+    body: schemas.DraftDescriptionRequest,
+    current_user: models.User = Depends(auth.get_current_user)
+):
+    """Generate a one-line description for an issue report using AI."""
+    desc = ai_service.draft_description(body.title, body.category, body.severity)
+    return {"description": desc}
+
 
 
 @router.get("/{issue_id}", response_model=schemas.IssueDetail)

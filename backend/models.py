@@ -83,7 +83,7 @@ class Issue(Base):
     id = Column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
     title = Column(String(255), nullable=False)
     description = Column(Text, nullable=True)
-    category = Column(SAEnum(IssueCategory), nullable=False, default=IssueCategory.other)
+    category = Column(String(50), nullable=False, default="other")
     severity = Column(SAEnum(IssueSeverity), nullable=False, default=IssueSeverity.low)
     status = Column(SAEnum(IssueStatus), nullable=False, default=IssueStatus.open)
     latitude = Column(Float, nullable=False)

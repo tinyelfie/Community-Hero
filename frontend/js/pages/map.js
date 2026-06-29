@@ -1,5 +1,5 @@
 /**
- * Community Hero — pages/map.js
+ * Nagrik — pages/map.js
  * Full-screen interactive map with markers, heatmap, hotspots, sidebar, info drawer
  */
 
@@ -325,11 +325,42 @@ function renderSidebarList() {
       <div class="font-bold text-on-surface text-sm mb-2 line-clamp-2">${i.title}</div>
       <div class="flex items-center justify-between text-xs text-on-surface-variant">
         <span class="px-2 py-0.5 rounded-full border border-outline-variant capitalize">${i.status.replace('_', ' ')}</span>
-        <span class="flex items-center gap-1 font-medium">👍 ${i.vote_count}</span>
+        <span onclick="window._upvoteIssue(event, '${i.id}')" class="flex items-center gap-1 font-medium hover:bg-surface-variant hover:text-primary px-2 py-1 -mx-2 -my-1 rounded-full transition-colors cursor-pointer" title="Upvote">👍 <span id="vote-count-${i.id}">${i.vote_count}</span></span>
       </div>
     </div>
   `}).join('');
 }
+
+window._upvoteIssue = async (e, issueId) => {
+  e.stopPropagation();
+  const auth = getAuthState();
+  if (!auth.token) {
+    toast.error('Please log in to upvote issues');
+    return;
+  }
+  
+  try {
+    await api.votes.cast(issueId, 'upvote');
+    toast.success('Upvoted!', 'Success');
+    
+    // Update local state
+    const issue = allIssues.find(i => i.id === issueId);
+    if (issue) {
+      issue.vote_count += 1;
+      const counter = document.getElementById(`vote-count-${issueId}`);
+      if (counter) counter.textContent = issue.vote_count;
+      
+      // Update markers to reflect new sizes based on votes
+      renderMarkers();
+    }
+  } catch (err) {
+    if (err.message && err.message.toLowerCase().includes('already')) {
+      toast.info('You have already upvoted this issue', 'Info');
+    } else {
+      toast.error(err.message || 'Failed to upvote', 'Error');
+    }
+  }
+};
 
 function renderMarkers() {
   if (markerClusterGroup) {
@@ -426,6 +457,44 @@ async function selectIssue(issueId) {
   try {
     const full = await api.issues.get(issueId);
     renderDrawerContent(full);
+
+    // Fetch and render community assessment
+    try {
+      const assessment = await api.issues.communityAssessment(issueId);
+      const container = document.getElementById(`community-assessment-container-${issueId}`);
+      if (container) {
+        if (assessment.total_assessments === 0) {
+          container.innerHTML = `<div class="text-xs text-on-surface-variant p-2 italic text-center bg-surface rounded-lg">No community assessments yet. Be the first to verify!</div>`;
+        } else {
+          container.innerHTML = `
+            <div class="space-y-2">
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-on-surface-variant">Total Verifications:</span>
+                <span class="font-bold text-on-surface px-2 py-0.5 bg-primary/10 text-primary rounded">${assessment.total_assessments}</span>
+              </div>
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-on-surface-variant">Photo Matches Reality:</span>
+                <span class="font-bold text-on-surface">${assessment.photo_visible_percent.toFixed(0)}%</span>
+              </div>
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-on-surface-variant">Location Accurate:</span>
+                <span class="font-bold text-on-surface">${assessment.location_accurate_percent.toFixed(0)}%</span>
+              </div>
+              ${assessment.most_common_severity ? `
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-on-surface-variant">Community Consensus Severity:</span>
+                <span class="font-bold text-on-surface px-2 py-0.5 bg-surface-variant rounded uppercase tracking-wider">${assessment.most_common_severity}</span>
+              </div>` : ''}
+            </div>
+          `;
+        }
+      }
+    } catch (e) {
+      const container = document.getElementById(`community-assessment-container-${issueId}`);
+      if (container) {
+        container.innerHTML = `<div class="text-xs text-error p-2 italic text-center">Failed to load assessments.</div>`;
+      }
+    }
   } catch (e) {
     drawerContent.innerHTML = `<div class="p-8 text-center text-on-surface-variant flex flex-col items-center justify-center h-full"><div class="text-4xl mb-2">⚠️</div><div class="font-bold">Error loading issue</div></div>`;
   }
@@ -888,7 +957,7 @@ window._printIssue = async (issueId) => {
       <!DOCTYPE html>
       <html>
       <head>
-        <title>Community Hero Report - ${issue.id}</title>
+        <title>Nagrik Report - ${issue.id}</title>
         <style>
           body { font-family: 'Corbel', serif; color: #333; line-height: 1.6; margin: 0; padding: 40px; background: #fff; }
           .header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 30px; }
@@ -915,7 +984,7 @@ window._printIssue = async (issueId) => {
       <body>
         <div class="header">
           <div>
-            <h1>Community Hero</h1>
+            <h1>Nagrik</h1>
             <div style="font-size: 12px; color: #888;">Empower Your Neighborhood</div>
           </div>
           <div class="subtitle">Official Issue Report</div>
@@ -978,7 +1047,7 @@ window._printIssue = async (issueId) => {
         ` : ''}
         
         <div class="footer">
-          <div>Generated by Community Hero Platform</div>
+          <div>Generated by Nagrik Platform</div>
           <div>Printed on: ${nowStr}</div>
         </div>
         
@@ -1179,7 +1248,7 @@ window._openVerifyModal = (issueId) => {
         <div class="space-y-3">
           <p class="text-sm font-bold text-on-surface">1. Is this issue clearly visible in the photo?</p>
           <div class="flex gap-2">
-            <button class="verify-opt flex-1 py-3 rounded-xl border border-outline-variant font-bold text-sm text-on-surface hover:bg-primary/10 hover:border-primary transition-colors" data-group="photo" data-val="true">Yes</button>
+            <button class="verify-opt flex-1 py-3 rounded-xl border border-outline-variant font-bold text-sm text-on-surface hover:bg-error/10 hover:border-error transition-colors" data-group="photo" data-val="true">Yes</button>
             <button class="verify-opt flex-1 py-3 rounded-xl border border-outline-variant font-bold text-sm text-on-surface hover:bg-error/10 hover:border-error transition-colors" data-group="photo" data-val="false">No</button>
           </div>
         </div>
@@ -1187,7 +1256,7 @@ window._openVerifyModal = (issueId) => {
         <div class="space-y-3">
           <p class="text-sm font-bold text-on-surface">2. Does the location seem accurate?</p>
           <div class="flex gap-2">
-            <button class="verify-opt flex-1 py-3 rounded-xl border border-outline-variant font-bold text-sm text-on-surface hover:bg-primary/10 hover:border-primary transition-colors" data-group="location" data-val="true">Yes</button>
+            <button class="verify-opt flex-1 py-3 rounded-xl border border-outline-variant font-bold text-sm text-on-surface hover:bg-error/10 hover:border-error transition-colors" data-group="location" data-val="true">Yes</button>
             <button class="verify-opt flex-1 py-3 rounded-xl border border-outline-variant font-bold text-sm text-on-surface hover:bg-error/10 hover:border-error transition-colors" data-group="location" data-val="false">No</button>
           </div>
         </div>
@@ -1195,9 +1264,9 @@ window._openVerifyModal = (issueId) => {
         <div class="space-y-3">
           <p class="text-sm font-bold text-on-surface">3. How severe does this look?</p>
           <div class="flex gap-2">
-            <button class="verify-opt flex-1 py-3 rounded-xl border border-outline-variant font-bold text-sm text-on-surface hover:bg-secondary/20 hover:border-secondary transition-colors" data-group="severity" data-val="mild">Mild</button>
-            <button class="verify-opt flex-1 py-3 rounded-xl border border-outline-variant font-bold text-sm text-on-surface hover:bg-primary/20 hover:border-primary transition-colors" data-group="severity" data-val="moderate">Moderate</button>
-            <button class="verify-opt flex-1 py-3 rounded-xl border border-outline-variant font-bold text-sm text-on-surface hover:bg-error/20 hover:border-error transition-colors" data-group="severity" data-val="severe">Severe</button>
+            <button class="verify-opt flex-1 py-3 rounded-xl border border-outline-variant font-bold text-sm text-on-surface hover:bg-error/10 hover:border-error transition-colors" data-group="severity" data-val="mild">Mild</button>
+            <button class="verify-opt flex-1 py-3 rounded-xl border border-outline-variant font-bold text-sm text-on-surface hover:bg-error/10 hover:border-error transition-colors" data-group="severity" data-val="moderate">Moderate</button>
+            <button class="verify-opt flex-1 py-3 rounded-xl border border-outline-variant font-bold text-sm text-on-surface hover:bg-error/10 hover:border-error transition-colors" data-group="severity" data-val="severe">Severe</button>
           </div>
         </div>
         
@@ -1228,21 +1297,12 @@ window._openVerifyModal = (issueId) => {
       
       // Update UI
       modal.querySelectorAll(`.verify-opt[data-group="${group}"]`).forEach(b => {
-        b.classList.remove('bg-primary', 'bg-error', 'bg-secondary', 'text-white');
-        b.classList.add('bg-surface', 'text-on-surface');
+        b.classList.remove('bg-primary', 'bg-error', 'bg-secondary', 'text-white', 'bg-surface');
+        b.classList.add('text-on-surface');
       });
       
-      if (val === 'true') {
-        btn.classList.add('bg-primary', 'text-white');
-      } else if (val === 'false') {
-        btn.classList.add('bg-error', 'text-white');
-      } else if (val === 'mild') {
-        btn.classList.add('bg-secondary', 'text-white');
-      } else if (val === 'moderate') {
-        btn.classList.add('bg-primary', 'text-white');
-      } else if (val === 'severe') {
-        btn.classList.add('bg-error', 'text-white');
-      }
+      btn.classList.remove('text-on-surface');
+      btn.classList.add('bg-error', 'text-white');
 
       // Check if all answered
       if (answers.photo !== null && answers.location !== null && answers.severity !== null) {
@@ -1252,7 +1312,7 @@ window._openVerifyModal = (issueId) => {
     });
   });
 
-  submitBtn.addEventListener('click', async () => {
+  submitBtn.addEventListener('click', async (e) => {
     const payload = {
       photo_visible: answers.photo === 'true',
       location_accurate: answers.location === 'true',
@@ -1264,13 +1324,13 @@ window._openVerifyModal = (issueId) => {
       const res = await api.issues.microVerify(issueId, payload);
       
       if (res.success) {
-        toast.show(`Thank you! You earned ${res.points_earned} points.`, 'success');
-        showFloatingPoints(res.points_earned, window.innerWidth/2, window.innerHeight/2);
+        toast.success(`Thank you! You earned ${res.points_earned} points.`, 'Success');
+        showFloatingPoints(e, res.points_earned);
         modal.remove();
         loadCommunityAssessment(issueId);
       }
-    } catch (e) {
-      toast.show(e.message || 'Failed to submit verification', 'error');
+    } catch (err) {
+      toast.error(err.message || 'Failed to submit verification', 'Error');
       submitBtn.textContent = 'Submit Verification';
     }
   });

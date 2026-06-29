@@ -1,5 +1,5 @@
 /**
- * Community Hero — components/toast.js
+ * Nagrik — components/toast.js
  * Toast notification system: success, error, info, warning
  */
 

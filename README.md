@@ -1,4 +1,4 @@
-# Community Hero
+# Nagrik
 
 > AI-powered civic issue reporting and analytics for Indian cities.
 

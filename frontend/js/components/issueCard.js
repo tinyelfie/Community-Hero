@@ -1,6 +1,6 @@
 import api, { API_BASE } from '../api.js';
 /**
- * Community Hero — components/issueCard.js
+ * Nagrik — components/issueCard.js
  * Reusable issue card HTML builder
  */
 
@@ -71,8 +71,10 @@ export function buildIssueCard(issue, opts = {}) {
   const dateStr = formatDate(issue.created_at);
   const address = issue.address || 'Location unknown';
   const summary = issue.ai_summary || issue.description || 'No description available.';
-  const imageUrl = issue.image_url 
-    ? (issue.image_url.startsWith('http') ? issue.image_url : `${API_BASE.replace('/api', '')}${issue.image_url}`) 
+  const imageUrls = issue.image_url ? issue.image_url.split(',') : [];
+  const primaryImageUrl = imageUrls[0] || null;
+  const imageUrl = primaryImageUrl 
+    ? (primaryImageUrl.startsWith('http') ? primaryImageUrl : `${API_BASE.replace('/api', '')}${primaryImageUrl}`) 
     : null;
 
   if (compact) {
@@ -202,7 +204,7 @@ window._shareIssue = async (title, cardEl) => {
   // Add branding footer
   const branding = document.createElement('div');
   branding.className = 'w-full text-center text-white text-xs font-bold py-2 mt-2 bg-[#FF8FA3] rounded-b-lg';
-  branding.textContent = 'Reported on Community Hero — your city, your voice';
+  branding.textContent = 'Reported on Nagrik — your city, your voice';
   cardEl.appendChild(branding);
   
   try {
@@ -211,12 +213,12 @@ window._shareIssue = async (title, cardEl) => {
     
     canvas.toBlob((blob) => {
       if (!blob) return;
-      const file = new File([blob], 'community-hero-issue.png', { type: 'image/png' });
+      const file = new File([blob], 'nagrik-issue.png', { type: 'image/png' });
       
       if (navigator.share) {
         navigator.share({
           title: title,
-          text: 'Check out this civic issue on Community Hero',
+          text: 'Check out this civic issue on Nagrik',
           files: [file]
         }).catch(err => console.error('Share failed:', err));
       } else {
@@ -224,7 +226,7 @@ window._shareIssue = async (title, cardEl) => {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'community-hero-issue.png';
+        a.download = 'nagrik-issue.png';
         a.click();
         URL.revokeObjectURL(url);
       }

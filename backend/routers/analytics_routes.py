@@ -93,7 +93,7 @@ def get_stats(db: Session = Depends(get_db)):
 
     # Issues by category
     cat_rows = db.query(models.Issue.category, func.count(models.Issue.id)).group_by(models.Issue.category).all()
-    issues_by_category = {row[0].value: row[1] for row in cat_rows}
+    issues_by_category = {row[0]: row[1] for row in cat_rows}
 
     # Monthly trend: last 6 months
     monthly_trend = []

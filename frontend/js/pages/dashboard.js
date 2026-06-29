@@ -8,8 +8,8 @@ export async function renderDashboard(container) {
       <div class="max-w-6xl mx-auto">
         <div class="flex items-center justify-between mb-2">
           <h1 class="font-display-xl text-3xl text-on-surface">City Analytics Dashboard</h1>
-          <button id="export-csv-btn" class="bg-primary text-white px-4 py-2 rounded-lg font-bold shadow hover:bg-primary/90 flex items-center gap-2">
-            <span>⬇️</span> Export Data
+          <button id="export-csv-btn" onclick="window.print()" class="bg-primary text-white px-4 py-2 rounded-lg font-bold shadow hover:bg-primary/90 flex items-center gap-2">
+            Export Data
           </button>
         </div>
         <p class="text-on-surface-variant font-body-md mb-8">Live metrics and insights on community reports.</p>

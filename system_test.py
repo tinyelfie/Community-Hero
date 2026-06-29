@@ -12,7 +12,7 @@ PYTHON = os.path.join(BACKEND_DIR, "venv", "Scripts", "python.exe")
 
 def test_system():
     print("=" * 60)
-    print("  COMMUNITY HERO — FULL SYSTEM TEST SUITE")
+    print("  NAGRIK — FULL SYSTEM TEST SUITE")
     print("=" * 60)
 
     # ── Boot Backend ──────────────────────────────────────────────

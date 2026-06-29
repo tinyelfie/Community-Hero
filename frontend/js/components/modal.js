@@ -1,5 +1,5 @@
 /**
- * Community Hero — components/modal.js
+ * Nagrik — components/modal.js
  * Generic modal system with open/close, fade+scale animation
  */
 

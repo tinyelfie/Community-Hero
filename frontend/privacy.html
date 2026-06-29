@@ -1,13 +1,315 @@
 <!DOCTYPE html>
-<html>
+<html class="light" lang="en">
 <head>
-<title>Privacy Policy</title>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+  <title>Privacy Policy | Nagrik</title>
+  
+  <meta name="description" content="Report, verify, and track civic issues in your city.">
+  <link rel="manifest" href="/manifest.json">
+
+  <!-- Chart.js for Dashboard -->
+  
+  
+  <!-- Leaflet for Maps -->
+  
+  
+  
+  
+  
+  
+
+  <!-- HTML2Canvas for capturing cards -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Corben:wght@400&family=Ultra&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  
+  <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                      "background": "var(--color-background)",
+                      "on-surface": "var(--color-on-surface)",
+                      "on-secondary-container": "var(--color-on-secondary-container)",
+                      "on-tertiary-fixed": "var(--color-on-tertiary-fixed)",
+                      "secondary-fixed-dim": "var(--color-secondary-fixed-dim)",
+                      "inverse-surface": "var(--color-inverse-surface)",
+                      "surface-container-low": "var(--color-surface-container-low)",
+                      "tertiary-fixed": "var(--color-tertiary-fixed)",
+                      "error": "var(--color-error)",
+                      "primary-fixed": "var(--color-primary-fixed)",
+                      "on-primary-fixed": "var(--color-on-primary-fixed)",
+                      "on-tertiary": "var(--color-on-tertiary)",
+                      "on-secondary-fixed-variant": "var(--color-on-secondary-fixed-variant)",
+                      "surface-container": "var(--color-surface-container)",
+                      "inverse-on-surface": "var(--color-inverse-on-surface)",
+                      "surface": "var(--color-surface)",
+                      "surface-tint": "var(--color-surface-tint)",
+                      "on-primary-fixed-variant": "var(--color-on-primary-fixed-variant)",
+                      "tertiary-fixed-dim": "var(--color-tertiary-fixed-dim)",
+                      "on-secondary-fixed": "var(--color-on-secondary-fixed)",
+                      "surface-container-highest": "var(--color-surface-container-highest)",
+                      "on-tertiary-fixed-variant": "var(--color-on-tertiary-fixed-variant)",
+                      "primary-container": "var(--color-primary-container)",
+                      "on-primary-container": "var(--color-on-primary-container)",
+                      "surface-container-lowest": "var(--color-surface-container-lowest)",
+                      "surface-bright": "var(--color-surface-bright)",
+                      "error-container": "var(--color-error-container)",
+                      "on-tertiary-container": "var(--color-on-tertiary-container)",
+                      "primary": "var(--color-primary)",
+                      "surface-container-high": "var(--color-surface-container-high)",
+                      "primary-fixed-dim": "var(--color-primary-fixed-dim)",
+                      "on-primary": "var(--color-on-primary)",
+                      "outline": "var(--color-outline)",
+                      "secondary": "var(--color-secondary)",
+                      "on-surface-variant": "var(--color-on-surface-variant)",
+                      "on-error": "var(--color-on-error)",
+                      "tertiary-container": "var(--color-tertiary-container)",
+                      "surface-dim": "var(--color-surface-dim)",
+                      "secondary-container": "var(--color-secondary-container)",
+                      "on-background": "var(--color-on-background)",
+                      "surface-variant": "var(--color-surface-variant)",
+                      "inverse-primary": "var(--color-inverse-primary)",
+                      "secondary-fixed": "var(--color-secondary-fixed)",
+                      "on-secondary": "var(--color-on-secondary)",
+                      "outline-variant": "var(--color-outline-variant)",
+                      "tertiary": "var(--color-tertiary)",
+                      "on-error-container": "var(--color-on-error-container)"
+},
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "base": "8px",
+                    "gutter": "20px",
+                    "container-max": "1200px",
+                    "lg": "48px",
+                    "sm": "12px",
+                    "xl": "80px",
+                    "md": "24px"
+            },
+            "fontFamily": {
+                    "brand": ["Ultra", "serif"],
+                    "label-sm": ["Corben", "serif"],
+                    "headline-lg": ["Corben", "serif"],
+                    "headline-lg-mobile": ["Corben", "serif"],
+                    "title-md": ["Corben", "serif"],
+                    "body-md": ["Corben", "serif"],
+                    "display-xl": ["Corben", "serif"],
+                    "body-lg": ["Corben", "serif"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                    "title-md": ["20px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+  </script>
+  <style>
+      body { font-family: 'Corben', serif; -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; min-height: 100dvh; }
+      .leaflet-container { font-family: 'Corben', serif !important; font-weight: 400 !important; }
+      option { color: #000 !important; background-color: #fff !important; }
+      #app { flex: 1; }
+      .glass-card {
+          background: rgba(255, 255, 255, 0.7);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+      .dark .glass-card {
+          background: rgba(48, 49, 45, 0.6);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .sakura-gradient, .sakura-dawn {
+          background: linear-gradient(135deg, #7c535c 0%, #9b4053 100%);
+      }
+      .shine-effect:hover {
+          position: relative;
+          overflow: hidden;
+      }
+      .shine-effect:hover::after {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+          transform: rotate(45deg);
+          animation: shine 0.8s ease-in-out;
+      }
+      @keyframes shine {
+          0% { transform: translateX(-100%) rotate(45deg); }
+          100% { transform: translateX(100%) rotate(45deg); }
+      }
+      .custom-scroll::-webkit-scrollbar {
+          width: 4px;
+      }
+      .custom-scroll::-webkit-scrollbar-thumb {
+          background: #d4c2c4;
+          border-radius: 10px;
+      }
+      .status-stepper { display: flex; align-items: center; padding: 16px 0; margin: 16px 0; border-top: 1px solid #E8E4D9; border-bottom: 1px solid #E8E4D9; }
+      .step { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
+      .step-dot { width: 14px; height: 14px; border-radius: 50%; background: #E8E4D9; border: 2px solid #E8E4D9; transition: all 0.3s ease; }
+      .step.active .step-dot { background: #FFCAD4; border-color: #FF8FA3; box-shadow: 0 0 0 3px rgba(255,143,163,0.2); }
+      .step.completed .step-dot { background: #B7E4C7; border-color: #4CAF50; }
+      .step-label { font-size: 11px; color: #888; white-space: nowrap; }
+      .step.active .step-label { color: #425B46; font-weight: 600; }
+      .step-line { flex: 1; height: 2px; background: #E8E4D9; margin: 0 4px; margin-bottom: 18px; }
+      .step-line.completed { background: #B7E4C7; }
+      
+      .hotspot-glow {
+          width: 16px;
+          height: 16px;
+          background-color: transparent;
+          border: 2px solid #ff4d4d;
+          border-radius: 50%;
+          box-shadow: 0 0 10px 3px rgba(255, 77, 77, 0.6), inset 0 0 8px 2px rgba(255, 77, 77, 0.6);
+      }
+  </style>
 <style>
-  body { font-family: sans-serif; padding: 2rem; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; }
+:root {
+  --color-background: #fbf9f3;
+  --color-on-surface: #1b1c19;
+  --color-on-secondary-container: #426b54;
+  --color-on-tertiary-fixed: #400014;
+  --color-secondary-fixed-dim: #a4d1b4;
+  --color-inverse-surface: #30312d;
+  --color-surface-container-low: #f5f3ee;
+  --color-tertiary-fixed: #ffd9dd;
+  --color-error: #ba1a1a;
+  --color-primary-fixed: #ffd9df;
+  --color-on-primary-fixed: #30121a;
+  --color-on-tertiary: #ffffff;
+  --color-on-secondary-fixed-variant: #264f39;
+  --color-surface-container: #f0eee8;
+  --color-inverse-on-surface: #f2f1eb;
+  --color-surface: #fbf9f3;
+  --color-surface-tint: #7c535c;
+  --color-on-primary-fixed-variant: #613c45;
+  --color-tertiary-fixed-dim: #ffb2bd;
+  --color-on-secondary-fixed: #002112;
+  --color-surface-container-highest: #e4e2dd;
+  --color-on-tertiary-fixed-variant: #7d283c;
+  --color-primary-container: #ffcad4;
+  --color-on-primary-container: #7b525b;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-bright: #fbf9f3;
+  --color-error-container: #ffdad6;
+  --color-on-tertiary-container: #9a3f52;
+  --color-primary: #7c535c;
+  --color-surface-container-high: #eae8e2;
+  --color-primary-fixed-dim: #edb9c3;
+  --color-on-primary: #ffffff;
+  --color-outline: #827476;
+  --color-secondary: #3e6750;
+  --color-on-surface-variant: #504446;
+  --color-on-error: #ffffff;
+  --color-tertiary-container: #ffcad1;
+  --color-surface-dim: #dbdad4;
+  --color-secondary-container: #bdeacd;
+  --color-on-background: #1b1c19;
+  --color-surface-variant: #e4e2dd;
+  --color-inverse-primary: #edb9c3;
+  --color-secondary-fixed: #c0edd0;
+  --color-on-secondary: #ffffff;
+  --color-outline-variant: #d4c2c4;
+  --color-tertiary: #9b4053;
+  --color-on-error-container: #93000a;
+}
+.dark {
+  color-scheme: dark;
+  --color-background: #121212;
+  --color-on-surface: #f2f1eb;
+  --color-on-secondary-container: #c0edd0;
+  --color-on-tertiary-fixed: #400014;
+  --color-secondary-fixed-dim: #a4d1b4;
+  --color-inverse-surface: #f2f1eb;
+  --color-surface-container-low: #1b1c19;
+  --color-tertiary-fixed: #ffd9dd;
+  --color-error: #ffb4ab;
+  --color-primary-fixed: #ffd9df;
+  --color-on-primary-fixed: #30121a;
+  --color-on-tertiary: #ffffff;
+  --color-on-secondary-fixed-variant: #264f39;
+  --color-surface-container: #232420;
+  --color-inverse-on-surface: #1b1c19;
+  --color-surface: #121212;
+  --color-surface-tint: #edb9c3;
+  --color-on-primary-fixed-variant: #613c45;
+  --color-tertiary-fixed-dim: #ffb2bd;
+  --color-on-secondary-fixed: #002112;
+  --color-surface-container-highest: #343530;
+  --color-on-tertiary-fixed-variant: #7d283c;
+  --color-primary-container: #613c45;
+  --color-on-primary-container: #ffd9df;
+  --color-surface-container-lowest: #0d0e0c;
+  --color-surface-bright: #383934;
+  --color-error-container: #93000a;
+  --color-on-tertiary-container: #ffcad1;
+  --color-primary: #edb9c3;
+  --color-surface-container-high: #2d2e29;
+  --color-primary-fixed-dim: #edb9c3;
+  --color-on-primary: #49252f;
+  --color-outline: #9c8d90;
+  --color-secondary: #a4d1b4;
+  --color-on-surface-variant: #d4c2c4;
+  --color-on-error: #690005;
+  --color-tertiary-container: #7d283c;
+  --color-surface-dim: #121212;
+  --color-secondary-container: #264f39;
+  --color-on-background: #f2f1eb;
+  --color-surface-variant: #504446;
+  --color-inverse-primary: #7c535c;
+  --color-secondary-fixed: #c0edd0;
+  --color-on-secondary: #0d3824;
+  --color-outline-variant: #504446;
+  --color-tertiary: #ffb2bd;
+  --color-on-error-container: #ffdad6;
+}
 </style>
 </head>
-<body>
-  <h1>Privacy Policy</h1>
-  <p>We respect your privacy. User data is stored securely in our databases solely for the purpose of routing issue reports to the proper authorities. <strong>We do not, and will never, sell your data to 3rd parties.</strong></p>
+<body class="bg-background text-on-surface">
+  <div class="max-w-container-max mx-auto px-gutter py-12" style="max-width: 800px;">
+    <h1>Privacy Policy</h1>
+<p><strong>Effective Date:</strong> June 30, 2026</p>
+<p>Welcome to <strong>Nagrik</strong>. We value your privacy and are committed to protecting the information you share while using our platform. Nagrik is an AI-powered civic issue reporting platform designed to help citizens report public infrastructure problems, monitor their resolution, and improve communication between citizens and local authorities. This Privacy Policy explains what information we collect, how we use it, and the measures we take to protect it.</p>
+<p>When you create an account or use Nagrik, we may collect information such as your name, email address, user role, and login credentials. If you choose to report a civic issue, we also collect the details you provide, including photographs, descriptions, issue category, severity, and the location of the reported issue. To improve the accuracy of reports, the platform may use your device's location or the location you manually select, along with reverse geocoding services to generate a readable address.</p>
+<p>The information collected is used solely to provide and improve the services offered by Nagrik. Your reports enable authorities to identify, prioritize, and resolve civic issues more efficiently, while your account information allows you to track submitted reports, receive notifications, and participate in community verification. We may also analyze anonymous usage data to understand how the platform is being used and to improve its functionality, security, and overall user experience.</p>
+<p>Nagrik incorporates Artificial Intelligence to assist in processing reported issues. Uploaded images and descriptions may be analyzed using AI to identify the issue category, estimate its severity, generate a brief summary, and provide an approximate repair cost. These AI-generated results are intended to support decision-making and improve response times. However, they are automatically generated and may not always be completely accurate. Final decisions regarding reported issues remain the responsibility of the relevant authorities or moderators.</p>
+<p>We do not sell, rent, or trade your personal information to third parties. Information may be shared only with authorized administrators and moderators responsible for reviewing and managing civic issues or with trusted third-party service providers that enable essential platform features such as mapping, reverse geocoding, and AI analysis. Information may also be disclosed if required by law or to protect the rights, safety, and security of our users and the platform.</p>
+<p>Nagrik takes reasonable technical and organizational measures to safeguard your information against unauthorized access, alteration, disclosure, or misuse. While we strive to maintain a secure environment, no method of electronic storage or data transmission over the internet can be guaranteed to be completely secure, and users should understand that some level of risk is always present.</p>
+<p>Your information is retained only for as long as necessary to operate the platform, maintain issue history, improve civic services, and comply with applicable legal requirements. If you wish to delete your account or request the removal of your personal information, you may contact the project administrator, and we will process your request in accordance with applicable laws and project requirements.</p>
+<p>Depending on your location and applicable regulations, you may have the right to access, update, or request the deletion of your personal information. You may also withdraw permissions, such as location access, through your device settings, although doing so may limit certain features of the platform.</p>
+<p>Nagrik may use cookies or similar technologies to maintain user sessions, remember preferences, improve website performance, and analyze usage patterns. These technologies help provide a smoother and more personalized experience while using the platform.</p>
+<p>This platform may rely on third-party services for certain functionalities, including interactive maps, location services, and AI-powered image analysis. These services operate according to their own privacy policies, and users are encouraged to review those policies for additional information.</p>
+<p>Nagrik is intended for general public use and is not specifically designed for children under the age of 13. We do not knowingly collect personal information from children, and any such information discovered will be removed as soon as reasonably possible.</p>
+<p>We may update this Privacy Policy periodically to reflect improvements to the platform or changes in applicable laws. Any updates will be published on this page with a revised effective date. By continuing to use Nagrik after such changes, you acknowledge and accept the updated Privacy Policy.</p>
+<p>If you have any questions, concerns, or suggestions regarding this Privacy Policy or the handling of your information, you may contact the Nagrik development team through the contact details provided within the application.</p>
+
+  </div>
+  <style>
+    h1 { font-family: 'Ultra', serif; color: var(--color-primary); font-size: 2.5rem; margin-bottom: 1.5rem; }
+    h2 { font-family: 'Corben', serif; color: var(--color-on-surface); font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1rem; font-weight: bold; }
+    p { font-family: 'Corben', serif; margin-bottom: 1rem; line-height: 1.7; font-size: 1.125rem; }
+    strong { font-weight: bold; color: var(--color-on-surface); }
+    a { color: var(--color-primary); text-decoration: underline; }
+  </style>
 </body>
 </html>

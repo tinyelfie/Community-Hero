@@ -166,7 +166,7 @@ export async function renderHome(container) {
 
       <!-- Leaderboard Section -->
       <section class="max-w-container-max mx-auto px-gutter py-12">
-        <h2 class="text-[28px] font-bold text-on-surface text-center mb-10">🏆 Top Community Heroes</h2>
+        <h2 class="text-[28px] font-bold text-on-surface text-center mb-10">🏆 Top Nagriks</h2>
         <div id="leaderboard-list" class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <!-- Populated by JS -->
           <div class="animate-pulse bg-surface-container-lowest h-24 rounded-2xl"></div>

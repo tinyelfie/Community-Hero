@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-DATABASE_URL: str = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/communityhero")
+DATABASE_URL: str = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/nagrik")
 JWT_SECRET: str = os.getenv("JWT_SECRET", "fallback-secret-change-me")
 JWT_ALGORITHM: str = "HS256"
 JWT_EXPIRE_HOURS: int = 24

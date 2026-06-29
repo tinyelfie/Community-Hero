@@ -3,11 +3,11 @@ version: "3.8"
 services:
   postgres:
     image: postgres:15-alpine
-    container_name: communityhero_db
+    container_name: nagrik_db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: communityhero
+      POSTGRES_DB: nagrik
     ports:
       - "5432:5432"
     volumes:

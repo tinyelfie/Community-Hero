@@ -1,5 +1,5 @@
 """
-Community Hero — No-Cache Threaded Frontend Server
+Nagrik — No-Cache Threaded Frontend Server
 Serves frontend files with Cache-Control: no-store headers
 Uses ThreadingTCPServer so multiple JS module imports load simultaneously.
 """
@@ -51,7 +51,7 @@ class ThreadedServer(socketserver.ThreadingTCPServer):
 
 if __name__ == '__main__':
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
-    print(f"[OK] Community Hero frontend running at http://127.0.0.1:{PORT}")
+    print(f"[OK] Nagrik frontend running at http://127.0.0.1:{PORT}")
     print(f"   Serving from: {os.getcwd()}")
     print(f"   Cache: DISABLED (no-store headers)")
     with ThreadedServer(('127.0.0.1', PORT), NoCacheHandler) as httpd:

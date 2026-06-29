@@ -63,8 +63,8 @@ async def lifespan(app: FastAPI):
 
 # Create FastAPI app
 app = FastAPI(
-    title="Community Hero API",
-    description="Community Hero — Civic Issue Reporting Platform",
+    title="Nagrik API",
+    description="Nagrik — Civic Issue Reporting Platform",
     version="1.0.0",
     lifespan=lifespan,
 )
@@ -91,10 +91,9 @@ app.include_router(comment_routes.router, prefix="/api/issues", tags=["Comments"
 app.include_router(analytics_routes.router, prefix="/api", tags=["Analytics"])
 app.include_router(notification_routes.router)
 app.include_router(authority_routes.router)
-app.include_router(ai_routes.router, prefix="/api/ai", tags=["AI"])
 app.include_router(admin_routes.router, prefix="/api/admin", tags=["Admin"])
 
 
 @app.get("/api/health", tags=["Health"])
 def health_check():
-    return {"status": "ok", "service": "Community Hero API"}
+    return {"status": "ok", "service": "Nagrik API"}

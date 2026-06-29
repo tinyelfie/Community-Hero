@@ -50,8 +50,14 @@ class IssueCreate(BaseModel):
     description: Optional[str] = None
     latitude: float
     longitude: float
-    category: Optional[IssueCategory] = IssueCategory.other
+    category: Optional[str] = "other"
     severity: Optional[IssueSeverity] = IssueSeverity.low
+
+
+class DraftDescriptionRequest(BaseModel):
+    title: str
+    category: str
+    severity: str
 
 
 class IssueStatusUpdate(BaseModel):
@@ -72,7 +78,7 @@ class IssueOut(BaseModel):
     id: UUID
     title: str
     description: Optional[str]
-    category: IssueCategory
+    category: str
     severity: IssueSeverity
     status: IssueStatus
     latitude: float
