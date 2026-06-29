@@ -141,7 +141,7 @@ export function renderReport(container) {
         </div>
 
         <!-- Submit Button -->
-        <button class="w-full sakura-gradient h-16 rounded-xl text-white font-bold text-title-md shadow-xl hover:scale-[1.02] active:scale-95 transition-all duration-300 relative overflow-hidden group" id="submitBtn" type="submit">
+        <button class="w-full sakura-gradient h-16 rounded-xl text-white font-bold text-title-md shadow-xl transition-all duration-300 relative overflow-hidden group hover:scale-105 active:scale-95 hover:shadow-[0_0_20px_rgba(124,83,92,0.5)]" id="submitBtn" type="submit">
           <span class="relative z-10 flex items-center justify-center gap-2" id="btnText">
             <span class="material-symbols-outlined">send</span> Submit Report
           </span>

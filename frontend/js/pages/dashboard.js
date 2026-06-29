@@ -66,34 +66,60 @@ export async function renderDashboard(container) {
     // Update KPIs
     // Update KPIs with stagger animation
     document.getElementById('kpi-grid').innerHTML = `
-      <div class="kpi-card bg-surface border border-outline-variant rounded-2xl p-6 shadow-sm flex flex-col justify-center transform translate-y-8 opacity-0 transition-all duration-700 ease-out">
+      <div class="kpi-card bg-surface border border-outline-variant rounded-2xl p-6 shadow-sm flex flex-col justify-center relative overflow-hidden transform translate-y-8 opacity-0 transition-all duration-700 ease-out hover:scale-105 cursor-default">
         <div class="text-sm font-bold text-on-surface-variant uppercase tracking-wider mb-2">Total Issues</div>
-        <div class="text-5xl font-display-xl text-primary">${stats.total_issues}</div>
+        <div class="text-5xl font-display-xl text-primary animate-number" data-target="${stats.total_issues}">0</div>
       </div>
-      <div class="kpi-card bg-surface border border-outline-variant rounded-2xl p-6 shadow-sm flex flex-col justify-center transform translate-y-8 opacity-0 transition-all duration-700 ease-out delay-100">
+      <div class="kpi-card bg-surface border border-outline-variant rounded-2xl p-6 shadow-sm flex flex-col justify-center relative overflow-hidden transform translate-y-8 opacity-0 transition-all duration-700 ease-out delay-100 hover:scale-105 cursor-default">
         <div class="text-sm font-bold text-on-surface-variant uppercase tracking-wider mb-2">Open Issues</div>
-        <div class="text-5xl font-display-xl text-error">${stats.open_issues}</div>
+        <div class="text-5xl font-display-xl text-error animate-number" data-target="${stats.open_issues}">0</div>
       </div>
-      <div class="kpi-card bg-surface border border-outline-variant rounded-2xl p-6 shadow-sm flex flex-col justify-center transform translate-y-8 opacity-0 transition-all duration-700 ease-out delay-200">
+      <div class="kpi-card bg-surface border border-outline-variant rounded-2xl p-6 shadow-sm flex flex-col justify-center relative overflow-hidden transform translate-y-8 opacity-0 transition-all duration-700 ease-out delay-200 hover:scale-105 cursor-default">
         <div class="text-sm font-bold text-on-surface-variant uppercase tracking-wider mb-2">Resolved</div>
-        <div class="text-5xl font-display-xl text-secondary">${stats.resolved_issues}</div>
+        <div class="text-5xl font-display-xl text-secondary animate-number" data-target="${stats.resolved_issues}">0</div>
       </div>
       <div class="kpi-card bg-surface border border-outline-variant rounded-2xl p-6 shadow-sm flex flex-col justify-center relative overflow-hidden transform translate-y-8 opacity-0 transition-all duration-700 ease-out delay-300 hover:scale-105 cursor-default">
-        <div class="absolute -right-4 -bottom-4 text-7xl opacity-5">📈</div>
         <div class="text-sm font-bold text-on-surface-variant uppercase tracking-wider mb-2">Resolution Rate</div>
-        <div class="text-5xl font-display-xl text-on-surface mb-2">${stats.resolution_rate}%</div>
+        <div class="text-5xl font-display-xl text-on-surface mb-2"><span class="animate-number" data-target="${stats.resolution_rate}">0</span>%</div>
         <div class="w-full bg-surface-variant rounded-full h-2">
-          <div class="bg-secondary h-2 rounded-full" style="width: ${stats.resolution_rate}%"></div>
+          <div class="bg-secondary h-2 rounded-full transition-all duration-1000 ease-out" style="width: 0%" id="resolution-progress"></div>
         </div>
       </div>
     `;
+
+    function animateValue(obj, start, end, duration, isDecimal) {
+      if (isNaN(end)) return;
+      let startTimestamp = null;
+      const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const val = progress * (end - start) + start;
+        obj.innerHTML = isDecimal ? val.toFixed(1) : Math.floor(val);
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        } else {
+          obj.innerHTML = end;
+        }
+      };
+      window.requestAnimationFrame(step);
+    }
 
     // Trigger KPI animations
     setTimeout(() => {
       document.querySelectorAll('.kpi-card').forEach(card => {
         card.classList.remove('translate-y-8', 'opacity-0');
       });
-    }, 50);
+      document.querySelectorAll('.animate-number').forEach(el => {
+        const targetStr = el.getAttribute('data-target');
+        const target = parseFloat(targetStr);
+        const isDecimal = targetStr.includes('.');
+        animateValue(el, 0, target, 2000, isDecimal);
+      });
+      const progressBar = document.getElementById('resolution-progress');
+      if (progressBar) {
+        progressBar.style.width = `${stats.resolution_rate}%`;
+      }
+    }, 100);
 
     // Render Category Chart
     const ctxCategory = document.getElementById('categoryChart');

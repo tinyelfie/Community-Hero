@@ -22,7 +22,7 @@ export function showModal({ title, body, actions = [], size = 'md' }) {
   overlay.id = 'modal-overlay';
 
   const actionsHtml = actions.map((a, i) =>
-    `<button class="btn ${a.class || 'btn--outline'}" data-action="${i}">${a.label}</button>`
+    `<button class="btn ${a.class || 'btn--outline'} transition-all hover:scale-105 active:scale-95 hover:shadow-[0_0_15px_rgba(124,83,92,0.2)]" data-action="${i}">${a.label}</button>`
   ).join('');
 
   overlay.innerHTML = `

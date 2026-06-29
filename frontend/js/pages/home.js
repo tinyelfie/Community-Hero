@@ -22,19 +22,20 @@ export async function renderHome(container) {
 
   // First, we set the HTML structure of the home page using the new Tailwind Design
   container.innerHTML = `
-    <main class="pt-20 pb-32">
+    <main class="pt-20 pb-32 relative">
+      <canvas id="hero-particles" class="fixed inset-0 pointer-events-none z-0"></canvas>
       <!-- Hero Section -->
       <section class="relative overflow-hidden pt-12 pb-24 px-gutter">
-        <div class="max-w-container-max mx-auto flex flex-col md:flex-row items-center gap-lg">
+        <div class="max-w-container-max mx-auto flex flex-col md:flex-row items-center gap-lg relative z-10">
           <div class="w-full md:w-1/2 space-y-md">
             <div class="inline-flex items-center gap-xs bg-primary-container/40 text-primary px-4 py-2 rounded-full border border-primary/20">
               <span class="material-symbols-outlined text-sm" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
               <span class="font-label-sm text-label-sm">TRANSFORMING CITIES GLOBALLY</span>
             </div>
-            <h1 class="font-display-xl text-display-xl md:text-[64px] leading-tight text-on-surface">
+            <h1 class="font-display-xl text-display-xl md:text-[64px] leading-tight text-on-surface wave-text">
                                     Empower Your Neighborhood with <span class="text-primary italic">Civic Precision.</span>
             </h1>
-            <p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">
+            <p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl wave-text">
                                     A concierge reporting experience for the modern citizen. Report issues, track resolutions in real-time, and shape the future of your local community through elegant feedback loops.
                                 </p>
             <div class="flex flex-wrap gap-md pt-4">
@@ -48,8 +49,7 @@ export async function renderHome(container) {
           </div>
           <div class="w-full md:w-1/2 relative group">
             <div class="absolute -inset-4 bg-primary/10 rounded-[40px] blur-3xl group-hover:bg-primary/20 transition-all duration-700"></div>
-            <div class="relative rounded-[32px] overflow-hidden shadow-2xl glass-card aspect-video">
-              <img class="w-full h-full object-cover" alt="A beautiful city view" src="assets/hero/${heroImgIndex}.jpg"/>
+            <div id="hero-image-container" class="relative rounded-[32px] overflow-hidden shadow-2xl glass-card aspect-video">
             </div>
           </div>
         </div>
@@ -327,10 +327,58 @@ export async function renderHome(container) {
         </div>
       `;
     });
+
+    // Start ticker
+    import('./homeTicker.js').then(({ initLiveTicker }) => {
+      initLiveTicker();
+    });
+
+    // Initialize Canvas Particle Vortex Animation
+    requestAnimationFrame(() => {
+      initParticleVortex();
+      initHeroSlideshow();
+    });
+
+    // Apply Wave Text Effect
+    document.querySelectorAll('.wave-text').forEach(el => {
+      wrapLettersInWords(el);
+    });
+
   } catch (e) {
     console.error('Failed to load home data', e);
   }
 }
+
+function wrapLettersInWords(node) {
+    if (node.nodeType === 3) { // Text node
+        const text = node.nodeValue;
+        if (text.trim() === '') return;
+        const words = text.split(/(\s+)/);
+        const fragment = document.createDocumentFragment();
+        words.forEach(word => {
+            if (word.trim() === '') {
+                fragment.appendChild(document.createTextNode(word));
+                return;
+            }
+            const wordSpan = document.createElement('span');
+            wordSpan.className = 'hover-word';
+            word.split('').forEach((char, i) => {
+                const charSpan = document.createElement('span');
+                charSpan.className = 'hover-letter';
+                charSpan.style.animationDelay = `${i * 0.03}s`;
+                charSpan.textContent = char;
+                wordSpan.appendChild(charSpan);
+            });
+            fragment.appendChild(wordSpan);
+        });
+        node.parentNode.replaceChild(fragment, node);
+    } else if (node.nodeType === 1 && !node.classList.contains('hover-word')) { // Element node
+        Array.from(node.childNodes).forEach(wrapLettersInWords);
+    }
+}
+
+let animationFrameId = null;
+let slideshowInterval = null;
 
 export function cleanupHome() {
   if (window._tickerInterval) {
@@ -341,6 +389,179 @@ export function cleanupHome() {
   if (ticker) {
     ticker.style.display = 'none';
   }
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId);
+    animationFrameId = null;
+  }
+  if (window._heroMouseListener) {
+    window.removeEventListener('mousemove', window._heroMouseListener);
+    window._heroMouseListener = null;
+  }
+  if (slideshowInterval) {
+    clearInterval(slideshowInterval);
+    slideshowInterval = null;
+  }
 }
 
+function initHeroSlideshow() {
+  const container = document.getElementById('hero-image-container');
+  if (!container) return;
 
+  const images = ['assets/hero/1.jpg', 'assets/hero/2.jpg', 'assets/hero/3.jpg'];
+  let currentIndex = Math.floor(Math.random() * images.length);
+  
+  container.style.backgroundColor = 'transparent';
+  container.style.backgroundSize = 'cover';
+  container.style.backgroundPosition = 'center';
+  
+  let isFirstRun = true;
+
+  function triggerTransition() {
+    if (!isFirstRun) {
+      currentIndex = (currentIndex + 1) % images.length;
+    }
+    isFirstRun = false;
+    const nextImage = images[currentIndex];
+    
+    const rows = 12;
+    const cols = 16;
+    const gridOverlay = document.createElement('div');
+    gridOverlay.className = 'absolute inset-0 grid';
+    gridOverlay.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+    gridOverlay.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+    gridOverlay.style.zIndex = '10';
+    
+    // Create the blocks
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const block = document.createElement('div');
+        block.style.backgroundImage = `url('${nextImage}')`;
+        // Background size must map to the full container
+        block.style.backgroundSize = `${cols * 100}% ${rows * 100}%`;
+        // Background position must map correctly to this specific tile
+        block.style.backgroundPosition = `${c === 0 ? 0 : (c / (cols - 1)) * 100}% ${r === 0 ? 0 : (r / (rows - 1)) * 100}%`;
+        block.style.opacity = '0';
+        block.style.transition = 'opacity 0.4s ease-out';
+        
+        // Diagonal delay: finishing within 2000ms
+        const diagonalIndex = r + c;
+        const maxIndex = rows + cols - 2;
+        const delay = (diagonalIndex / maxIndex) * 1600;
+        block.style.transitionDelay = `${delay}ms`;
+        
+        gridOverlay.appendChild(block);
+        
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            block.style.opacity = '1';
+          });
+        });
+      }
+    }
+    
+    container.appendChild(gridOverlay);
+    
+    setTimeout(() => {
+      container.style.backgroundImage = `url('${nextImage}')`;
+      gridOverlay.remove();
+    }, 2100);
+  }
+
+  triggerTransition(); // Reveal the very first image using the animation
+  slideshowInterval = setInterval(triggerTransition, 5000); // 5 seconds between transitions
+}
+
+function initParticleVortex() {
+  const canvas = document.getElementById('hero-particles');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let width = canvas.width = window.innerWidth;
+  let height = canvas.height = window.innerHeight;
+
+  let mouseX = width / 2;
+  let mouseY = height / 2;
+  
+  let prevMouseX = mouseX;
+  let prevMouseY = mouseY;
+  let mouseVelocity = 0;
+
+  window._heroMouseListener = (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  };
+  window.addEventListener('mousemove', window._heroMouseListener);
+
+  const particles = [];
+  const maxRadius = Math.max(width, height);
+  const minRadius = 150; // approx 4cm radius
+
+  class Particle {
+    constructor() {
+      this.angle = Math.random() * Math.PI * 2;
+      this.radius = minRadius + Math.random() * (maxRadius - minRadius); // Spread outside 4cm
+      this.baseSpeed = Math.random() * 2 + 0.5; // Base tangential speed
+      this.size = Math.random() * 2 + 1;
+      this.length = Math.random() * 15 + 5; // Orbit tail length
+    }
+    update(speedMultiplier) {
+      // Angular velocity = v / r
+      this.angle += (this.baseSpeed * speedMultiplier) / this.radius;
+    }
+    draw() {
+      const x = mouseX + Math.cos(this.angle) * this.radius;
+      const y = mouseY + Math.sin(this.angle) * this.radius;
+      
+      const dAngle = this.length / this.radius;
+      const tailX = mouseX + Math.cos(this.angle - dAngle) * this.radius;
+      const tailY = mouseY + Math.sin(this.angle - dAngle) * this.radius;
+
+      // Color interpolation: #FF8FA3 (255, 143, 163) center -> #FFCAD4 (255, 202, 212) edge
+      const ratio = Math.min((this.radius - minRadius) / (maxRadius / 1.5), 1);
+      const r = 255;
+      const g = Math.floor(143 + (202 - 143) * ratio);
+      const b = Math.floor(163 + (212 - 163) * ratio);
+
+      ctx.beginPath();
+      ctx.moveTo(tailX, tailY);
+      ctx.lineTo(x, y);
+      ctx.strokeStyle = `rgb(${r}, ${g}, ${b})`;
+      ctx.lineWidth = this.size;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+    }
+  }
+
+  for (let i = 0; i < 400; i++) {
+    particles.push(new Particle());
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    
+    // Calculate mouse velocity
+    const dx = mouseX - prevMouseX;
+    const dy = mouseY - prevMouseY;
+    const instantVelocity = Math.sqrt(dx * dx + dy * dy);
+    mouseVelocity += (instantVelocity - mouseVelocity) * 0.1; // Smooth out velocity changes
+    
+    prevMouseX = mouseX;
+    prevMouseY = mouseY;
+    
+    // Speed multiplier: base slow drift + scaled by mouse velocity
+    const speedMultiplier = 0.2 + mouseVelocity * 0.1;
+
+    particles.forEach(p => {
+      p.update(speedMultiplier);
+      p.draw();
+    });
+    animationFrameId = requestAnimationFrame(animate);
+  }
+
+  animate();
+
+  window.addEventListener('resize', () => {
+    if (!canvas) return;
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  });
+}

@@ -128,6 +128,9 @@ async function handleRoute() {
   currentRoute = path;
   currentCleanup = route.cleanup;
 
+  document.body.className = document.body.className.replace(/\bpage-\S+/g, '').trim();
+  document.body.classList.add(`page-${path}`);
+
   updateActiveLink();
 
   const appEl = document.getElementById('app');
@@ -403,5 +406,50 @@ function hideOfflineBanner() {
   }
 }
 
+function initCursor() {
+  const cursor = document.getElementById('cursor-spotlight');
+  if (!cursor) return;
+
+  // Only animate if pointer is fine (not a touch device)
+  if (!window.matchMedia("(pointer: fine)").matches) return;
+
+  let mouseX = window.innerWidth / 2;
+  let mouseY = window.innerHeight / 2;
+  let cursorX = mouseX;
+  let cursorY = mouseY;
+  const speed = 0.15; // smooth trailing speed
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  function animateCursor() {
+    cursorX += (mouseX - cursorX) * speed;
+    cursorY += (mouseY - cursorY) * speed;
+    
+    // Width and height are 400px, so offset by 200px to center
+    cursor.style.transform = `translate(calc(${cursorX}px - 50%), calc(${cursorY}px - 50%))`;
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  // Hover effect over interactive elements
+  const interactiveSelectors = 'a, button, input, select, textarea, .cursor-pointer, [role="button"]';
+  document.body.addEventListener('mouseover', (e) => {
+    if (e.target.closest(interactiveSelectors)) {
+      cursor.classList.add('hovering');
+    }
+  });
+  document.body.addEventListener('mouseout', (e) => {
+    if (e.target.closest(interactiveSelectors)) {
+      cursor.classList.remove('hovering');
+    }
+  });
+}
+
 // Bootstrap
-document.addEventListener('DOMContentLoaded', initApp);
+document.addEventListener('DOMContentLoaded', () => {
+  initApp();
+  initCursor();
+});

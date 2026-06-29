@@ -14,17 +14,17 @@ export function renderNavbar() {
       <div class="flex justify-between items-center h-20 px-gutter max-w-container-max mx-auto">
         <div class="flex items-center gap-sm cursor-pointer" onclick="window.location.hash='home'">
           <span class="material-symbols-outlined text-primary text-headline-lg" data-icon="account_balance">account_balance</span>
-          <h1 class="font-brand text-title-md md:text-headline-lg bg-gradient-to-r from-primary to-tertiary bg-clip-text text-transparent pt-2 pb-1 leading-normal whitespace-nowrap">Nagrik</h1>
+          <h1 class="font-brand text-title-md md:text-headline-lg text-primary hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-primary hover:to-tertiary transition-all duration-500 pt-2 pb-1 leading-normal whitespace-nowrap">Nagrik</h1>
         </div>
         <div class="flex items-center gap-md">
           <button id="dark-mode-toggle" class="hover:scale-105 hover:opacity-80 transition-all duration-300 text-on-surface-variant">
             <span class="material-symbols-outlined" data-icon="light_mode">light_mode</span>
           </button>
           <div class="hidden md:flex gap-md" id="navbar-desktop-links">
-            <a class="navbar-link text-on-surface-variant font-medium hover:text-primary transition-all py-2" href="#home">Home</a>
-            <a class="navbar-link text-on-surface-variant font-medium hover:text-primary transition-all py-2" href="#map">Map</a>
-            <a class="navbar-link text-on-surface-variant font-medium hover:text-primary transition-all py-2" href="#report">Report</a>
-            <a class="navbar-link text-on-surface-variant font-medium hover:text-primary transition-all py-2" href="#dashboard">Dashboard</a>
+            <a class="navbar-link text-on-surface-variant font-medium hover:text-primary transition-all duration-300 py-2 inline-block hover:-translate-y-1 hover:font-brand hover:text-lg" href="#home">Home</a>
+            <a class="navbar-link text-on-surface-variant font-medium hover:text-primary transition-all duration-300 py-2 inline-block hover:-translate-y-1 hover:font-brand hover:text-lg" href="#map">Map</a>
+            <a class="navbar-link text-on-surface-variant font-medium hover:text-primary transition-all duration-300 py-2 inline-block hover:-translate-y-1 hover:font-brand hover:text-lg" href="#report">Report</a>
+            <a class="navbar-link text-on-surface-variant font-medium hover:text-primary transition-all duration-300 py-2 inline-block hover:-translate-y-1 hover:font-brand hover:text-lg" href="#dashboard">Dashboard</a>
           </div>
           <div id="navbar-right-auth" class="hidden md:flex items-center gap-sm">
           </div>
@@ -108,7 +108,7 @@ export function updateNavAuth() {
         </div>
         <div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-sm">${initials}</div>
       </a>
-      <button class="border border-outline text-on-surface-variant px-4 py-2 rounded-full font-label-sm text-label-sm hover:bg-surface-variant transition-colors" id="nav-logout-btn">Logout</button>
+      <button class="border border-outline text-on-surface-variant px-4 py-2 rounded-full font-label-sm text-label-sm transition-all hover:bg-surface-variant hover:scale-105 active:scale-95 hover:shadow-[0_0_15px_rgba(124,83,92,0.2)]" id="nav-logout-btn">Logout</button>
     `;
     document.getElementById('nav-logout-btn')?.addEventListener('click', () => logout());
     
@@ -149,8 +149,8 @@ export function updateNavAuth() {
     document.getElementById('mobile-nav-login')?.remove();
   } else {
     authContainer.innerHTML = `
-      <a href="#login" class="text-primary font-bold text-label-sm px-4 py-2 hover:underline">Log in</a>
-      <a href="#register" class="sakura-gradient text-white px-6 py-2 rounded-full font-label-sm text-label-sm shine-effect shadow-md hover:scale-105 transition-transform">Sign Up</a>
+      <a href="#login" class="text-primary font-bold text-label-sm px-4 py-2 transition-all hover:scale-105 active:scale-95 inline-block hover:shadow-[0_0_15px_rgba(124,83,92,0.2)] rounded-full">Log in</a>
+      <a href="#register" class="sakura-gradient text-white px-6 py-2 rounded-full font-label-sm text-label-sm shine-effect shadow-md transition-all hover:scale-105 active:scale-95 hover:shadow-[0_0_20px_rgba(124,83,92,0.5)]">Sign Up</a>
     `;
     
     // Make sure login mobile link exists

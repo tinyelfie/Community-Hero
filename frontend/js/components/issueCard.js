@@ -166,8 +166,8 @@ export function buildIssueCard(issue, opts = {}) {
         </div>
         <div class="flex items-center gap-2">
           <span class="text-xs text-muted">${dateStr}</span>
-          <button class="btn btn--sm bg-surface-variant hover:bg-outline-variant transition-colors" onclick="event.stopPropagation();window._shareIssue?.('${issue.title.replace(/'/g, "\\'")}', event.target.closest('.issue-card'))">📤 Share</button>
-          ${showActions ? `<button class="btn btn--sm btn--sakura" onclick="event.stopPropagation();window._viewIssue?.('${issue.id}')">View</button>` : ''}
+          <button class="btn btn--sm bg-surface-variant transition-all hover:bg-outline-variant hover:scale-105 active:scale-95 hover:shadow-[0_0_15px_rgba(124,83,92,0.2)]" onclick="event.stopPropagation();window._shareIssue?.('${issue.title.replace(/'/g, "\\'")}', event.target.closest('.issue-card'))">📤 Share</button>
+          ${showActions ? `<button class="btn btn--sm btn--sakura transition-all hover:scale-105 active:scale-95 hover:shadow-[0_0_20px_rgba(124,83,92,0.5)]" onclick="event.stopPropagation();window._viewIssue?.('${issue.id}')">View</button>` : ''}
         </div>
       </div>
       ${issue.status === 'resolved' && issue.assignee ? `
