@@ -5,7 +5,7 @@
  */
 
 const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '';
-const API_BASE = isLocal ? 'http://127.0.0.1:8000/api' : 'https://nagrik-api.onrender.com/api';
+const API_BASE = isLocal ? 'http://127.0.0.1:8000/api' : 'https://community-hero-api.onrender.com/api';
 
 /** Get the stored JWT token */
 function getToken() {
