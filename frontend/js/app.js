@@ -177,9 +177,8 @@ function renderLogin(container) {
           </p>
           
           <div class="mt-8 p-4 bg-surface-container-low rounded-lg border border-outline-variant/30 text-center text-sm text-on-surface-variant">
-            <strong>Demo account:</strong><br>
-            kapadiavincent@gov.example.net<br>
-            Password: password123
+            <strong>Admin:</strong> admin@nagrik.in (pw: admin123)<br>
+            <strong>Citizen:</strong> user0@example.com (pw: password123)
           </div>
         </div>
       </div>

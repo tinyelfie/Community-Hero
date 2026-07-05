@@ -90,6 +90,8 @@ class Issue(Base):
     longitude = Column(Float, nullable=False)
     address = Column(String(500), nullable=True)
     image_url = Column(String(500), nullable=True)
+    description_sentiment = Column(Float, nullable=True)
+    urgency_level = Column(String(50), nullable=True)
     ai_summary = Column(Text, nullable=True)
     ai_tags = Column(String(200), nullable=True)
     ai_resolution_suggestion = Column(Text, nullable=True)
@@ -98,6 +100,11 @@ class Issue(Base):
     is_escalated = Column(Boolean, nullable=False, default=False)
     estimated_cost_min = Column(Integer, nullable=True)
     estimated_cost_max = Column(Integer, nullable=True)
+    needs_review = Column(Boolean, nullable=False, default=False)
+    rf_prediction = Column(String(20), nullable=True)
+    gemini_prediction = Column(String(20), nullable=True)
+    prediction_method = Column(String(50), nullable=True)
+    rf_confidence = Column(Float, nullable=True)
     reported_by = Column(Uuid(as_uuid=True), ForeignKey("users.id"), nullable=False)
     assigned_to = Column(Uuid(as_uuid=True), ForeignKey("users.id"), nullable=True)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
@@ -136,6 +143,7 @@ class Comment(Base):
     issue_id = Column(Uuid(as_uuid=True), ForeignKey("issues.id"), nullable=False)
     user_id = Column(Uuid(as_uuid=True), ForeignKey("users.id"), nullable=True)
     body = Column(Text, nullable=False)
+    sentiment_score = Column(Float, nullable=True)
     is_authority_update = Column(Boolean, nullable=False, default=False)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
 
@@ -200,3 +208,16 @@ class MicroVerification(Base):
 
     issue = relationship("Issue", backref="micro_verifications")
     user = relationship("User", backref="micro_verifications")
+
+class Forecast(Base):
+    __tablename__ = "forecasts"
+
+    id = Column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    area_name = Column(String(100), nullable=False)
+    week_number = Column(Integer, nullable=False)
+    predicted_count = Column(Integer, nullable=False)
+    confidence_low = Column(Integer, nullable=False)
+    confidence_high = Column(Integer, nullable=False)
+    trend = Column(String(20), nullable=False)
+    r_squared = Column(Float, nullable=False)
+    generated_at = Column(DateTime, nullable=False, default=datetime.utcnow)

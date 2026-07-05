@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from database import get_db
 import models, schemas, auth
+from services import sentiment_analyzer
 
 router = APIRouter()
 
@@ -50,11 +51,14 @@ def post_comment(
     # Only moderators/admins can post authority updates
     is_authority = body.is_authority_update and current_user.role.value in ("moderator", "admin")
 
+    compound_score, _ = sentiment_analyzer.get_sentiment_data(body.body.strip())
+
     comment = models.Comment(
         issue_id=issue.id,
         user_id=current_user.id,
         body=body.body.strip(),
         is_authority_update=is_authority,
+        sentiment_score=compound_score
     )
     db.add(comment)
     db.commit()

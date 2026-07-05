@@ -154,6 +154,44 @@ def check_duplicate(new_title: str, new_desc: str, existing_issues: list) -> dic
         print(f"[AI] check_duplicate error: {e}")
         return {"is_duplicate": False}
 
+def check_duplicate_escalation(new_issue_text: str, candidate_1: dict, candidate_2: dict = None) -> bool:
+    """
+    Arbitrate if the new issue is a duplicate of the candidates using Gemini.
+    Returns True if it is a duplicate of either, False otherwise.
+    """
+    if not _GEMINI_AVAILABLE:
+        return False
+
+    candidates_text = f"Candidate 1: {candidate_1['title']} - {candidate_1['description'] or ''}"
+    if candidate_2:
+        candidates_text += f"\nCandidate 2: {candidate_2['title']} - {candidate_2['description'] or ''}"
+
+    prompt = f"""You are a civic issue duplicate detector.
+    
+    NEW ISSUE:
+    {new_issue_text}
+    
+    CANDIDATES:
+    {candidates_text}
+    
+    Determine if the new issue is describing the exact same physical problem as any of the candidates.
+    Return ONLY valid JSON with this exact key:
+    {{
+      "is_duplicate": true/false
+    }}
+    
+    Return ONLY the JSON object. No other text.
+    """
+    try:
+        model = genai.GenerativeModel("gemini-1.5-flash-latest")
+        response = model.generate_content(prompt)
+        result = _extract_json(response.text)
+        return bool(result.get("is_duplicate", False))
+    except Exception as e:
+        print(f"[AI] check_duplicate_escalation error: {e}")
+        return False
+
+
 
 def generate_resolution_suggestion_with_context(category: str, description: str, severity: str, similar_issues: list) -> str:
     """

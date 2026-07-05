@@ -19,3 +19,5 @@ faker
 requests
 pandas
 openpyxl
+google-cloud-storage
+scikit-learn

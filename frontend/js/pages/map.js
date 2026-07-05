@@ -549,12 +549,18 @@ function renderDrawerContent(issue) {
         slaHtml = `<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-red-100 text-red-600 border border-red-300">🚨 Overdue</span>`;
       }
     }
-
     let costHtml = '';
     if (isAdmin && issue.estimated_cost_min != null && issue.estimated_cost_max != null) {
       const minCost = issue.estimated_cost_min.toLocaleString('en-IN');
       const maxCost = issue.estimated_cost_max.toLocaleString('en-IN');
       costHtml = `<span class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider bg-green-100 text-green-800 border border-green-300 shadow-sm mt-1">💰 ₹${minCost} – ₹${maxCost} estimated.</span>`;
+    }
+
+    let urgencyChip = '';
+    if (issue.urgency_level === 'critical') {
+      urgencyChip = `<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-rose-100 text-rose-800 border border-rose-200">🔥 Urgent</span>`;
+    } else if (issue.urgency_level === 'high') {
+      urgencyChip = `<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-orange-100 text-orange-800 border border-orange-200">⚠️ High Concern</span>`;
     }
 
     document.getElementById('drawer-content').innerHTML = `
@@ -566,6 +572,7 @@ function renderDrawerContent(issue) {
           ${issue.is_escalated ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-error text-on-error border border-error-container shadow-sm">🚨 ESCALATED</span>` : ''}
           <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-surface-variant text-on-surface">${icon} ${(issue.category || 'other').replace('_', ' ')}</span>
           <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${issue.severity === 'high' ? 'bg-error-container text-on-error-container' : issue.severity === 'medium' ? 'bg-secondary-container text-on-secondary-container' : 'bg-surface-variant text-on-surface'}">${issue.severity}</span>
+          ${urgencyChip}
           ${slaHtml}
           ${costHtml}
         </div>
@@ -583,6 +590,25 @@ function renderDrawerContent(issue) {
       <h3 class="font-display-md text-xl text-on-surface mb-4">${issue.title}</h3>
       
       ${renderStepper(issue.status)}
+
+      ${(issue.rf_prediction && issue.gemini_prediction) ? `
+      <div class="mb-4 p-4 rounded-xl border border-outline-variant bg-surface-container-lowest font-mono text-xs text-on-surface-variant">
+        <div class="flex justify-between mb-1">
+          <span>Gemini Vision</span>
+          <span class="font-bold">${issue.gemini_prediction.toUpperCase()}</span>
+        </div>
+        <div class="flex justify-between mb-1">
+          <span>ML Model (RF)</span>
+          <span class="font-bold">${issue.rf_prediction.toUpperCase()} <span class="font-normal opacity-70">(${(issue.rf_confidence * 100).toFixed(0)}%)</span></span>
+        </div>
+        <div class="h-px bg-outline-variant my-2"></div>
+        <div class="flex justify-between font-bold text-primary">
+          <span>Consensus</span>
+          <span>${issue.severity.toUpperCase()}</span>
+        </div>
+        ${issue.prediction_method === 'disagreement_flagged' ? '<div class="text-error mt-2 text-[10px]">⚠️ Models disagreed significantly — human review recommended.</div>' : ''}
+      </div>
+      ` : ''}
 
       ${issue.ai_summary
         ? `<p class="text-on-surface-variant font-body-md bg-surface-variant/50 p-4 rounded-xl border border-outline-variant mb-4">✨ ${issue.ai_summary}</p>`
@@ -691,13 +717,22 @@ function renderDrawerContent(issue) {
         <h5 class="font-bold text-sm text-on-surface mb-4">Comments</h5>
         <div id="comments-list" class="space-y-4 mb-4">
           ${issue.comments?.length
-            ? issue.comments.map(c => `
+            ? issue.comments.map(c => {
+                let sentIcon = '';
+                if (c.sentiment_score !== undefined && c.sentiment_score !== null) {
+                  if (c.sentiment_score <= -0.5) sentIcon = '<span title="Very Negative" class="ml-1">😡</span>';
+                  else if (c.sentiment_score <= -0.1) sentIcon = '<span title="Negative" class="ml-1">😞</span>';
+                  else if (c.sentiment_score >= 0.5) sentIcon = '<span title="Very Positive" class="ml-1">🤩</span>';
+                  else if (c.sentiment_score >= 0.1) sentIcon = '<span title="Positive" class="ml-1">🙂</span>';
+                }
+                return `
                 <div class="p-3 rounded-lg ${c.is_authority_update ? 'bg-primary/10 border border-primary/20' : 'bg-surface-container-lowest border border-outline-variant'}">
                   <div class="text-xs text-on-surface-variant mb-1 font-medium">
-                    ${c.is_authority_update ? '🏛️ ' : ''}${c.user?.name || 'User'} ${c.user?.is_verified_reporter ? '<span title="Verified Reporter — 3+ issues successfully resolved." class="text-blue-500 font-bold cursor-help ml-1">✓</span>' : ''} · ${formatDate(c.created_at)}
+                    ${c.is_authority_update ? '🏛️ ' : ''}${c.user?.name || 'User'} ${c.user?.is_verified_reporter ? '<span title="Verified Reporter — 3+ issues successfully resolved." class="text-blue-500 font-bold cursor-help ml-1">✓</span>' : ''} · ${formatDate(c.created_at)} ${sentIcon}
                   </div>
                   <div class="text-sm text-on-surface">${c.body}</div>
-                </div>`).join('')
+                </div>`
+              }).join('')
             : '<div class="text-xs text-on-surface-variant p-3 text-center">No comments yet.</div>'
           }
         </div>

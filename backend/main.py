@@ -9,6 +9,8 @@ from contextlib import asynccontextmanager
 from datetime import datetime, timedelta
 from config import UPLOAD_DIR
 from routers import auth_routes, issue_routes, vote_routes, comment_routes, analytics_routes, notification_routes, authority_routes, ai_routes, admin_routes
+import joblib
+import json
 
 # Create uploads directory if it doesn't exist
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -57,6 +59,25 @@ async def auto_escalation_agent():
 async def lifespan(app: FastAPI):
     create_tables()
     task = asyncio.create_task(auto_escalation_agent())
+    
+    # Load ML Model
+    try:
+        model_path = os.path.join(os.path.dirname(__file__), 'ml_models', 'severity_model.pkl')
+        app.state.severity_model = joblib.load(model_path)
+        
+        features_path = os.path.join(os.path.dirname(__file__), 'ml_models', 'feature_names.json')
+        with open(features_path, 'r') as f:
+            app.state.feature_names = json.load(f)
+            
+        importances_path = os.path.join(os.path.dirname(__file__), 'ml_models', 'feature_importances.json')
+        with open(importances_path, 'r') as f:
+            app.state.feature_importances = json.load(f)
+    except Exception as e:
+        print(f"Warning: Could not load ML model: {e}")
+        app.state.severity_model = None
+        app.state.feature_names = None
+        app.state.feature_importances = None
+
     yield
     task.cancel()
 

@@ -1,0 +1,13 @@
+Random Forest Classification Report
+===================================
+
+              precision    recall  f1-score   support
+
+         low       0.53      0.64      0.58        36
+      medium       0.74      0.85      0.79       105
+        high       0.69      0.44      0.54        50
+    critical       0.25      0.11      0.15         9
+
+    accuracy                           0.68       200
+   macro avg       0.55      0.51      0.52       200
+weighted avg       0.67      0.68      0.66       200

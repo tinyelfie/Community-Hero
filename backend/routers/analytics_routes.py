@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from typing import List
@@ -35,7 +35,7 @@ def get_area_report(name: str, db: Session = Depends(get_db)):
     resolution_rate = round((resolved / total * 100), 1)
     
     # Most common category
-    categories = [i.category.value for i in issues]
+    categories = [i.category for i in issues]
     most_common_category = max(set(categories), key=categories.count).replace('_', ' ').title()
     
     # Grade computation: 80%+ = A, 60-80% = B, 40-60% = C, below 40% = D
@@ -131,6 +131,49 @@ def get_stats(db: Session = Depends(get_db)):
     top_user = db.query(models.User).order_by(models.User.points.desc()).first()
     top_user_name = top_user.name if top_user else "Ananya S."
 
+    # Community Pulse
+    seven_days_ago = now - timedelta(days=7)
+    recent_issues = db.query(models.Issue.description_sentiment).filter(
+        models.Issue.created_at >= seven_days_ago,
+        models.Issue.description_sentiment.isnot(None)
+    ).all()
+    recent_comments = db.query(models.Comment.sentiment_score).filter(
+        models.Comment.created_at >= seven_days_ago,
+        models.Comment.sentiment_score.isnot(None)
+    ).all()
+
+    scores = [r[0] for r in recent_issues] + [r[0] for r in recent_comments]
+    avg_sentiment = sum(scores) / len(scores) if scores else 0.0
+
+    if avg_sentiment < -0.5:
+        pulse_state = "High Frustration"
+        pulse_color = "red"
+        pulse_label = "Community needs urgent attention"
+        pulse_emoji = "🔴"
+    elif avg_sentiment < -0.3:
+        pulse_state = "Elevated Concern"
+        pulse_color = "orange"
+        pulse_label = "Several unresolved issues generating frustration"
+        pulse_emoji = "🟠"
+    elif avg_sentiment < -0.1:
+        pulse_state = "Moderate Engagement"
+        pulse_color = "amber"
+        pulse_label = "Normal civic reporting activity"
+        pulse_emoji = "🟡"
+    else:
+        pulse_state = "Positive Community Mood"
+        pulse_color = "green"
+        pulse_label = "Good resolution rate maintaining trust"
+        pulse_emoji = "🟢"
+
+    community_pulse = {
+        "score": round(avg_sentiment, 2),
+        "state": pulse_state,
+        "color": pulse_color,
+        "label": pulse_label,
+        "emoji": pulse_emoji
+    }
+
     return schemas.StatsOut(
         total_issues=total,
         open_issues=open_count,
@@ -142,7 +185,61 @@ def get_stats(db: Session = Depends(get_db)):
         weekly_reports=weekly_reports,
         verified_this_month=verified_this_month,
         top_user_name=top_user_name,
+        community_pulse=community_pulse
     )
+
+@router.get("/insights/forecast")
+def get_forecasts(db: Session = Depends(get_db)):
+    """Return Linear Regression forecasts for all areas."""
+    forecasts = db.query(models.Forecast).all()
+    
+    areas = {}
+    for f in forecasts:
+        if f.area_name not in areas:
+            areas[f.area_name] = {
+                "area_name": f.area_name,
+                "r_squared": f.r_squared,
+                "predictions": []
+            }
+        
+        areas[f.area_name]["predictions"].append({
+            "week_number": f.week_number,
+            "predicted_count": f.predicted_count,
+            "confidence_low": f.confidence_low,
+            "confidence_high": f.confidence_high,
+            "trend": f.trend
+        })
+    
+    # We also need historical data for the charts (last 12 weeks)
+    now = datetime.utcnow()
+    start_date = now - timedelta(weeks=26)
+    issues = db.query(models.Issue.address, models.Issue.created_at).filter(
+        models.Issue.created_at >= start_date
+    ).all()
+    
+    from collections import defaultdict
+    weekly_counts = defaultdict(lambda: defaultdict(int))
+    for issue in issues:
+        if not issue.address:
+            continue
+        area = issue.address.split(',')[0].strip()
+        week_num = min((issue.created_at - start_date).days // 7 + 1, 26)
+        weekly_counts[area][week_num] += 1
+        
+    for area_name, data in areas.items():
+        history = [weekly_counts[area_name].get(w, 0) for w in range(15, 27)] # Last 12 weeks
+        data["historical_weekly_counts"] = history
+        
+    return {"areas": list(areas.values())}
+
+
+@router.get("/insights/model-insights")
+def get_model_insights(request: Request):
+    """Get Random Forest feature importances from app state."""
+    importances = getattr(request.app.state, 'feature_importances', None)
+    if not importances:
+        return []
+    return importances
 
 
 @router.get("/insights/heatmap", response_model=List[schemas.HeatmapPoint])

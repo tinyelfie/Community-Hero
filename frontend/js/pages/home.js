@@ -328,10 +328,7 @@ export async function renderHome(container) {
       `;
     });
 
-    // Start ticker
-    import('./homeTicker.js').then(({ initLiveTicker }) => {
-      initLiveTicker();
-    });
+
 
     // Initialize Canvas Particle Vortex Animation
     requestAnimationFrame(() => {

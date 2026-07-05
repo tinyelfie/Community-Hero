@@ -5,7 +5,17 @@
  */
 
 const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '';
-const API_BASE = isLocal ? 'http://127.0.0.1:8000/api' : 'https://community-hero-api.onrender.com/api';
+
+let API_BASE;
+if (isLocal) {
+    API_BASE = 'http://127.0.0.1:8000/api';
+} else if (window.location.hostname.includes('web.app') || window.location.hostname.includes('firebaseapp.com')) {
+    // If deployed to Firebase, use the Google Cloud Run backend
+    API_BASE = 'https://<YOUR-CLOUD-RUN-URL>.a.run.app/api';
+} else {
+    // If deployed to Vercel/Render, keep using the Render backend
+    API_BASE = 'https://community-hero-api.onrender.com/api';
+}
 
 /** Get the stored JWT token */
 function getToken() {

@@ -8,7 +8,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 
 BASE_URL = "http://127.0.0.1:8000"
 BACKEND_DIR = os.path.join(os.path.dirname(__file__), "backend")
-PYTHON = os.path.join(BACKEND_DIR, "venv", "Scripts", "python.exe")
+PYTHON = sys.executable
 
 def test_system():
     print("=" * 60)
@@ -143,6 +143,9 @@ def test_system():
 
     r = session.get(f"{BASE_URL}/api/insights/area?name=Salt+Lake")
     check("ST-16: Area Insights", r.status_code == 200, f"HTTP {r.status_code}")
+    
+    r = session.get(f"{BASE_URL}/api/insights/forecast")
+    check("ST-16b: Volume Forecast", r.status_code == 200, f"HTTP {r.status_code}")
 
     r = session.get(f"{BASE_URL}/api/insights/leaderboard")
     check("ST-17: Leaderboard", r.status_code == 200, f"HTTP {r.status_code}")

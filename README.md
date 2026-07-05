@@ -1,46 +1,17 @@
-# Nagrik
+# Community Hero (Nagrik)
 
-> AI-powered civic issue reporting and analytics for Indian cities.
+**Community Hero** is an AI-powered full-stack civic issue reporting platform. It bridges the gap between citizens and local authorities by allowing users to report issues (like potholes, broken streetlights) and track their resolution.
 
-Citizens report broken streetlights, potholes, and waste. The community validates. Authorities act. AI handles the analysis.
+## Features
+- **AI Triage & Categorization:** Automatically assigns category tags and generates AI summaries of issues using Google Gemini.
+- **Severity Prediction:** A Random Forest machine learning model predicts the severity of new issues based on historical trends, time, category, and text patterns.
+- **Sentiment Analysis (Community Pulse):** Uses NLP (VADER) to gauge the urgency and sentiment of user comments, displaying a live neighborhood mood dashboard.
+- **Volume Forecasting:** Uses Scikit-Learn Linear Regression to forecast civic issue volume for the upcoming weeks.
+- **Duplicate Detection:** TF-IDF text vectorization prevents duplicate reports by comparing similarities among nearby issues.
+- **Automated AI Digests:** Generates a weekly civic progress report via Gemini Flash.
 
----
-
-## What It Does
-
-- 📸 **Report** civic issues with photo + GPS — AI auto-classifies and summarizes
-- 🗳️ **Vote & verify** issues to surface the most critical ones
-- 🗺️ **Interactive map** with heatmap, clustering, and predictive hotspots
-- 📊 **Analytics dashboard** with animated charts and KPI cards
-- 🚗 **Authority route optimizer** for efficient field inspections
-- 🏆 **Gamification** — points, badges, verified reporter status
-
----
-
-## Stack
-
-`FastAPI` · `SQLite` · `Google Gemini AI` · `Leaflet.js` · `Chart.js` · `Vanilla JS SPA`
-
----
-
-## Quick Start
-
-```bash
-cd backend
-python -m venv venv && venv\Scripts\activate
-pip install -r requirements.txt
-python seed_demo.py
-uvicorn main:app --port 8000
-```
-
-```bash
-# New terminal
-cd frontend
-python -m http.server 5500
-```
-
-Open **http://localhost:5500** · Login: `citizen@example.com` / `test123`
-
-→ See [how_to_run.md](how_to_run.md) for full setup instructions.  
-→ See [technical_report.md](technical_report.md) for architecture and design decisions.  
-→ See [description.md](description.md) for the full file structure and reading guide.
+## Tech Stack
+- **Frontend:** Vanilla JS, HTML, CSS, Chart.js, Tailwind CSS (via CDN), Leaflet (Maps).
+- **Backend:** FastAPI (Python), SQLite/PostgreSQL, SQLAlchemy.
+- **Machine Learning:** Scikit-Learn, NLTK (VADER), Joblib.
+- **Generative AI:** Google Gemini API.

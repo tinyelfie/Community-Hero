@@ -1,0 +1,34 @@
+[
+    {
+        "feature": "sentiment_score",
+        "importance": 0.23804554240604792
+    },
+    {
+        "feature": "category_encoded",
+        "importance": 0.16422829140319092
+    },
+    {
+        "feature": "description_length",
+        "importance": 0.11965467334674726
+    },
+    {
+        "feature": "area_avg_severity",
+        "importance": 0.1181132187311149
+    },
+    {
+        "feature": "hour_of_day",
+        "importance": 0.10451952594995935
+    },
+    {
+        "feature": "vote_count",
+        "importance": 0.10156085965361368
+    },
+    {
+        "feature": "report_age_days",
+        "importance": 0.10074058227291534
+    },
+    {
+        "feature": "day_of_week",
+        "importance": 0.0531373062364107
+    }
+]

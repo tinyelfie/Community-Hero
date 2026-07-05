@@ -113,6 +113,14 @@ export function buildIssueCard(issue, opts = {}) {
     const maxCost = issue.estimated_cost_max.toLocaleString('en-IN');
     costHtml = `<div class="px-2 py-1 bg-green-100 text-green-800 border border-green-300 rounded-md text-[10px] font-bold mt-2 inline-flex items-center gap-1">💰 ₹${minCost} – ₹${maxCost} estimated.</div>`;
   }
+  
+  // VADER Urgency Chip
+  let urgencyChip = '';
+  if (issue.urgency_level === 'critical') {
+    urgencyChip = `<span class="bg-rose-100 text-rose-800 text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full border border-rose-200">🔥 Urgent</span>`;
+  } else if (issue.urgency_level === 'high') {
+    urgencyChip = `<span class="bg-orange-100 text-orange-800 text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full border border-orange-200">⚠️ High Concern</span>`;
+  }
 
   let slaHtml = '';
   let borderStyle = '';
@@ -141,9 +149,12 @@ export function buildIssueCard(issue, opts = {}) {
          onclick="window._viewIssue?.('${issue.id}')" style="cursor:pointer; ${borderStyle}">
       ${imageHtml}${placeholderHtml}
       <div class="issue-card__body">
-        <div class="issue-card__meta">
-          <span class="badge badge--${catClass}">${icon} ${(issue.category || 'other').replace('_', ' ')}</span>
+        <div class="flex flex-wrap gap-2 mb-3">
           <span class="chip chip--${issue.severity}">${severityLabel}</span>
+          <span class="bg-surface-variant text-on-surface-variant text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full border border-outline-variant">
+            ${(issue.category || 'other').replace('_', ' ')}
+          </span>
+          ${urgencyChip}
         </div>
         ${slaHtml}
         ${costHtml}

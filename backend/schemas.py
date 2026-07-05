@@ -68,6 +68,7 @@ class CommentOut(BaseModel):
     id: UUID
     body: str
     is_authority_update: bool
+    sentiment_score: Optional[float] = None
     created_at: datetime
     user: Optional[UserOut] = None
 
@@ -85,6 +86,8 @@ class IssueOut(BaseModel):
     longitude: float
     address: Optional[str]
     image_url: Optional[str]
+    description_sentiment: Optional[float] = None
+    urgency_level: Optional[str] = None
     ai_summary: Optional[str]
     ai_tags: Optional[str]
     ai_resolution_suggestion: Optional[str] = None
@@ -93,6 +96,11 @@ class IssueOut(BaseModel):
     is_escalated: bool = False
     estimated_cost_min: Optional[int] = None
     estimated_cost_max: Optional[int] = None
+    needs_review: bool = False
+    rf_prediction: Optional[str] = None
+    gemini_prediction: Optional[str] = None
+    prediction_method: Optional[str] = None
+    rf_confidence: Optional[float] = None
     reported_by: UUID
     reporter: Optional[UserOut] = None
     assignee: Optional[UserOut] = None
@@ -143,6 +151,7 @@ class StatsOut(BaseModel):
     weekly_reports: int
     verified_this_month: int
     top_user_name: str
+    community_pulse: Optional[dict] = None
 
 
 class HeatmapPoint(BaseModel):

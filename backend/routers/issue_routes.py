@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form, BackgroundTasks
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form, BackgroundTasks, Request
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from typing import Optional, List, Any
@@ -6,8 +6,9 @@ from math import radians, sin, cos, sqrt, atan2
 from datetime import datetime
 import httpx
 from database import get_db
+from database import get_db
 import models, schemas, auth
-from services import storage, ai_service
+from services import storage, ai_service, sentiment_analyzer
 
 router = APIRouter()
 
@@ -36,10 +37,89 @@ async def reverse_geocode(lat: float, lng: float) -> str:
     return f"{lat:.4f}, {lng:.4f}"
 
 
-def enrich_issue_with_ai(issue_id: str, image_path: str, db_url: str):
+def enrich_issue_with_ai(issue_id: str, image_path: str, db_url: str, issue_data: dict, model, feature_names):
     """Background task: run Gemini AI on image and update issue record."""
     from sqlalchemy import create_engine
     from sqlalchemy.orm import sessionmaker
+    from services import ai_service, severity_predictor
+    import models
+
+    engine = create_engine(db_url)
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    db = SessionLocal()
+
+    try:
+        import uuid
+        issue = db.query(models.Issue).filter(models.Issue.id == uuid.UUID(issue_id)).first()
+        if not issue:
+            return
+
+        gemini_result = None
+        if image_path:
+            gemini_result = ai_service.analyze_issue_image(image_path)
+            
+        # RF Prediction
+        rf_result = severity_predictor.predict_severity(issue_data, db, model, feature_names)
+        
+        # Determine final severity
+        gemini_sev = gemini_result.get("severity") if gemini_result else None
+        rf_sev = rf_result.get("predicted_severity")
+        rf_conf = rf_result.get("confidence", 0.0)
+        
+        sev_levels = {"low": 0, "medium": 1, "high": 2, "critical": 3}
+        
+        if gemini_sev and rf_sev:
+            g_idx = sev_levels.get(gemini_sev, 0)
+            r_idx = sev_levels.get(rf_sev, 0)
+            diff = abs(g_idx - r_idx)
+            
+            if diff == 0:
+                final_sev = gemini_sev
+                method = "consensus"
+                conf = (0.9 + rf_conf) / 2
+            elif diff == 1:
+                final_sev = gemini_sev
+                method = "gemini_primary"
+                conf = 0.9 * 0.85 # lower by 15%
+            else:
+                final_sev = gemini_sev
+                method = "disagreement_flagged"
+                issue.needs_review = True
+                conf = 0.9 * 0.5
+        elif rf_sev:
+            final_sev = rf_sev
+            method = "random_forest"
+            conf = rf_conf
+        elif gemini_sev:
+            final_sev = gemini_sev
+            method = "gemini"
+            conf = 0.9
+        else:
+            final_sev = "medium"
+            method = "default"
+            conf = 0.0
+            
+        try:
+            issue.severity = models.IssueSeverity(final_sev)
+        except ValueError:
+            pass
+            
+        issue.rf_prediction = rf_sev
+        issue.gemini_prediction = gemini_sev
+        issue.prediction_method = method
+        issue.rf_confidence = conf
+        
+        if gemini_result:
+            issue.category = gemini_result.get("category", issue.category)
+            issue.ai_summary = gemini_result.get("summary")
+            issue.ai_tags = ",".join(gemini_result.get("tags", []))
+            
+        db.commit()
+    except Exception as e:
+        print(f"Background AI task error: {e}")
+    finally:
+        db.close()
+
 @router.get("", response_model=List[schemas.IssueOut])
 async def list_issues(
     category: Optional[str] = None,
@@ -81,6 +161,7 @@ async def list_issues(
 
 @router.post("", response_model=Any, status_code=201)
 async def create_issue(
+    request: Request,
     background_tasks: BackgroundTasks,
     title: str = Form(...),
     description: Optional[str] = Form(None),
@@ -98,10 +179,12 @@ async def create_issue(
 ):
     """Create a new civic issue report with optional images."""
     urls = []
+    first_filepath = None
     
     if image and image.filename:
-        url, _ = await storage.save_upload(image)
+        url, fp = await storage.save_upload(image)
         urls.append(url)
+        first_filepath = fp
     
     if image2 and image2.filename:
         url2, _ = await storage.save_upload(image2)
@@ -123,6 +206,9 @@ async def create_issue(
     except ValueError:
         sev = models.IssueSeverity.low
 
+    # VADER Sentiment analysis
+    compound_score, urgency = sentiment_analyzer.get_sentiment_data(description or title)
+
     # Create issue
     issue = models.Issue(
         title=title,
@@ -135,6 +221,8 @@ async def create_issue(
         severity=sev,
         status=models.IssueStatus.open,
         reported_by=current_user.id,
+        description_sentiment=compound_score,
+        urgency_level=urgency
     )
     db.add(issue)
 
@@ -160,6 +248,31 @@ async def create_issue(
     sub = Subscription(user_id=current_user.id, issue_id=issue.id)
     db.add(sub)
     db.commit()
+    
+    # Trigger background AI task
+    issue_data = {
+        "category": cat,
+        "vote_count": issue.vote_count,
+        "created_at": issue.created_at,
+        "description": issue.description,
+        "address": issue.address
+    }
+    
+    model = request.app.state.severity_model if hasattr(request.app.state, 'severity_model') else None
+    feature_names = request.app.state.feature_names if hasattr(request.app.state, 'feature_names') else None
+    
+    import os
+    db_url = os.getenv("DATABASE_URL", "sqlite:///./app.db")
+    
+    background_tasks.add_task(
+        enrich_issue_with_ai, 
+        str(issue.id), 
+        first_filepath, 
+        db_url,
+        issue_data,
+        model,
+        feature_names
+    )
 
     return schemas.IssueOut.model_validate(issue)
 

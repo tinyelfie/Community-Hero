@@ -1,0 +1,10 @@
+[
+    "category_encoded",
+    "vote_count",
+    "hour_of_day",
+    "day_of_week",
+    "description_length",
+    "area_avg_severity",
+    "sentiment_score",
+    "report_age_days"
+]

@@ -14,6 +14,21 @@ export async function renderDashboard(container) {
         </div>
         <p class="text-on-surface-variant font-body-md mb-8">Live metrics and insights on community reports.</p>
 
+        <!-- Community Pulse -->
+        <div id="community-pulse-container" class="mb-8 hidden">
+          <div class="rounded-2xl p-6 shadow-sm border" id="community-pulse-card">
+            <h3 class="font-bold text-on-surface mb-2">Community Pulse</h3>
+            <div class="flex items-center gap-4">
+              <div id="pulse-emoji" class="text-5xl"></div>
+              <div>
+                <div id="pulse-state" class="font-display-md text-xl"></div>
+                <div id="pulse-label" class="text-sm"></div>
+                <div id="pulse-score" class="text-xs mt-1 font-mono"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- KPI Cards -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8" id="kpi-grid">
           ${[1,2,3,4].map(() => `<div class="h-28 bg-surface border border-outline-variant rounded-2xl animate-pulse"></div>`).join('')}
@@ -36,6 +51,31 @@ export async function renderDashboard(container) {
             </div>
           </div>
         </div>
+        </div>
+
+        <!-- Volume Forecast Row -->
+        <div id="volume-forecast-container" class="mb-8 hidden">
+          <h3 class="font-display-md text-2xl text-on-surface mb-4">📈 Volume Forecast</h3>
+          <div class="bg-surface border border-outline-variant rounded-2xl p-6 shadow-sm mb-4">
+            <h4 class="font-bold text-on-surface mb-4">City-Wide Issue Trend (Linear Regression)</h4>
+            <div class="h-64 relative w-full">
+              <canvas id="forecastChart" class="relative z-10"></canvas>
+            </div>
+          </div>
+          <div id="area-forecast-cards" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Feature Importances Row -->
+        <div id="feature-importance-container" class="mb-8 hidden">
+          <div class="bg-surface border border-outline-variant rounded-2xl p-6 shadow-sm">
+            <h3 class="font-bold text-on-surface mb-2">What drives severity predictions</h3>
+            <p class="text-sm text-on-surface-variant mb-4">Random Forest feature importances from our ML model.</p>
+            <div class="h-64 relative w-full">
+              <canvas id="importanceChart" class="relative z-10"></canvas>
+            </div>
+          </div>
         </div>
 
         <!-- AI Insights Row -->
@@ -120,6 +160,22 @@ export async function renderDashboard(container) {
         progressBar.style.width = `${stats.resolution_rate}%`;
       }
     }, 100);
+
+    // Render Community Pulse
+    if (stats.community_pulse) {
+      const p = stats.community_pulse;
+      document.getElementById('community-pulse-container').classList.remove('hidden');
+      const pCard = document.getElementById('community-pulse-card');
+      if (p.color === 'red') { pCard.classList.add('bg-red-50', 'border-red-200', 'text-red-900'); }
+      else if (p.color === 'orange') { pCard.classList.add('bg-orange-50', 'border-orange-200', 'text-orange-900'); }
+      else if (p.color === 'amber') { pCard.classList.add('bg-yellow-50', 'border-yellow-200', 'text-yellow-900'); }
+      else { pCard.classList.add('bg-green-50', 'border-green-200', 'text-green-900'); }
+      
+      document.getElementById('pulse-emoji').textContent = p.emoji;
+      document.getElementById('pulse-state').textContent = p.state;
+      document.getElementById('pulse-label').textContent = p.label;
+      document.getElementById('pulse-score').textContent = `Sentiment index: ${p.score}`;
+    }
 
     // Render Category Chart
     const ctxCategory = document.getElementById('categoryChart');
@@ -228,6 +284,176 @@ export async function renderDashboard(container) {
         }
       }));
       ctxTrend.classList.remove('opacity-0');
+    }
+
+    // Load Model Insights (Feature Importances)
+    try {
+      const insightsRes = await fetch(`${API_BASE}/api/analytics/insights/model-insights`);
+      if (insightsRes.ok) {
+        const importances = await insightsRes.json();
+        if (importances && importances.length > 0) {
+          document.getElementById('feature-importance-container').classList.remove('hidden');
+          const ctxImportance = document.getElementById('importanceChart');
+          if (ctxImportance && window.Chart) {
+             const labels = importances.map(i => i.feature.replace(/_/g, ' ').toUpperCase());
+             const data = importances.map(i => (i.importance * 100).toFixed(1));
+             chartInstances.push(new Chart(ctxImportance, {
+               type: 'bar',
+               data: {
+                 labels,
+                 datasets: [{
+                   label: 'Importance (%)',
+                   data,
+                   backgroundColor: '#FFCAD4',
+                   borderColor: '#FF8FA3',
+                   borderWidth: 1,
+                   borderRadius: 4
+                 }]
+               },
+               options: {
+                 indexAxis: 'y',
+                 responsive: true,
+                 maintainAspectRatio: false,
+                 plugins: { legend: { display: false } },
+                 scales: { x: { max: 100, beginAtZero: true } }
+               }
+             }));
+          }
+        }
+      }
+    } catch (e) {
+      console.warn("Failed to load model insights", e);
+    }
+
+    // Load Volume Forecast
+    try {
+      const forecastRes = await fetch(`${API_BASE}/api/insights/forecast`);
+      if (forecastRes.ok) {
+        const data = await forecastRes.json();
+        if (data.areas && data.areas.length > 0) {
+          document.getElementById('volume-forecast-container').classList.remove('hidden');
+          
+          // Build chart data
+          // We will sum the historical and predicted counts across all areas for the city-wide chart
+          const numHistory = 12; // weeks 15-26
+          const numFuture = 2; // weeks 27-28
+          let cityHistory = new Array(numHistory).fill(0);
+          let cityFuturePred = new Array(numFuture).fill(0);
+          let cityFutureLow = new Array(numFuture).fill(0);
+          let cityFutureHigh = new Array(numFuture).fill(0);
+          
+          data.areas.forEach(area => {
+            for (let i = 0; i < numHistory; i++) {
+              cityHistory[i] += area.historical_weekly_counts[i] || 0;
+            }
+            area.predictions.forEach((p, i) => {
+              if (i < numFuture) {
+                cityFuturePred[i] += p.predicted_count;
+                cityFutureLow[i] += p.confidence_low;
+                cityFutureHigh[i] += p.confidence_high;
+              }
+            });
+          });
+          
+          const labels = [];
+          for (let i = 1; i <= numHistory; i++) labels.push(`W-${numHistory - i + 1}`);
+          labels.push("Today");
+          labels.push("Next W");
+          labels.push("W+2");
+          
+          // To make the line continuous, we need the 'Today' point (which is the last historical point)
+          const lastHistorical = cityHistory[numHistory - 1];
+          
+          const historyData = [...cityHistory, lastHistorical, null, null];
+          const futurePredData = [...new Array(numHistory).fill(null), lastHistorical, ...cityFuturePred];
+          const futureLowData = [...new Array(numHistory).fill(null), lastHistorical, ...cityFutureLow];
+          const futureHighData = [...new Array(numHistory).fill(null), lastHistorical, ...cityFutureHigh];
+          
+          const ctxForecast = document.getElementById('forecastChart');
+          if (ctxForecast && window.Chart) {
+            chartInstances.push(new Chart(ctxForecast, {
+              type: 'line',
+              data: {
+                labels,
+                datasets: [
+                  {
+                    label: 'Historical',
+                    data: historyData,
+                    borderColor: '#425B46',
+                    borderWidth: 3,
+                    tension: 0.1
+                  },
+                  {
+                    label: 'Forecast',
+                    data: futurePredData,
+                    borderColor: '#425B46',
+                    borderWidth: 3,
+                    borderDash: [5, 5],
+                    tension: 0.1
+                  },
+                  {
+                    label: 'High Confidence Bound',
+                    data: futureHighData,
+                    borderColor: 'rgba(66, 91, 70, 0)',
+                    backgroundColor: 'rgba(66, 91, 70, 0.1)',
+                    fill: '+1', // fill to the next dataset (which is low bound)
+                    pointRadius: 0,
+                    tension: 0.1
+                  },
+                  {
+                    label: 'Low Confidence Bound',
+                    data: futureLowData,
+                    borderColor: 'rgba(66, 91, 70, 0)',
+                    fill: false,
+                    pointRadius: 0,
+                    tension: 0.1
+                  }
+                ]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { display: false }
+                },
+                scales: {
+                  y: { beginAtZero: true }
+                }
+              }
+            }));
+          }
+          
+          // Render Area cards
+          data.areas.sort((a, b) => b.predictions[0].predicted_count - a.predictions[0].predicted_count);
+          document.getElementById('area-forecast-cards').innerHTML = data.areas.map(area => {
+            const pred = area.predictions[0];
+            let arrow = '→', trendColor = 'text-green-600';
+            if (pred.trend === 'rising') { arrow = '↑'; trendColor = 'text-red-600'; }
+            else if (pred.trend === 'increasing') { arrow = '↗'; trendColor = 'text-orange-500'; }
+            else if (pred.trend === 'declining') { arrow = '↘'; trendColor = 'text-blue-500'; }
+            
+            let r2Text = '🔀 Irregular pattern', r2Color = 'text-gray-500';
+            if (area.r_squared >= 0.7) { r2Text = '📈 Strong trend detected'; r2Color = 'text-green-600'; }
+            else if (area.r_squared >= 0.4) { r2Text = '〰️ Moderate trend'; r2Color = 'text-orange-500'; }
+            
+            const warningBadge = (pred.trend === 'rising' && pred.predicted_count > 8) 
+              ? '<span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full absolute top-2 right-2">⚠️ Attention needed</span>'
+              : '';
+
+            return `
+              <div class="bg-surface border border-outline-variant rounded-2xl p-4 shadow-sm relative">
+                ${warningBadge}
+                <div class="font-bold text-lg mb-1">${area.area_name}</div>
+                <div class="text-3xl font-display-md mb-1">${pred.predicted_count} <span class="text-sm ${trendColor}">${arrow}</span></div>
+                <div class="text-xs text-on-surface-variant mb-2">Range: ${pred.confidence_low} - ${pred.confidence_high} issues</div>
+                <div class="text-xs font-semibold ${r2Color}">${r2Text} (R² = ${area.r_squared.toFixed(2)})</div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+    } catch (e) {
+      console.warn("Failed to load volume forecast", e);
     }
 
     // Load AI Insights
